@@ -1,7 +1,5 @@
-
 function HomeController()
 {
-
 // bind event listeners to button clicks //
 	var that = this;
 
@@ -9,7 +7,7 @@ function HomeController()
 	$('#btn-logout').click(function(){ that.attemptLogout(); });
 
 // confirm account deletion //
-	$('#account-form-btn1').click(function(){$('.modal-confirm').modal('show')});
+	$('#account-form-btn1').click(function(){$('.modal-confirm').modal('show');});
 
 // handle account deletion //
 	$('.modal-confirm .submit').click(function(){ that.deleteAccount(); });
@@ -23,13 +21,13 @@ function HomeController()
 			type: 'POST',
 			data: { id: $('#userId').val()},
 			success: function(data){
-	 			that.showLockedAlert('Your account has been deleted.<br>Redirecting you back to the homepage.');
+				that.showLockedAlert('Your account has been deleted.<br>Redirecting you back to the homepage.');
 			},
 			error: function(jqXHR){
 				console.log(jqXHR.responseText+' :: '+jqXHR.statusText);
 			}
 		});
-	}
+	};
 
 	this.attemptLogout = function()
 	{
@@ -39,22 +37,23 @@ function HomeController()
 			type: "POST",
 			data: {logout : true},
 			success: function(data){
-	 			that.showLockedAlert('You are now logged out.<br>Redirecting you back to the homepage.');
+				that.showLockedAlert('You are now logged out.<br>Redirecting you back to the homepage.');
 			},
 			error: function(jqXHR){
 				console.log(jqXHR.responseText+' :: '+jqXHR.statusText);
 			}
 		});
-	}
+	};
 
 	this.showLockedAlert = function(msg){
 		$('.modal-alert').modal({ show : false, keyboard : false, backdrop : 'static' });
 		$('.modal-alert .modal-header h3').text('Success!');
 		$('.modal-alert .modal-body p').html(msg);
 		$('.modal-alert').modal('show');
-		$('.modal-alert button').click(function(){window.location.href = '/';})
-		setTimeout(function(){window.location.href = '/';}, 3000);
-	}
+		$('.modal-alert button').click(function(){window.location.href = '/';});
+		//setTimeout(function(){window.location.href = '/';}, 0);
+		window.location.href = '/';
+	};
 }
 
 HomeController.prototype.onUpdateSuccess = function()
@@ -64,4 +63,4 @@ HomeController.prototype.onUpdateSuccess = function()
 	$('.modal-alert .modal-body p').html('Your account has been updated.');
 	$('.modal-alert').modal('show');
 	$('.modal-alert button').off('click');
-}
+};

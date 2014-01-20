@@ -1,4 +1,3 @@
-
 $(document).ready(function(){
 
 	var hc = new HomeController();
@@ -6,11 +5,11 @@ $(document).ready(function(){
 	
 	$('#account-form').ajaxForm({
 		beforeSubmit : function(formData, jqForm, options){
-			if (av.validateForm() == false){
+			if (av.validateForm() === false){
 				return false;
-			} 	else{
+			} else{
 			// push the disabled username field onto the form data array //
-				formData.push({name:'user', value:$('#user-tf').val()})
+				formData.push({name:'user', value:$('#user-tf').val()});
 				return true;
 			}
 		},
@@ -19,9 +18,9 @@ $(document).ready(function(){
 		},
 		error : function(e){
 			if (e.responseText == 'email-taken'){
-			    av.showInvalidEmail();
+				av.showInvalidEmail();
 			}	else if (e.responseText == 'username-taken'){
-			    av.showInvalidUserName();
+				av.showInvalidUserName();
 			}
 		}
 	});
@@ -46,4 +45,4 @@ $(document).ready(function(){
 	$('.modal-confirm .submit').html('Delete');
 	$('.modal-confirm .submit').addClass('btn-danger');
 
-})
+});
