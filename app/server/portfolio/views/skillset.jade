@@ -1,0 +1,15 @@
+.full-height.skillSet(ng-controller='SkillSet')
+	.overlay
+		h2.rb-close-top.pull-right(ng-click='skillClose()') &times;
+		.container
+			legend.text-center Lisbon
+			span.rb-temp 21C
+		h2.rb-close-bottom.pull-right(ng-click='skillClose()') &times;
+	.container
+		.row
+			h1.text-center.featurette-divider Skills
+
+			ul#rb-grid.rb-grid.clearfix.col-md-12.col-sm-12.col-xs-12.background-opacity.list-unstyled
+				- each skill in skillSet
+					li.col-md-3.col-xs-3.col-sm-3(title=skill.name)
+						img.img-responsive.img-skill.img-circle(src='/portfolio/images/skills/'+skill.image+'.jpg' ng-click='skillClick($event, "'+skill.image+'")')

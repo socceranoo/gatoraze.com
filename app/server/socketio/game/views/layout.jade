@@ -1,0 +1,17 @@
+!!! 5
+html(ng-app='')
+	head
+		title= title
+		include ../../../common-css
+		link(rel='STYLESHEET', type='text/css', href='/trump/style/temp.css')
+		
+	body.trump
+		.container
+			block content
+			
+		include ../../../common-scripts
+		script(src="/socket.io/socket.io.js")
+		script(src="/trump/scripts/trump.js")
+		script.
+			var user= '!{user}';
+			var site= '!{site}';

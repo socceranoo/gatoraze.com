@@ -1,0 +1,25 @@
+#der {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+}
+#ter {
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  border-radius: 10px;
+}
+ul.card-set {
+  padding-left: 70px;
+}
+ul.card-set li.card {
+  margin-left: -70px;
+  width: 111px;
+  height: 148px;
+  background-image: url("../images/cardset2.jpg");
+  background-position: 333px 444px;
+  padding: 0px 0px 0px 0px;
+}

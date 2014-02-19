@@ -1,0 +1,28 @@
+!!! 5
+html(ng-app='')
+	head
+		title= title
+		include ../../common-css
+		link(rel='icon', type='/money/images/ico', href='/money/images/shopify-bag.png')
+		link(rel='STYLESHEET', type='text/css', href='/money/style/money.css')
+		//
+			link(rel='STYLESHEET', type='text/css', href='/money/style/money2.css')
+			link(rel='STYLESHEET', type='text/css', href='/money/style/temp.css')
+		
+	body.money
+		include navbar
+		.container
+			block content
+			#biglogo.modal.fade.out
+				.modal-dialog.modal-lg
+					.modal-content
+						.modal-header.text-center
+							button.close(type='button' data-dismiss='modal') &times;
+							h2.modal-title= site
+						.modal-body.text-center
+							img(style='height: 400px; width: 400px;', src='/money/images/shopify-bag.png', alt='')
+						.modal-body.text-center
+							h4.btn.btn-danger(data-dismiss='modal') Close
+				.featurette-divider3
+		include ../../common-scripts
+		include scripts-specific

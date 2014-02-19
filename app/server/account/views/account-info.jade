@@ -1,0 +1,23 @@
+extends layout
+
+block content
+	div.navbar.navbar-fixed-top
+		div.navbar-inner
+			div.container-fluid
+				ul#global-nav.nav.pull-left
+					a(href='/home').brand Control Panel
+				a.btn.btn-success(href="/money") Dollaraze
+				a.btn.btn-primary(href="/logout")
+					i.icon-lock.icon-white
+					| Sign Out
+
+	.row
+		.col-md-6.col-md-offset-3
+			include account
+	include modals/alert
+	include modals/confirm
+
+block scripts-specific
+	script(src='/account/scripts/views/account-info.js')
+	script(src='/account/scripts/controllers/accountController.js')
+	script(src='/account/scripts/form-validators/accountValidator.js')

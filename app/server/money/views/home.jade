@@ -1,0 +1,40 @@
+extends layout
+
+block content
+	.row
+		.col-md-2
+			include friendbox
+		.col-md-10.text-center(ng-controller='Summary')
+			// legend Welcome
+			.col-md-5
+				h2#owesyou.owesyou.text-center &nbsp;
+				#pie1(style='height:350px;').text-center
+			.col-md-5.col-md-offset-1
+				h2#youowe.youowe.text-center &nbsp;
+				#pie2(style='height:350px;').text-center
+			.featurette-divider3
+			.featurette-divider
+			script.
+				var plot_data= !{JSON.stringify(arg.plot)};
+				var total_data= !{JSON.stringify(arg.total)};
+
+			- if(arg.data.length)
+				h3.text-center Recent Bills
+				table.table.gradient-style.background-opacity
+					tr
+						th.text-left Event
+						th Date
+						th Paid
+						th Participants
+						th Amount
+					- each stuff in arg.data
+						tr
+							td.disp_event.text-left
+								a(href='/money/details?id='+stuff.id+'&current='+arg.current)= stuff.event
+							td.disp_date= stuff.date
+							td.disp_paid= stuff.paid.join(',')
+							td.disp_part= stuff.part.join(',')
+							td.disp_amount= stuff.amount
+			else 
+				h3.text-center You have no recent bills
+				

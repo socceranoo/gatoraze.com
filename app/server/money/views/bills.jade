@@ -1,0 +1,40 @@
+extends layout
+
+block content
+	.row
+		.col-md-2
+			//
+				legend.text-center
+					- if (arg.current)
+						a(href='/money/oldbills') Deleted Bills
+					else
+						a(href='/money/bills') Active Bills
+			include friendbox
+					
+		.col-md-10.text-center
+			.ell
+				- if (arg.current)
+					legend Transactions
+				else
+					legend Deleted Transactions
+				- if (arg.data.length)
+					.transaction-table.table-responsive(ng-controller='ViewBills')
+						table.table.gradient-style.background-opacity
+							tr
+								th.text-left Event
+								//
+									th.text-left Description
+								th Date
+								th Paid
+								th Participants
+								th Amount
+							- each stuff in arg.data
+								tr
+									td.disp_event.text-left
+										a(href='/money/details?id='+stuff.id+'&current='+arg.current)= stuff.event
+									//
+										td.disp_desc.text-left= stuff.description
+									td.disp_date= stuff.date
+									td.disp_paid= stuff.paid.join(',')
+									td.disp_part= stuff.part.join(',')
+									td.disp_amount= stuff.amount

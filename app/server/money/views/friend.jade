@@ -1,0 +1,31 @@
+extends layout
+
+block content
+	.row
+		.col-md-2
+			include friendbox
+		.col-md-10
+			.col-md-8.col-md-offset-2.text-center.ell
+				#afdiv(ng-controller='FriendCtrl' ng-cloak)
+					form#af-form(ng-submit='submitFriend()')
+						legend Add-Friends
+						.alert(ng-show='error').alert-danger Warning! enter a valid email.
+						.alert(ng-show='arrayempty').alert-danger Warning! enter at least one email to add.
+						.clearfix.text-center.form-group
+							//
+								label.control-label.col-xs-12.text-left Email:
+							.col-xs-8
+								input.form-control(type='email', placeholder='enter an email address' ng-model='email' style='margin-bottom:0px')
+							.col-xs-2.col-xs-offset-2
+								input.btn.btn-primary(type='button', value='add email', ng-click='addFriend()')
+						hr
+						ul.list-unstyled.background-louds
+							li.clearfix(ng-repeat='(email, result) in results')
+								h3.pull-left(ng-class='{owesyou:{{result[0]}}, youowe:{{!result[0]}}}') {{email}}
+								h3.pull-right(ng-class='{owesyou:{{result[0]}}, youowe:{{!result[0]}}}') {{result[1]}}
+								
+							li.clearfix(ng-repeat='todo in friends')
+								h3.text-left.owesyou
+									{{todo}}
+									a.close(href='javascript:void(0);' ng-click='removeFriend(todo)') &times;
+						input.btn.btn-success(type='submit', value='Submit')

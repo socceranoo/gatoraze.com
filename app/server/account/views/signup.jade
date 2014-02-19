@@ -2,10 +2,12 @@
 extends layout
 
 block content
-	include account
+	.row
+		.col-md-6.col-md-offset-3
+			include account
 	include modals/alert
 
 block scripts-specific
-	script(src='/js/views/signup.js')
-	script(src='/js/controllers/signupController.js')
-	script(src='/js/form-validators/accountValidator.js')
+	script(src='/account/scripts/views/signup.js')
+	script(src='/account/scripts/controllers/signupController.js')
+	script(src='/account/scripts/form-validators/accountValidator.js')

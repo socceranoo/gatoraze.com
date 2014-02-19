@@ -1,0 +1,76 @@
+extends layout
+
+block content
+	.controller(ng-controller='BillOpr')
+		#confirm-modal.modal.fade.out
+			.modal-dialog.modal-sm
+				.modal-content
+					.modal-header.text-center
+						a.close(data-dismiss='modal') ×
+						//h2= site
+						h3
+							span(ng-bind='Uopr')
+							span &nbsp;bill
+					.modal-body.text-center
+						h4 Are you sure you want to 
+							span(ng-bind='opr')
+							span &nbsp;this bill ?
+						a.btn.btn-primary(href='/money/bill?id='+arg.id, ng-show="opr=='edit'" ng-bind='Uopr')
+						a.btn.btn-danger(href='/money/delete?id='+arg.id, ng-show="opr=='delete'" ng-bind='Uopr')
+						a.btn.btn-warning(href='/money/revive?id='+arg.id, ng-show="opr=='revive'" ng-bind='Uopr')
+						a.btn.btn-danger(href='/money/trash?id='+arg.id, ng-show="opr=='trash'" ng-bind='Uopr')
+						&nbsp; &nbsp;
+						a.btn.btn-success(data-dismiss='modal') No
+					hr
+		.row
+			.col-md-2
+				- if (authorized)
+					.text-center
+						//h5 Operations
+						- if (arg.current)
+							legend.owesyou Active
+							a.btn.btn-primary.btn-block(href='javascript:void(0);' ng-click='popUp(0)') edit bill
+							a.btn.btn-danger.btn-block(href='javascript:void(0);' ng-click='popUp(1)') delete bill
+						else 
+							legend.youowe Deleted
+							a.btn.btn-success.btn-block(href='javascript:void(0);' ng-click='popUp(2)') revive bill
+							//
+								a.btn.btn-danger(href='javascript:void(0);' ng-click='popUp(3)') delete forever
+					hr
+				include friendbox
+			.col-md-10.transaction-table
+				.col-md-8.col-md-offset-2.text-center.background-opacity
+					legend.text-center Bill Details
+					- if (!authorized)
+						h3.text-center You are not authorized to perform this operation.
+					else
+						h3
+							span.color-asbestos.featurette-divider3= arg.event+' '
+							small.color-midnightBlue on  
+							span.color-asbestos.featurette-divider3= ' '+arg.date
+						h1.color-carrot.featurette-divider2= '$'+arg.amount
+						h4.color-asbestos.featurette-divider3= arg.description
+						hr
+						.clearfix
+							.col-md-6
+								h4.color-asbestos Paid by
+								- each val in arg.payees
+									h4
+										span.owesyou= val.name+' - $'+val.amount
+							.col-md-6
+								h4.color-asbestos Participants
+								- each val in arg.participants
+									h4
+										span.youowe= val.name+' - $'+val.amount
+						hr
+						h3.color-asbestos Summary
+						- each val in arg.summary
+							h4	
+								span.youowe= val.borrower
+								| &nbsp;
+								//
+									| owes
+								span.glyphicon.glyphicon-arrow-right
+								| &nbsp;
+								span.owesyou=  val.loaner
+								span= ' $'+val.amount+''

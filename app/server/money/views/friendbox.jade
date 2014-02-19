@@ -1,0 +1,13 @@
+ul#friendbox.list-unstyled.featurette-dividr2
+	legend.text-center Summary
+	- if (friends.data.length == 0)
+		p.owesyou click summary to load friends
+	- each stuff in friends.data
+		li.clearfix
+			h4
+				a.pull-left(href='/money/bills?user='+stuff[0])= stuff[1]
+				- if (stuff[2])
+					span.pull-right.user-amount.owesyou= stuff[3]
+				else
+					span.pull-right.user-amount.youowe= stuff[3]
+hr	

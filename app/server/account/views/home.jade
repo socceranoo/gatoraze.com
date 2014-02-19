@@ -1,20 +1,21 @@
 extends layout
 
 block content
-	div.navbar.navbar-fixed-top
-		div.navbar-inner
-			div.container-fluid
-				ul#global-nav.nav.pull-left
-					a(href='#').brand Control Panel
-				button#btn-logout.btn.btn-primary
-					i.icon-lock.icon-white
-					| Sign Out
+	.row
+		.col-md-8.col-md-offset-2.background-opacity
+			h2.text-center 
+			.col-md-4
+				h3.text-center DOLLARAZE
+				a(href='/money').height-300
+					img.img-circle.img-responsive.background-orange(src='/account/images/money-icon2.png')
+			.col-md-4
+				h3.text-center TRUMP
+				a(href='/trump').height-300
+					img.img-circle.img-responsive.background-peterRiver(src='/account/images/trump-icon.png')
+			.col-md-4
+				h3.text-center TUBE
+				a(href='/tube').height-300
+					img.img-circle.img-responsive.background-sunFlower(src='/account/images/synctube-icon2.png')
 
-	include account
-	include modals/alert
-	include modals/confirm
 
 block scripts-specific
-	script(src='/js/views/home.js')
-	script(src='/js/controllers/homeController.js')
-	script(src='/js/form-validators/accountValidator.js')

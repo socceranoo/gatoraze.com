@@ -7,7 +7,7 @@ module.exports = function (app, module_obj) {
 	app.get('/', function(req, res){
 		// check if the user's credentials are saved in a cookie //
 		if (req.cookies.user === undefined || req.cookies.pass === undefined){
-			res.render('account/views/login', { title: 'Hello - Please Login To Your Account' });
+			res.render('account/views/login', { title: 'Login' });
 			return;
 		}
 		// attempt automatic login //
@@ -16,7 +16,7 @@ module.exports = function (app, module_obj) {
 				req.session.user = o;
 				res.redirect('/home');
 			}	else{
-				res.render('account/views/login', { title: 'Hello - Please Login To Your Account' });
+				res.render('account/views/login', { title: 'Login' });
 			}
 		});
 	});
@@ -137,13 +137,20 @@ module.exports = function (app, module_obj) {
 	
 	app.get('/home', function(req, res) {
 		res.render('account/views/home', {
+			title : 'gatoraze home',
+			udata : req.session.user
+		});
+	});
+
+	app.get('/account-info', function(req, res) {
+		res.render('account/views/account-info', {
 			title : 'Control Panel',
 			countries : CT,
 			udata : req.session.user
 		});
 	});
 	
-	app.post('/home', function(req, res){
+	app.post('/account-info', function(req, res){
 		if (req.param('user') !== undefined) {
 			AM.updateAccount({
 				user		: req.param('user'),
@@ -173,11 +180,22 @@ module.exports = function (app, module_obj) {
 	});
 	
 // view & delete accounts //
+	app.get('/logout', function(req, res) {
+		res.clearCookie('user');
+		res.clearCookie('pass');
+		req.session.destroy( function(e) {
+			res.redirect('/');
+		});
+	});
 	
 	app.get('/print', function(req, res) {
-		AM.getAllRecords( function(e, accounts){
-			res.render('account/views/print', { title : 'Account List', accts : accounts });
-		});
+		if (req.session.user.user == 'socceranoo') {
+			AM.getAllRecords( function(e, accounts){
+				res.render('account/views/print', { title : 'Account List', accts : accounts });
+			});
+		} else {
+			res.render('account/views/print', { title : 'Account List', accts : [] });
+		}
 	});
 	
 	app.post('/delete', function(req, res){
@@ -193,9 +211,13 @@ module.exports = function (app, module_obj) {
 	});
 	
 	app.get('/reset', function(req, res) {
-		AM.delAllRecords(function(){
+		if (req.session.user.user == 'socceranoo') {
+			AM.delAllRecords(function(){
+				res.redirect('/print');	
+			});
+		} else {
 			res.redirect('/print');	
-		});
+		}
 	});
 	
 	//app.get('*', function(req, res) { res.render('account/views/404', { title: 'Page Not Found'}); });

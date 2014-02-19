@@ -1,9 +1,12 @@
 
-.modal-alert.modal.hide.fade
-    div.modal-header
-        button.close(data-dismiss='modal') x
-        h3
-    div.modal-body
-        p
-    div.modal-footer
-        button(data-dismiss="modal")#ok.btn.btn-warning OK
+.modal-alert.modal.fade
+	.modal-dialog.modal-sm
+		.modal-content
+			div.modal-header.text-center
+				button.close(data-dismiss='modal') &times;
+				h3
+			div.modal-body.text-center
+				p
+			div.modal-footer.text-center
+				//
+					button(data-dismiss="modal")#ok.btn.btn-warning OK

@@ -1,0 +1,117 @@
+extends layout
+
+block content
+	.row
+		.col-md-2
+			include friendbox
+		.col-md-10
+			- if (!authorized)
+				.col-md-8.col-md-offset-2.text-center
+					legend Edit Bill
+					h3.text-center You are not authorized to edit this bill.
+			else
+				#abdiv.ngdiv.text-center.col-md-8.col-md-offset-2.background-opacity(ng-controller='BillCtrl', ng-cloak)
+					script.
+						var billObj = !{JSON.stringify(arg)};
+						var username = '!{friends.user}';
+					- if (arg.new)
+						legend(ng-hide='payment') Add-bill
+						legend(ng-show='payment') Report Payment
+						sup
+							span(ng-hide='payment', style='cursor: pointer;', ng-click='togglePayment();')
+								a Payment mode
+							span(ng-show='payment', style='cursor: pointer;', ng-click='togglePayment();')
+								a Bill mode
+					else if(arg.payment)
+						legend(ng-show='payment') Edit-Payment
+					else
+						legend(ng-hide='payment') Edit-Bill
+						
+					.transaction-table()
+						form.form-orizontal(ng-submit='submitBill()' role='form')
+							#bill-details.hidden
+								input.form-control#bill-flag(type='hidden', ng-model='billId', value='-1')
+							.clearfix
+							#genError.featurette-divider3(style='color: red;', ng-show='genError')
+
+							div(ng-hide='payment')
+								.featurette-divider3.form-group.clearfix
+									label.control-label.col-xs-3.text-left Event:
+									.col-xs-6.col-xs-offset-3
+										input.form-control(type='text', ng-model='event', required='')
+								.featurette-divider3.clearfix.form-group
+									label.control-label.col-xs-3.text-left Description:
+									.col-xs-6.col-xs-offset-3
+										textarea.form-control(maxlength='150', ng-model='description', required='')
+
+							.featurette-divider3.clearfix.form-group
+								label.control-label.col-xs-3.text-left Date:
+								.col-xs-6.col-xs-offset-3
+									input.form-control(type='date', required='', ng-model='date')
+
+							.featurette-divider3.clearfix.form-group
+								label.control-label.col-xs-3.text-left Amount:
+								.col-xs-6.col-xs-offset-3
+									input.form-control(type='number', step='any', required='', ng-model='amount', ng-change='amountChange();')
+
+							.featurette-divider3.clearfix.form-group(ng-show='payment')
+								label.control-label.col-xs-3.text-left Payment From
+								.col-xs-6.col-xs-offset-3
+									select.form-control(ng-model='Payer', ng-change='addPayerPayee(Payer, 0);')
+										option(value='default') select an option
+										option(value=friends.user)= friends.user+' (you)'
+										- each stuff in friends.data
+											option(value=stuff[0])= stuff[0]
+							.featurette-divider3.clearfix.form-group(ng-hide='payment')
+								label.control-label.col-xs-3.text-left Who paid ?
+								.col-xs-6.col-xs-offset-3
+									select.form-control(ng-model='Payer', ng-change='addPayerPayee(Payer, 0);')
+										option(value='default') select an option
+										option(value=friends.user)= friends.user+' (you)'
+										- each stuff in friends.data
+											option(value=stuff[0])= stuff[0]
+
+							.featurette-divider3.clearfix.form-group(ng-show='array[0].keys().length')
+								sub.pull-left(ng-hide='payment', style='cursor: pointer;', ng-click='resetFields(2);')
+									a reset fields
+								sub.pull-right(ng-hide='payment', style='cursor: pointer;', ng-click='equalizeAmounts(0)')
+									a equalize amounts
+							.featurette-divider3.form-group(style='color: red;', ng-show='paidAmountError') Please check the paid amounts*
+							ul.list-unstyled
+								li.clearfix.featurette-divider4(ng-repeat='(key, value) in array[0]')
+									h4.pull-left.youowe.lose(style='cursor: pointer;', ng-click='removePayerPayee(key, 0);') &times;&nbsp;
+									h4.pull-left.owesyou {{key}}
+									.pull-right(ng-hide='payment')
+										input.form-control.ind-amount.owesyou(ng-change='paidAmountChange(key);', ng-model='array[0][key]')
+
+							.featurette-divider3.clearfix.form-group(ng-show='payment')
+								label.control-label.col-xs-3.text-left Payment to
+								.col-xs-6.col-xs-offset-3
+									select.form-control(ng-model='Payee', ng-change='addPayerPayee(Payee, 1);')
+										option(value='default') select an option
+										option(value=friends.user)= friends.user+' (you)'
+										- each stuff in friends.data
+											option(value=stuff[0])= stuff[0]
+							.featurette-divider3.clearfix.form-group(ng-hide='payment')
+								label.control-label.col-xs-3.text-left Who took part?
+								.col-xs-6.col-xs-offset-3
+									select.form-control(ng-model='Payee', ng-change='addPayerPayee(Payee, 1);')
+										option(value='default') select an option
+										option(value=friends.user)= friends.user+' (you)'
+										- each stuff in friends.data
+											option(value=stuff[0])= stuff[0]
+
+							.featurette-divider3.clearfix(ng-show='array[1].keys().length')
+								sub.pull-left(ng-hide='payment', style='cursor: pointer;', ng-click='resetFields(3);')
+									a reset
+								sub.pull-right(ng-hide='payment', style='cursor: pointer;', ng-click='equalizeAmounts(1)')
+									a equalize amounts
+							.featurette-divider3(style='color: red;', ng-show='partAmountError') Please check the part amounts*
+							ul.list-unstyled
+								li.clearfix.featurette-divider4(ng-repeat='(key, value) in array[1]')
+									h4.pull-left.youowe.lose(style='cursor: pointer;', ng-click='removePayerPayee(key, 1);') &times;&nbsp;
+									h4.pull-left.youowe {{key}}
+									.pull-right(ng-hide='payment')
+										input.form-control.ind-amount.youowe(ng-change='partAmountChange(key);', ng-model='array[1][key]')
+							.col-xs-3.col-xs-offset-6
+								input.form-control.btn.btn-block.btn-primary(type='submit', value='Go')

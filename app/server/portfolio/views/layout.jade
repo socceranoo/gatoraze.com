@@ -1,0 +1,29 @@
+!!! 5
+html(ng-app='')
+	head
+		title= title
+		include ../../common-css
+		//link(rel='icon', type='ico', href='/portfolio/images/emblemv.png')
+		link(rel='icon', type='ico', href='/portfolio/images/icon.png')
+		link(rel='STYLESHEET', type='text/css', href='/portfolio/style/component.css')
+		link(rel='STYLESHEET', type='text/css', href='/portfolio/style/pt-page.css')
+		link(rel='STYLESHEET', type='text/css', href='/portfolio/style/animations.css')
+		//
+			link(rel='STYLESHEET', type='text/css', href='/portfolio/style/jquery.jscrollpane.custom.css')
+			link(rel='STYLESHEET', type='text/css', href='/portfolio/style/bookblock.css')
+			link(rel='STYLESHEET', type='text/css', href='/portfolio/style/custom.css')
+		link(rel='STYLESHEET', type='text/css', href='/portfolio/style/portfolio.css')
+
+	body.portfolio
+		include item-selector
+		block content
+		script(src="/portfolio/scripts/boxgrid.js")	
+		script(src="/portfolio/scripts/jquery.fittext.js")	
+		script(src="/portfolio/scripts/toucheffects.js")	
+		script(src="/portfolio/scripts/pagetransitions.js")	
+		//
+			script(src="/portfolio/scripts/jquery.bookblock.js")	
+			script(src="/portfolio/scripts/jquery.jscrollpane.min.js")	
+			script(src="/portfolio/scripts/jquerypp.custom.js")	
+			script(src="/portfolio/scripts/page.js")	
+		script(src="/portfolio/scripts/portfolio.js")	

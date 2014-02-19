@@ -1,0 +1,23 @@
+.full-height.interests(g-controller='Projects')
+	//
+		.left-pane.background-sunFlower
+			h2.text-center title
+			h2.text-center title
+			h2.text-center title
+		.dropdown
+			a.btn.btn-danger.img-circle(href='javascript:void(0);')
+				span.glyphicon.glyphicon-list()
+	.container
+		.row
+			h1.text-center About me
+			ul.grid.cs-style-3.clearfix.interests-metro.list-unstyled.col-md-12.col-sm-12.col-xs-12.background-opacity
+				- each item in aboutMe
+					li(class='col-md-'+item.col+' col-sm-'+item.col+' col-xs-'+item.col)
+						.metro-container	
+							.metro(class='background-'+item.bg)
+								img.img-responsive.img-item(src='/portfolio/images/about-me/'+item.image+'.png')
+							.metro-details
+								h3 Camera
+								span Jacob Cummings
+								a(href='javascript:void(0);') Take a look
+

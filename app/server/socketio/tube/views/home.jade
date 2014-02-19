@@ -1,0 +1,13 @@
+extends layout
+
+block content
+	.row
+		.span10.offset1
+			.well.text-center
+				header
+					h3= site
+				div#chatControls
+					input(type='text')#messageInput
+					button#submit Send
+				div#chatEntries
+	

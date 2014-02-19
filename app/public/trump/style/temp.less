@@ -1,0 +1,27 @@
+.rounded-corners (@radius: 5px) {
+	-webkit-border-radius: @radius;
+	-moz-border-radius: @radius;
+	-ms-border-radius: @radius;
+	-o-border-radius: @radius;
+	border-radius: @radius;
+}
+
+#der {
+	.rounded-corners;
+}
+#ter {
+	.rounded-corners(10px);
+}
+@paddingLeft : 70px;
+ul.card-set {
+	padding-left:@paddingLeft;
+}
+ul.card-set li.card {
+	margin-left: -1 * @paddingLeft;
+	width:111px;
+	height:148px;
+	background-image:url("../images/cardset2.jpg");
+	background-position:333px 444px;
+	padding:0px 0px 0px 0px;
+}
+

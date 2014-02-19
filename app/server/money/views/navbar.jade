@@ -1,0 +1,40 @@
+nav.navbar.navbar-fixed-top.avbar-inverse
+	.container
+		.navbar-header
+			a.btn.navbar-btn.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+				span.icon-bar
+				span.icon-bar
+				span.icon-bar
+			a.navbar-brand(href='#biglogo', data-toggle='modal')
+				img(src='images/shopify-bag.png', alt='')
+			a.navbar-brand.color-nephritis(href='/money')= site
+		.navbar-collapse.collapse.pull-right
+			ul.nav.list-inline.navbar-nav
+				li.heading
+					a(href='/money/summary') summary
+				li
+					a(href='/money/friend') add friends
+				li
+					a(href='/money/bill') add bill
+				li
+					a.dropdown-toggle(data-toggle="dropdown", href='javascript:void(0);') view bills
+						b.caret
+					ul.dropdown-menu
+						li
+							a(href='/money/bills') active bills
+						li
+							a(href='/money/oldbills') deleted bills
+				li
+					a.dropdown-toggle(data-toggle="dropdown", href='javascript:void(0);') account
+						b.caret
+					ul.dropdown-menu
+						li
+							a(href='/home') home
+						li
+							a(href='/account-info')= friends.user
+						li
+							a(href='/logout') logout
+		//navbar-collapse
+	//container
+//navbar
+h2.featurette-divider2 &nbsp;
