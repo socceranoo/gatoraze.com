@@ -1,1 +1,1 @@
-/home/anoop/Public/socceranoo.github.com/
+/Users/manjunath_mageswaran/Public/socceranoo.github.com/
