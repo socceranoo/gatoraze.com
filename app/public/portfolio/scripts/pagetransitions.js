@@ -1,4 +1,4 @@
-var PageTransitions = (function() {
+var PageTransitions = function() {
 
 	var $main = $('#pt-main'),
 		$pages = $main.children( 'div.pt-page' ),
@@ -26,10 +26,7 @@ var PageTransitions = (function() {
 			var $page = $( this );
 			$page.data('originalClassList', $page.attr('class'));
 		} );
-
 		$pages.eq( current ).addClass( 'pt-page-current' );
-
-
 	}
 
 	function clickButton() {
@@ -94,7 +91,6 @@ var PageTransitions = (function() {
 
 	function getAnimation (num) {
 		var	outClass = '', inClass = '';
-
 		switch(num) {
 			case 1:
 				outClass = 'pt-page-moveToLeft';
@@ -366,10 +362,10 @@ var PageTransitions = (function() {
 				break;
 
 		}
+		return [outClass, inClass];
 	}
 
 	init();
+	return { init : init , click: clickButton};
 
-	return { init : init };
-
-})();
+};

@@ -1,8 +1,10 @@
 var boxObj;
+var ptObj;
 $(document).ready(function() {
 	waypoint_init();
 	boxObj = Boxgrid();
 	boxObj.init();
+	ptObj = PageTransitions();
 	//Page.init();
 });
 
@@ -61,6 +63,9 @@ function Projects($scope) {
 		} else {
 			$container.removeClass("slideRight").data('opened', false);
 		}
+	};
+	$scope.nextPt = function () {
+		ptObj.click();
 	};
 }
 
