@@ -1,0 +1,58 @@
+.pt-perspective {
+	width: 100%;
+	height: 100%;
+	-webkit-perspective: 1200px;
+	-moz-perspective: 1200px;
+	perspective: 1200px;
+}
+
+.pt-page {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	visibility: hidden;
+	overflow: hidden;
+	-webkit-backface-visibility: hidden;
+	-moz-backface-visibility: hidden;
+	backface-visibility: hidden;
+	-webkit-transform: translate3d(0, 0, 0);
+	-moz-transform: translate3d(0, 0, 0);
+	transform: translate3d(0, 0, 0);
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+}
+
+.pt-page-current,
+.no-js .pt-page {
+	visibility: visible;
+	z-index: 1;
+}
+
+.pt-page-ontop {
+	z-index: 999;
+}
+
+/* Text Styles, Colors, Backgrounds */
+
+.pt-page h1 {
+	font-size: 4.4em;
+	line-height: 1;
+	letter-spacing: 6px;
+	text-align: center;
+	text-transform: uppercase;
+	word-spacing: -0.3em;
+}
+.pt-page h1 strong {
+	color:#000;
+	opacity: 0.1;
+}
+.pt-triggers {
+	position: absolute;
+	bottom:50px;
+	left:50%;
+	z-index: 99999;
+	margin-left:-100px;
+}

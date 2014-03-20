@@ -15,11 +15,10 @@
 	.dropdown
 		a#tblcontents.btn.btn-danger.img-circle(ng-click='moveRight();' href='javascript:void(0);')
 			span.glyphicon.glyphicon-list
-	.pt-wrapper
-		.pt-triggers
-			button#iterateEffects.pt-touch-button(ng-click='nextPt()') Show next page transition
-		#pt-main.pt-perspective
-			.pt-page.pt-page-1.background-metroNavy
-				include lorem
-			.pt-page.pt-page-2.background-metroPink
-				include lorem
+	.pt-triggers
+		button.btn.btn-inverse(ng-click='nextPt()') Show next page transition
+	#pt-main.pt-perspective
+		.pt-page.pt-page-1.background-metroNavy
+			include lorem
+		.pt-page.pt-page-2.background-metroPurple
+			include lorem

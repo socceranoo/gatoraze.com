@@ -1,5 +1,4 @@
-@import "../../common/less/variables";
-@import "../../common/less/common";
+@import "../../common/less/main";
 	body.portfolio {
 		background-size: cover;
 		background-repeat: no-repeat;
@@ -9,7 +8,7 @@
 	}
 
 	.full-height {
-		position:relative;	
+		position:relative;
 		top:0px;
 		left:0px;
 	}
@@ -20,11 +19,22 @@
 		-o-transition: left 0.3s ease-in-out;
 		transition: left 0.3s ease-in-out;
 	}
-	
 	.cover {
 		.setFullBg('../images/bg1.jpg');
 		//.setFullBg('../images/bg1-full.jpg');
-		height:700px;
+		height:70%;
+	}
+
+	.cover-item {
+		max-width:200px;
+		margin:40px auto;
+		height:200px;
+		max-height:200px;
+	}
+
+	.cover-item h2 {
+		padding-top:80px;
+		font-size:40px;
 	}
 
 	.skillSet {
@@ -93,7 +103,7 @@
 
 	.overlay {
 		opacity: 0;
-		position: absolute;
+		position: fixed;
 		top: 0px;
 		left: 0px;
 		width: 100%;
@@ -155,5 +165,10 @@
 	}
 	.metro {
 		max-height:176px;
+	}
+}
+@media (max-width:501px) {
+	.metro {
+		max-height:106px;
 	}
 }

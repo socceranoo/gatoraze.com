@@ -37,8 +37,7 @@ $special = $Event.special.debouncedresize = {
 	threshold: 50
 };
 
-var Boxgrid = function() {
-
+var BoxGrid = function() {
 	var $items = $( '.rb-grid > li' ),
 		transEndEventNames = {
 			'WebkitTransition' : 'webkitTransitionEnd',
@@ -59,27 +58,25 @@ var Boxgrid = function() {
 		// window width and height
 		winsize = getWindowSize();
 		$close = $('.rb-close'),
-		$overlay = $('.overlay');
+		$overlay = $('.overlay'),
+		$basecc = "#000",
+		$inversecc = "#fff";
 
-	function init( options ) {		
-		// apply fittext plugin
-		initEvents();
-	}
-
-	function open ($item, background) {
-
+	function open ($item, background, invert) {
+		var cc = (invert)?$basecc:$inversecc;
 		// save current item's index
 		current = $item;
 		var layoutProp = getItemLayoutProp( $item ),
 			clipPropFirst = 'rect(' + layoutProp.top + 'px ' + ( layoutProp.left + layoutProp.width ) + 'px ' + ( layoutProp.top + layoutProp.height ) + 'px ' + layoutProp.left + 'px)',
-			clipPropLast = 'rect(0px ' + winsize.width + 'px ' + winsize.height + 'px 0px)';
+			clipPropLast = 'rect(0px ' + winsize.width + 'px ' + (winsize.height) + 'px 0px)';
 
 		$overlay.css( {
 			clip : supportTransitions ? clipPropFirst : clipPropLast,
 			opacity : 1,
 			zIndex: 9999,
 			pointerEvents : 'auto',
-			background : background
+			background : background,
+			color : cc
 		} );
 
 		if( supportTransitions ) {
@@ -103,15 +100,11 @@ var Boxgrid = function() {
 	}
 
 	function close($item) {
-	
 		$body.css( 'overflow-y', 'auto' );
-
 		var layoutProp = getItemLayoutProp( $item ),
 			clipPropFirst = 'rect(' + layoutProp.top + 'px ' + ( layoutProp.left + layoutProp.width ) + 'px ' + ( layoutProp.top + layoutProp.height ) + 'px ' + layoutProp.left + 'px)',
 		clipPropLast = 'auto';
-
 		current = null;
-
 		$overlay.css( {
 			clip : supportTransitions ? clipPropFirst : clipPropLast,
 			opacity : supportTransitions ? 1 : 0,
@@ -126,6 +119,7 @@ var Boxgrid = function() {
 					$overlay.css( 'opacity', 0 ).on( transEndEventName, function() {
 						$overlay.off( transEndEventName ).css( { clip : clipPropLast, zIndex: -1 } );
 						$overlay.css('background', 'transparent');
+						$overlay.css('color', $basecc);
 					} );
 				}, 25 );
 
@@ -139,7 +133,7 @@ var Boxgrid = function() {
 	}
 
 	function initEvents() {
-		$( window ).on( 'debouncedresize', function() { 
+		$( window ).on( 'debouncedresize', function() {
 			winsize = getWindowSize();
 			// todo : cache the current item
 			if( current !== null ) {
@@ -149,11 +143,9 @@ var Boxgrid = function() {
 	}
 
 	function getItemLayoutProp( $item ) {
-		
 		var scrollT = $window.scrollTop(),
 			scrollL = $window.scrollLeft(),
 			itemOffset = $item.offset();
-
 		return {
 			left : itemOffset.left - scrollL,
 			top : itemOffset.top - scrollT,
@@ -171,7 +163,6 @@ var Boxgrid = function() {
 		}
 		return { width : w, height : h };
 	}
-
-	return { init : init , open:open, close:close };
-
+	initEvents();
+	return { open : open, close : close };
 };
