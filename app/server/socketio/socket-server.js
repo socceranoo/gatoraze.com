@@ -4,7 +4,7 @@ module.exports = function(IO) {
 	var sleep = require('sleep');
 	var gameRooms = {};
 	var exportObj = {};
-	var gameTableObj = require('./game-table');
+	var gameTableObj = require('./game/game-table');
 	var events = gameTableObj.events;
 
 	function socketRoom(game, session, room) {

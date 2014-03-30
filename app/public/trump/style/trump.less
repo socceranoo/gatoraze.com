@@ -29,51 +29,60 @@ ul.card-set {
 	padding-left:@paddingLeft;
 	min-height:194px;
 }
-ul.card-set li.card {
+ul.card-set li.card-holder {
 	position:relative;
 	margin-left: -1 * @paddingLeft;
+	padding:0px 0px 0px 0px;
+}
+.card {
+	position:relative;
 	width:@cardWidth;
 	height:@cardHeight;
 	background-image:url("../images/cardset3.jpg");
 	background-position:111px 0px;
-	padding:0px 0px 0px 0px;
+	box-shadow: 0 0 10px #9ecaed;
+	.scale-mixin(0.75);
 }
-ul.player-hand li.card:hover {
-	@scale:1.2;
+.player-name {
+	position :relative;
+	top:10px;
+	font-size:20px;
+	color:@metro_green;
+}
+.scale-mixin(@scale:1.2) {
 	/*
 	top:-30px;
 	*/
 	transform:scale(@scale);
 	-ms-transform:scale(@scale);
 	-webkit-transform:scale(@scale);
-	transition: all .3s linear;
-	-webkit-transition: all .3s linear;
+	transition: transform .3s linear;
+	-webkit-transition: -webkit-transform .3s linear;
+}
+ul.player-hand .card:hover {
+	.scale-mixin(1.2);
 }
 ul.position-set {
 	padding:0px !important;
 	min-height:0px !important;
 }
-li.card-position {
+.card-position {
 	margin:10px !important;
 	padding:5px !important;
-	outline:5px solid @metro_green;
 }
 .red-border {
-	outline:5px solid @metro_red !important;
+	//outline:5px solid @metro_red !important;
 }
-.empty-bg {
-	background:#fff !important;
-}
-.player-name {
-	margin:0px 10px 0px 10px !important;
-	padding:0px 5px 0px 5px !important;
-	width:111px;
-	color:@metro_green;
+.green-border {
+	//outline:5px solid @metro_green;
 }
 .bid-data {
 	line-height:@cardHeight;
 	font-size:55px;
 	margin:0px;
 	padding:0px;
+}
+.active {
+	.scale-mixin(1.2);
 }
 

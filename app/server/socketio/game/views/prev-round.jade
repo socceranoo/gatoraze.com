@@ -6,6 +6,6 @@
 				h3 Previous Round
 			.modal-body.text-center
 				ul.position-set.card-set.clearfix.list-unstyled.list-inline(ng-cloak)
-					li.card.card-position(ng-class="{'red-border': obj.player%2 == 1}" ng-repeat='obj in roundData.prevRound track by $index' style='background-position:{{obj.card.bgPos[0]}}px {{obj.card.bgPos[1]}}px')
-				ul.position-set.card-set.clearfix.list-unstyled.list-inline(ng-cloak)
-					li.player-name(ng-class="{'color-metroRed': obj.player%2 == 1}" ng-repeat='obj in roundData.prevRound track by $index') {{roundData.players[obj.player]}}
+					li.card-holder.card-position(ng-repeat='obj in tableData.prevRound track by $index')
+						.card.green-border(ng-class="{'red-border': obj.player%2 == 1}" style='background-position:{{obj.card.bgPos[0]}}px {{obj.card.bgPos[1]}}px')
+						span.player-name(ng-class="{'color-metroRed': obj.player%2 == 1}" ng-bind='tableData.players[obj.player]')

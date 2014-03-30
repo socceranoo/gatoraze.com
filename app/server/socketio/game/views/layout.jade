@@ -5,7 +5,7 @@ html(ng-app='')
 		include ../../../common-css
 		link(rel='STYLESHEET', type='text/css', href='/trump/style/trump.css')
 	body.trump
-		.container
+		.container(ng-controller='Trump')
 			block content
 		include ../../../common-scripts
 		script(src="/socket.io/socket.io.js").

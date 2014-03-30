@@ -2,7 +2,7 @@ module.exports = function(app, module_obj, io) {
 	var AM = module_obj.AM;
 	var MM = module_obj.MM;
 	var EM = module_obj.EM;
-	var socketServer = require("./game/socket-server")(io);
+	var socketServer = require("./socket-server")(io);
 	var count = 0;
 	//Routes 
 	app.get('/trump', function(req, res){

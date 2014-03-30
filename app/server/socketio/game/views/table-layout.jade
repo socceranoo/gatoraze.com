@@ -1,0 +1,6 @@
+.background-metroPuple.text-center
+	ul.position-set.card-set.clearfix.list-unstyled.list-inline(ng-cloak ng-show='tableData.round.length')
+		li.card-holder.card-position(ng-repeat='card in tableData.round track by $index' )
+			.card.green-border(ng-class="{'red-border': $index%2 == 1, 'active': $index == token}" style='background-position:{{card.bgPos[0]}}px {{card.bgPos[1]}}px')
+				span.bid-data(ng-bind='tableData.bidData[$index]')
+			span.player-name(ng-class="{'color-metroRed': $index%2 == 1}" ng-bind='tableData.players[$index]')

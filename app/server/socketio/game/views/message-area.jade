@@ -1,0 +1,7 @@
+div(style='isplay:none')
+	div
+		input(type='text' placeholder='type to chat' ng-model='message')
+		button(ng-click='sendMessage()') Send
+	div(style='height:300px; overflow:auto;')
+		div#ocbox
+		div#ccbox

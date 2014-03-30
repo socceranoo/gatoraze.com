@@ -141,49 +141,64 @@ ul.card-set {
   padding-left: 70px;
   min-height: 194px;
 }
-ul.card-set li.card {
+ul.card-set li.card-holder {
   position: relative;
   margin-left: -70px;
+  padding: 0px 0px 0px 0px;
+}
+.card {
+  position: relative;
   width: 111px;
   height: 148px;
   background-image: url("../images/cardset3.jpg");
   background-position: 111px 0px;
-  padding: 0px 0px 0px 0px;
+  box-shadow: 0 0 10px #9ecaed;
+  /*
+	top:-30px;
+	*/
+  transform: scale(0.75);
+  -ms-transform: scale(0.75);
+  -webkit-transform: scale(0.75);
+  transition: transform .3s linear;
+  -webkit-transition: -webkit-transform 0.3s linear;
 }
-ul.player-hand li.card:hover {
+.player-name {
+  position: relative;
+  top: 10px;
+  font-size: 20px;
+  color: #339966;
+}
+ul.player-hand .card:hover {
   /*
 	top:-30px;
 	*/
   transform: scale(1.2);
   -ms-transform: scale(1.2);
   -webkit-transform: scale(1.2);
-  transition: all .3s linear;
-  -webkit-transition: all .3s linear;
+  transition: transform .3s linear;
+  -webkit-transition: -webkit-transform 0.3s linear;
 }
 ul.position-set {
   padding: 0px !important;
   min-height: 0px !important;
 }
-li.card-position {
+.card-position {
   margin: 10px !important;
   padding: 5px !important;
-  outline: 5px solid #339966;
-}
-.red-border {
-  outline: 5px solid #c24747 !important;
-}
-.empty-bg {
-  background: #fff !important;
-}
-.player-name {
-  margin: 0px 10px 0px 10px !important;
-  padding: 0px 5px 0px 5px !important;
-  width: 111px;
-  color: #339966;
 }
 .bid-data {
   line-height: 148px;
   font-size: 55px;
   margin: 0px;
   padding: 0px;
+}
+.active {
+  /*
+	top:-30px;
+	*/
+  transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  -webkit-transform: scale(1.2);
+  transition: transform .3s linear;
+  -webkit-transition: -webkit-transform 0.3s linear;
 }

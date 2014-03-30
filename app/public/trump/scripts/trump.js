@@ -20,7 +20,7 @@ function Trump($scope) {
 	var joker = {name:"JOKER", index:0, bgPos:[111, 0]};
 	var blank = {name:"BLANK", index:0, bgPos:[222, 0]};
 	$scope.trump = {card:null, setter:'', points:''};
-	$scope.tableData = {players : [], round :[], prevRound:[], bidData:[]};
+	$scope.tableData = {players : [], round :[], prevRound:[], bidData:[], prevGame:[]};
 	$scope.bidOver = false;
 	var defaultInfo = 'Welcome';
 	$scope.info = defaultInfo;
@@ -31,6 +31,7 @@ function Trump($scope) {
 		bid:false,
 		bidder:0,
 		points:0,
+		minimum:false,
 		increaseBid : function() {
 			if ($scope.bidObj.bid && $scope.token == $scope.position) {
 				$scope.bidObj.points++;
@@ -44,16 +45,28 @@ function Trump($scope) {
 		submitBid: function() {
 			if ($scope.bidObj.bid && $scope.token == $scope.position) {
 				if ($scope.bidObj.points <= $scope.oldBidObj.points) {
-					$scope.info ='Cannot bid equal or lesser';
-					return;
+					if ($scope.bidObj.points < $scope.oldBidObj.points) {
+						$scope.info ='Cannot bid equal or lesser';
+						return;
+					} else {
+						if ($scope.bidObj.minimum !== true) {
+							$scope.info ='Cannot bid equal or lesser';
+							return;
+						}
+					}
 				}
 				$scope.action = "Wait";
+				$scope.bidObj.minimum = false;
 				socket.emit(events.play, {userInfo: userInfo, play:false, player:$scope.position, trump:null, bidObj:$scope.bidObj});
 			}
 		},
 		passBid: function() {
 			if ($scope.bidObj.bid && $scope.token == $scope.position) {
-				$scope.action = " ";
+				if ($scope.bidObj.minimum === true) {
+					$scope.info ='Cannot pass the minimum bid';
+					return;
+				}
+				$scope.action = "Wait";
 				socket.emit(events.play, {userInfo: userInfo, play:false, pass:true, player:$scope.position, trump:null, bidObj:$scope.oldBidObj});
 			}
 		}
@@ -93,7 +106,8 @@ function Trump($scope) {
 			$scope.addMessage(data.message, data.sender, data.date, data.data);
 			$scope.tableData.prevRound = data.data.prevRound;
 			$scope.setDefaultBg(1);
-			//$scope.addControlData(events.round, data.data);
+			$scope.addControlData(events.round, data.data);
+			$scope.$apply();
 		});
 		socket.on(events.game, function(data) {
 			$scope.addMessage(data.message, data.sender, data.date, data.data);
@@ -102,7 +116,8 @@ function Trump($scope) {
 			$scope.trump.points ='';
 			$scope.bidOver = false;
 			$scope.setDefaultBg(0);
-			//$scope.addControlData(events.game, data.data);
+			$scope.tableData.prevGame = data.data.prevGame;
+			$scope.addControlData(events.game, data.data);
 			$scope.$apply();
 		});
 		socket.on(events.ready, function(data) {
@@ -110,6 +125,7 @@ function Trump($scope) {
 			//$scope.addMessage(data.message, data.sender, data.date, data.data);
 			//$scope.addControlData(events.ready, data.data);
 			$scope.tableData.players = data.data.players;
+			$scope.tableData.players[$scope.position] = "You";
 			for (i = 0; i< $scope.tableData.players.length ; i++) {
 				$scope.tableData.round[i] = blank;
 				$scope.tableData.bidData[i] = '';
@@ -124,11 +140,12 @@ function Trump($scope) {
 					$scope.tableData.bidData[data.data.bidData[i][0]] = data.data.bidData[i][1];
 				}
 			}
-			if (data.data.trumpData && data.data.trumpData.setter != '') {
+			if (data.data.trumpData && data.data.trumpData.setter !== '') {
 				$scope.trump.card = joker;
 				$scope.trump.setter = data.data.trumpData.setter;
 				$scope.trump.points = data.data.trumpData.points;
 			}
+			$scope.action = "Wait";
 			$scope.$apply();
 		});
 		socket.on(events.cards, function(data) {
@@ -158,6 +175,7 @@ function Trump($scope) {
 				$scope.bidObj.bid = data.data.bidObj.bid;
 				$scope.bidObj.bidder = data.data.bidObj.bidder;
 				$scope.bidObj.points = data.data.bidObj.points;
+				$scope.bidObj.minimum = data.data.bidObj.minimum;
 				if (data.data.bidObj.bid && $scope.token == $scope.position) {
 					$scope.action = "Bid";
 				} else {
@@ -167,7 +185,7 @@ function Trump($scope) {
 				//Setting trump for the first time
 				if ($scope.bidObj.bid === false) {
 					if($scope.position == data.data.player) {
-						$scope.action = "Set trump";
+						$scope.action = "Set Trump";
 					}
 					if (data.data.bidObj.trump === true) {
 						$scope.trump.setter = data.data.bidObj.bidder;
@@ -204,7 +222,7 @@ function Trump($scope) {
 	};
 	$scope.setDefaultBg = function (option) {
 		var card = null;
-		if (option == 0)
+		if (option === 0)
 			card = blank;
 		else
 			card = joker;
@@ -233,7 +251,7 @@ function Trump($scope) {
 		}
 	};
 	$scope.cardClick = function (card, index) {
-		if ($scope.action == "Set trump") {
+		if ($scope.action == "Set Trump") {
 			socket.emit(events.play, {play:false, trump:card, userInfo:userInfo, bidObj:$scope.oldBidObj});
 			$scope.trump.card = card;
 			$scope.action = "Wait";

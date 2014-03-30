@@ -1,0 +1,6 @@
+.col-md-12.ell.ackground-emerald.text-center(ng-cloak ng-show='bidObj.bid')
+	h1.color-metroPurple(ng-bind='bidObj.points')
+	a.pull-left(href='javascript:void(0);' ng-click='bidObj.increaseBid()') +
+	a.pull-right(href='javascript:void(0);' ng-click='bidObj.decreaseBid()') -
+	a.btn.btn-danger.btn-block.text-center(href='javascript:void(0);' ng-click='bidObj.submitBid()') Bid
+	a.btn.btn-primary.btn-block(href='javascript:void(0);' ng-hide='bidObj.minimum' ng-click='bidObj.passBid()') Pass
