@@ -1,3 +1,11 @@
+@import "../../common/less/variables";
+@import "../../common/less/main";
+body.trump {
+	z-index : 1;
+}
+body.modal-open {
+	overflow: auto;
+}
 .rounded-corners (@radius: 5px) {
 	-webkit-border-radius: @radius;
 	-moz-border-radius: @radius;
@@ -13,15 +21,59 @@
 	.rounded-corners(10px);
 }
 @paddingLeft : 70px;
+@cardWidth : 111px;
+@cardHeight : 148px;
 ul.card-set {
+	width:auto;
+	margin:5px auto;
 	padding-left:@paddingLeft;
+	min-height:194px;
 }
 ul.card-set li.card {
+	position:relative;
 	margin-left: -1 * @paddingLeft;
-	width:111px;
-	height:148px;
-	background-image:url("../images/cardset2.jpg");
-	background-position:333px 444px;
+	width:@cardWidth;
+	height:@cardHeight;
+	background-image:url("../images/cardset3.jpg");
+	background-position:111px 0px;
 	padding:0px 0px 0px 0px;
+}
+ul.player-hand li.card:hover {
+	@scale:1.2;
+	/*
+	top:-30px;
+	*/
+	transform:scale(@scale);
+	-ms-transform:scale(@scale);
+	-webkit-transform:scale(@scale);
+	transition: all .3s linear;
+	-webkit-transition: all .3s linear;
+}
+ul.position-set {
+	padding:0px !important;
+	min-height:0px !important;
+}
+li.card-position {
+	margin:10px !important;
+	padding:5px !important;
+	outline:5px solid @metro_green;
+}
+.red-border {
+	outline:5px solid @metro_red !important;
+}
+.empty-bg {
+	background:#fff !important;
+}
+.player-name {
+	margin:0px 10px 0px 10px !important;
+	padding:0px 5px 0px 5px !important;
+	width:111px;
+	color:@metro_green;
+}
+.bid-data {
+	line-height:@cardHeight;
+	font-size:55px;
+	margin:0px;
+	padding:0px;
 }
 

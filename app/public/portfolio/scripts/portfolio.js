@@ -7,7 +7,6 @@ $(document).ready(function() {
 function Cover($scope) {
 	$scope.position = 0;
 	$scope.click1 = function (index) {
-		alert(index);
 		navObj.move(index);
 	};
 }

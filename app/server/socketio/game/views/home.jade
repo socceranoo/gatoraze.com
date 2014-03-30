@@ -2,30 +2,48 @@ extends layout
 
 block content
 	.row(ng-controller='Trump')
-		.well
-			h3.text-center= site
-			div.col-md-3
-				div
-					input(type='text' placeholder='type to chat' ng-model='message')
-					button(ng-click='sendMessage()') Send
-				div(style='height:300px; overflow:auto;')
-					div#ocbox
-					div#ccbox
-			div.col-md-6
-				div#control-data(style='height:300px; overflow:auto;')
+		include prev-round
+		.well.text-center
+			h3= site
+			a.btn.btn-success(data-toggle='modal' href='#prev-round') click me
+			a.btn.btn-warning(data-toggle='modal' href='#control-modal') control
+			a.btn.btn-primary(href='javascript:void(0);' ng-click='addComputer()') Add Computer
 		div.col-md-12.text-center
-			.text-center
+			.background-metroPuple
+				ul.position-set.card-set.clearfix.list-unstyled.list-inline(ng-cloak ng-show='tableData.round.length')
+					li.card.card-position(ng-class="{'red-border': $index%2 == 1}" ng-repeat='card in tableData.round track by $index' style='background-position:{{card.bgPos[0]}}px {{card.bgPos[1]}}px')
+						| &nbsp;
+						span.bid-data.text-center(ng-bind='tableData.bidData[$index]')
+				ul.position-set.card-set.clearfix.list-unstyled.list-inline(ng-cloak ng-show='tableData.players.length')
+					li.player-name(ng-class="{'color-metroRed': $index%2 == 1}" ng-repeat='value in tableData.players track by $index') {{value}}
+				//
+					ul.position-set.card-set.clearfix.list-unstyled.list-inline(ng-cloak ng-show='tableData.bidData.length')
+						li.player-name(ng-class="{'color-metroRed': $index%2 == 1}" ng-repeat='value in tableData.bidData track by $index') {{value}}
+		div.col-md-12.text-center
+			.text-center.ell.background-sunFloer
 				h3.text-center(ng-bind='action')
-				ul.well.background-sunFlower.card-set.clearfix.list-unstyled.list-inline(ng-show='cards.length' ng-cloak)
-					li.card(ng-repeat='card in cards' style='background-position:{{card.bgPos[0]}}px {{card.bgPos[1]}}px' ng-click='cardClick(card)')
-		div.col-md-4.col-md-offset-4
-			.well.background-emerald(ng-show='bidObj.bid' ng-cloak)
-				h1.text-center
-					a(href='javascript:void(0);' ng-bind='bidObj.points', ng-click='bidObj.increaseBid()')
-				a.btn.text-center(href='javascript:void(0);' ng-click='bidObj.submitBid()') Bid
-				a.btn.text-center(href='javascript:void(0);' ng-click='bidObj.passBid()') Pass
-				h3.text-center(ng-bind='bidObj.bidder.name')
-		div.col-md-4
-			ul.text-center.well.background-sunFlower.card-set.clearfix.list-unstyled.inline(ng-cloak)
-				li.card(style='background-position:{{trump.bgPos[0]}}px {{trump.bgPos[1]}}px')
-			h3.text-center(ng-bind='bidObj.bidder.name')
+				ul.card-set.player-hand.clearfix.list-unstyled.list-inline(ng-cloak ng-show='tableData.players.length')
+					li.card(ng-repeat='card in cards' style='background-position:{{card.bgPos[0]}}px {{card.bgPos[1]}}px' ng-click='cardClick(card, $index)')
+		div.col-md-3
+			.ell.ackground-emerald(ng-cloak)
+				.col-md-12(ng-show='bidObj.bid')
+					h1.text-center
+						span.color-metroPurple(ng-bind='bidObj.points')
+						a.pull-left(href='javascript:void(0);' ng-click='bidObj.increaseBid()') +
+						a.pull-right(href='javascript:void(0);' ng-click='bidObj.decreaseBid()') -
+					a.btn.btn-danger.pull-left.text-center(href='javascript:void(0);' ng-click='bidObj.submitBid()') Bid
+					a.btn.btn-primary.pull-right(href='javascript:void(0);' ng-click='bidObj.passBid()') Pass
+		div.col-md-6
+			.text-center.ell.ackground-sunFlower(ng-cloak ng-show='trump.card')
+				ul.card-set.clearfix.list-unstyled.list-inline
+					li.card.trump(style='background-position:{{trump.card.bgPos[0]}}px {{trump.card.bgPos[1]}}px')
+				h4.text-center(ng-bind='trump.points')
+				h4.text-center(ng-bind='tableData.players[trump.setter]')
+		div.col-md-6(style='isplay:none')
+			div
+				input(type='text' placeholder='type to chat' ng-model='message')
+				button(ng-click='sendMessage()') Send
+			div(style='height:300px; overflow:auto;')
+				div#ocbox
+				div#ccbox
+		include control
