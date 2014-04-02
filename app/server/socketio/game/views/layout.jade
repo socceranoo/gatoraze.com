@@ -1,7 +1,7 @@
 doctype html
 html(ng-app='')
 	head
-		title= title
+		title= site+'- home'
 		include ../../../common-css
 		link(rel='STYLESHEET', type='text/css', href='/trump/style/trump.css')
 	body.trump
@@ -13,3 +13,6 @@ html(ng-app='')
 		script.
 			var user= '!{user}';
 			var site= '!{site}';
+			var session= '!{session}';
+			var room= '!{room}';
+			var total= '!{total}';

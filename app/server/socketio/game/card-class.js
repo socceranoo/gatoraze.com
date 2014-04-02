@@ -36,6 +36,11 @@ exports.createCardDeck = function () {
 };
 
 exports.shuffle = function (cardArr) {
+	internalShuffle(cardArr);
+	internalShuffle(cardArr);
+};
+
+var internalShuffle = function (cardArr) {
 	var i = cardArr.length, j, tempi, tempj;
 	if (i === 0)
 		return false;

@@ -7,10 +7,12 @@ block content
 	.row
 		.well.text-center
 			h3= site
+			h4.color-metroRed(ng-bind='info')
 			a.btn.btn-success(data-toggle='modal' href='#prev-round') Previous Round
 			a.btn.btn-warning(data-toggle='modal' href='#control-modal') Control data
 			a.btn.btn-warning(data-toggle='modal' href='#prev-game') Previous Game
 			a.btn.btn-primary(href='javascript:void(0);' ng-click='addComputer()') Add Computer
+			a.btn.btn-danger(href='/' ng-click='addComputer()') Back to Lobby
 		div.col-md-12.text-center
 			include table-layout
 		div.col-md-12.text-center

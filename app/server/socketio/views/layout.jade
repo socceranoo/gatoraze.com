@@ -1,0 +1,13 @@
+doctype html
+html(ng-app='')
+	head
+		title= title
+		include ../../common-css
+	body
+		.container
+			block content
+		include ../../common-scripts
+		//
+			script.
+				var user= '!{user}';
+				var site= '!{site}';

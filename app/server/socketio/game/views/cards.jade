@@ -3,3 +3,4 @@
 	ul.card-set.player-hand.clearfix.list-unstyled.list-inline(ng-cloak ng-show='tableData.players.length')
 		li.card-holder(ng-repeat='card in cards')
 			.card(style='background-position:{{card.bgPos[0]}}px {{card.bgPos[1]}}px' ng-click='cardClick(card, $index)')
+	a.btn.btn-primary(data-toggle='modal' href='#bid-modal' ng-cloak ng-show='bidObj.bid') Bid

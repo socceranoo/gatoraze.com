@@ -1,5 +1,5 @@
 .text-center.ell.ackground-sunFlower(ng-cloak ng-show='trump.card')
-	ul.card-set.clearfix.list-unstyled.list-inline
-		li.card.trump(style='background-position:{{trump.card.bgPos[0]}}px {{trump.card.bgPos[1]}}px')
-	h4.text-center(ng-bind='trump.points')
-	h4.text-center(ng-bind='tableData.players[trump.setter]')
+	h4(ng-bind='tableData.players[trump.setter]')
+	.card.trump-card(style='background-position:{{trump.card.bgPos[0]}}px {{trump.card.bgPos[1]}}px')
+	h4(ng-bind='trump.points')
+	a.btn.btn-danger(href='javascript:void(0);' ng-click='revealTrump()' ng-hide='trump.revealed') Reveal Trump

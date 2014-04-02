@@ -2,17 +2,23 @@ module.exports = function(IO) {
 	var io = IO;
 	var moment = require('moment');
 	var sleep = require('sleep');
-	var gameRooms = {};
+	var socketRoomsHash = {};
 	var exportObj = {};
-	var gameTableObj = require('./game/game-table');
-	var events = gameTableObj.events;
+	var events = require('./game/events').events;
+	var servers = {
+		trump: {name:"trump", sessionCount: 0, tableObj:require('./game/game-table')},
+		tube:{name:"tube", sessionCount:0, tableObj:null},
+		hearts:{name:"hearts", sessionCount:0, tableObj:null},
+	};
 
-	function socketRoom(game, session, room) {
-		this.game = game;
-		this.room = room;
+	function socketRoom(data) {
+		this.game = data.site;
+		this.room = data.room;
+		this.session = data.session;
+		this.total = data.total;
 		this.userSockets = {};
 		//Members are maintained in the gameTable.members.
-		this.gameTable = gameTableObj.createGame(game, session, room);
+		this.gameTable = servers[this.game].tableObj.createGame(data);
 
 		this.addUser = function (socket, data) {
 			var ret = this.gameTable.addHumanMember(data.user);
@@ -22,7 +28,7 @@ module.exports = function(IO) {
 				addToRoom(socket, data);
 				this.userSockets[data.user] = socket;
 			}
-			sendEventsSocket(this.gameTable.server, socket, sendData, this.userSockets);
+			sendEventsSocket(this.game, socket, sendData, this.userSockets);
 			return success;
 		};
 
@@ -30,7 +36,7 @@ module.exports = function(IO) {
 			var ret = this.gameTable.addComputerMember(data.user);
 			var success = ret[0];
 			var sendData = ret[1];
-			sendEventsSocket(this.gameTable.server, socket, sendData, this.userSockets);
+			sendEventsSocket(this.game, socket, sendData, this.userSockets);
 		};
 		this.removeUser = function (socket) {
 			var ret = this.gameTable.removeHumanMember(socket.data.user);
@@ -40,12 +46,17 @@ module.exports = function(IO) {
 				removeFromRoom(socket);
 				delete this.userSockets[socket.data.user];
 			}
-			sendEventsSocket(this.gameTable.server, socket, sendData, this.userSockets);
+			sendEventsSocket(this.game, socket, sendData, this.userSockets);
 		};
 		this.userPlay = function (socket, data) {
 			var sendData = this.gameTable.playerPlay(data);
 			//console.log(JSON.stringify(sendData));
-			sendEventsSocket(this.gameTable.server, socket, sendData, this.userSockets);
+			sendEventsSocket(this.game, socket, sendData, this.userSockets);
+		};
+		this.getRoomInfo = function () {
+			var retdata = {game:this.game, room:this.room, session:this.session};
+			this.gameTable.getTableInfo(retdata);
+			return retdata;
 		};
 	}
 	var getMoment = function () {
@@ -104,7 +115,7 @@ module.exports = function(IO) {
 	//Function 4
 	var serverBroadcast = function(sender, event, message, data) {
 		var messageObj = {sender:sender, message:message, data:data, date: getMoment()};
-		for (var key in gameRooms) {
+		for (var key in socketRoomsHash) {
 			io.sockets.in(key).emit(event,  messageObj);
 		}
 	};
@@ -115,26 +126,41 @@ module.exports = function(IO) {
 			roomBroadcastExceptSender(socket.data.user, socket, events.message, message, null);
 		});
 
-		if (!gameRooms[data.room]) {
-			gameRooms[data.room] = new socketRoom(data.site, data.session, data.room);
+		if (!socketRoomsHash[data.room]) {
+			socketRoomsHash[data.room] = new socketRoom(data);
+			servers[data.site].sessionCount++;
 		}
-		var gameRoomObj = gameRooms[data.room];
+		var gameRoomObj = socketRoomsHash[data.room];
 		if (gameRoomObj.addUser(socket, data)) {
 			socket.on(events.play, function (data) {
-				var gameRoomObj = gameRooms[data.userInfo.room];
+				var gameRoomObj = socketRoomsHash[data.userInfo.room];
 				gameRoomObj.userPlay(socket, data);
 			});
 			socket.on(events.addComputer, function (data) {
-				var gameRoomObj = gameRooms[data.userInfo.room];
+				var gameRoomObj = socketRoomsHash[data.userInfo.room];
 				gameRoomObj.addComputer(socket, data.userInfo);
 			});
 		}
 	};
 
 	exportObj.userLeave = function (socket) {
-		var gameRoomObj = gameRooms[socket.data.room];
+		var gameRoomObj = socketRoomsHash[socket.data.room];
 		if (gameRoomObj) {
 			gameRoomObj.removeUser(socket);
+		}
+	};
+	exportObj.availableServers = Object.keys(servers);
+
+	exportObj.getSessionCount = function (site) {
+		return servers[site].sessionCount;
+	};
+
+	exportObj.getActiveRooms = function (retdata) {
+		var socketRoomObj = null;
+		for (var key in socketRoomsHash) {
+			socketRoomObj = socketRoomsHash[key];
+			console.log(JSON.stringify(socketRoomObj.game));
+			retdata[socketRoomObj.game].push(socketRoomObj.getRoomInfo());
 		}
 	};
 	return exportObj;

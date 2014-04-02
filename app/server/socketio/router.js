@@ -4,16 +4,32 @@ module.exports = function(app, module_obj, io) {
 	var EM = module_obj.EM;
 	var socketServer = require("./socket-server")(io);
 	var count = 0;
+	var sleep = require('sleep');
 	//Routes 
 	app.get('/trump', function(req, res){
 		var site = "trump";
+		var session = req.query.session;
+		var players = req.query.players;
+		players = (players && (players == 4 || players == 6 || players == 8)) ? players:4;
+		session = (!session) ? socketServer.getSessionCount(site)+1:session;
+		var room = site+session;
 		count++;
-		var user = "socceranoo"+count;
-		res.render('socketio/game/views/home', {site:site, title: site+' - home', user:user});
+		var user = "Guest"+Math.floor((Math.random()*500)+1);
+		res.render('socketio/game/views/home', {site:site, user:user, room:room, session:session, total:players});
 	});
 	app.get('/tube', function(req, res){
 		var site = "Tube";
-		res.render('socketio/tube/views/home', {site:site, title: site+' - home', user:"socceranoo"});
+		res.render('socketio/tube/views/home', {site:site, user:user, room:room, session:session});
+	});
+
+	app.get('/', function(req, res){
+		var site = "Lobby";
+		var list = {};
+		for (var i = 0; i < socketServer.availableServers.length; i++) {
+			list[socketServer.availableServers[i]] = [];
+		}
+		socketServer.getActiveRooms(list);
+		res.render('socketio/views/home', {site:site, title: site+' - home', list:list});
 	});
 
 	//Generic socket connection handler...

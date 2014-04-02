@@ -22,6 +22,10 @@ exports.getMinimumBid = function (game, round) {
 	return bid[game][round];
 };
 
+exports.getTotalPoints = function (num) {
+	var game = [28, 0, 48, 0, 88];
+	return game[num - 4];
+};
 exports.processRound = function (round, trump) {
 	var leadObj = round[0];
 	var points = 0;
@@ -42,24 +46,85 @@ exports.setTrump = function (playerObj, trump) {
 };
 exports.bestCard = function (playerObj, round, trump) {
 	var index = 0;
+	var i = 0;
+	if (round.length === 0 ) {
+		//console.log("First Card");
+		return {card: playerObj.hand[index], index:index};
+	}
+	for (i = 0; i < playerObj.hand.length ; i++) {
+		if(round[0].card.suit.name == playerObj.hand[i].suit.name){
+			//console.log("Lead Card:"+round[0].card.name+" My card:"+playerObj.hand[i].name);
+			return {card: playerObj.hand[i], index:i};
+		}
+	}
+	if (trump.revealed === false) {
+		for (i = 0; i < playerObj.hand.length ; i++) {
+			if(trump.card.suit.name == playerObj.hand[i].suit.name){
+				//console.log("Trump revealed and trump played");
+				return {card: playerObj.hand[i], index:i, reveal:true};
+			}
+		}
+		//console.log("Trump revealed and no trump");
+		return {card: playerObj.hand[index], index:index, reveal:true};
+	}
+	//console.log("Lead Card:"+round[0].card.name+" My card:"+playerObj.hand[index].name+" Trump Revealed is :"+trump.revealed);
 	return {card: playerObj.hand[index], index:index};
 };
-exports.isValidCard = function (playerObj, card, round, trump) {
+exports.revealTrump = function (playerObj, round, trump) {
 	var message = '';
-	if (round.length === 0 ) {
-		return [true, message];
+	if (trump.revealed === true) {
+		message = 'Trump already revealed';
+		return [false, message];
 	}
-	if (card.suit.name == round[0].card.suit.name) {
-		return [true, message];
+	if (round.length === 0 ) {
+		message = 'Cannot reveal trump when you are playing first';
+		return [false, message];
 	}
 	var suitFound = false;
 	for (var i = 0; i < playerObj.hand.length ; i++) {
 		if (round[0].card.suit.name == playerObj.hand[i].suit.name){
 			suitFound = true;
-			message = 'Cannot play some other suit than the lead card suit';
+			message = 'Cannot reveal trump when you have the suit';
 		}
 	}
 	return [!suitFound, message];
+};
+exports.isValidCard = function (playerObj, card, round, roundNumber, trump) {
+	var message = '';
+	var i = 0;
+	var trumpCount = 0;
+	var trumpFound = false;
+	var suitFound = false;
+
+	var message1 = 'Cannot play trump before it is revealed';
+	var message2 = 'Cannot play other suit than the trump when you have revealed it';
+	var message3 = 'Cannot play some other suit than the lead card suit';
+	for (i = 0; i < playerObj.hand.length ; i++) {
+		if (trump.card.suit.name == playerObj.hand[i].suit.name){
+			trumpCount++;
+		}
+		if (round.length > 0 && round[0].card.suit.name == playerObj.hand[i].suit.name){
+			suitFound = true;
+		}
+	}
+	if (round.length === 0 ) {
+		if (playerObj.position == trump.setter && card.suit.name == trump.card.suit.name && trump.revealed === false) {
+			if (trumpCount < playerObj.hand.length) {
+				return [false, message1];
+			}
+		}
+		return [true, message];
+	}
+	if (card.suit.name == round[0].card.suit.name) {
+		return [true, message];
+	}
+	if (trump.revealRound == roundNumber && trump.revealer == playerObj.position) {
+		if (card.suit.name != trump.card.suit.name && trumpCount > 0) {
+			return [false, message2];
+		}
+		return [true, message];
+	}
+	return [!suitFound, message3];
 };
 exports.bestBid = function (playerObj, bidObj, trump) {
 	if (trump === null) {
@@ -68,7 +133,7 @@ exports.bestBid = function (playerObj, bidObj, trump) {
 		return {pass:true, points: bidObj.points};
 	}
 };
-exports.pruneCardDeck = function (cardDeck, num, testPlayers) {
+exports.pruneCardDeck = function (cardDeck, num) {
 	var ret = [];
 	var pointsObj = getPointsObj();
 	for (var j = 0 ; j < cardDeck.length; j++) {
@@ -81,6 +146,6 @@ exports.pruneCardDeck = function (cardDeck, num, testPlayers) {
 		}
 		ret.push(cardDeck[j]);
 	}
-	return ret.slice(0, 4*testPlayers);
+	return ret;
 };
 

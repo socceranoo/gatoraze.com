@@ -1,0 +1,32 @@
+extends layout
+block content
+	.row
+		h3.text-center= site
+		- each val, server in list
+			h3.text-center= server.toUpperCase()
+			a.btn.btn-success(href='/'+server+'/?user=asdadasd') New 4 player game
+			a.btn.btn-success(href='/'+server+'/?players=6&user=asdadasd') New 6 player game
+			a.btn.btn-success(href='/'+server+'/?players=8&user=asdadasd') New 8 player game
+
+			- if (val.length)
+				.wll
+					table.table.table-bordered.table-striped
+						tr
+							th Server
+							th Room
+							th In Progress
+							th Players
+							th Info
+							th Join
+						- each stuff in val
+							tr
+								td= stuff.game+' ('+stuff.totalPoints+')'
+								td= stuff.room
+								td= stuff.inProgress
+								td= stuff.active+'/'+stuff.total
+								td
+									ul.list-unstyled
+									- each player in stuff.playerInfo
+										li= player
+								td
+									a(href='/'+stuff.game+'/?session='+stuff.session+'&user=asdadasd') Join

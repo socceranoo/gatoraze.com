@@ -10,7 +10,6 @@ function Trump($scope) {
 	var socket = io.connect();
 	var maxArraySize = 5;
 	$scope.position = 0;
-	$scope.session = 1;
 	$scope.message = '';
 	$scope.connected = false;
 	$scope.messageArr = [];
@@ -19,13 +18,13 @@ function Trump($scope) {
 	$scope.oldBidObj = null;
 	var joker = {name:"JOKER", index:0, bgPos:[111, 0]};
 	var blank = {name:"BLANK", index:0, bgPos:[222, 0]};
-	$scope.trump = {card:null, setter:'', points:''};
+	$scope.trump = {card:null, setter:'', points:'', revealed:false};
 	$scope.tableData = {players : [], round :[], prevRound:[], bidData:[], prevGame:[]};
 	$scope.bidOver = false;
 	var defaultInfo = 'Welcome';
 	$scope.info = defaultInfo;
 
-	var userInfo = {user:user, site:site, room:site+$scope.session , session:$scope.session};
+	var userInfo = {user:user, site:site, room:room , session:session, total:total};
 
 	$scope.bidObj = {
 		bid:false,
@@ -58,6 +57,7 @@ function Trump($scope) {
 				$scope.action = "Wait";
 				$scope.bidObj.minimum = false;
 				socket.emit(events.play, {userInfo: userInfo, play:false, player:$scope.position, trump:null, bidObj:$scope.bidObj});
+				$("#bid-modal").modal('hide');
 			}
 		},
 		passBid: function() {
@@ -68,6 +68,7 @@ function Trump($scope) {
 				}
 				$scope.action = "Wait";
 				socket.emit(events.play, {userInfo: userInfo, play:false, pass:true, player:$scope.position, trump:null, bidObj:$scope.oldBidObj});
+				$("#bid-modal").modal('hide');
 			}
 		}
 	};
@@ -77,7 +78,7 @@ function Trump($scope) {
 		socket.emit('setPseudo', {userInfo: userInfo});
 	});
 	socket.on(events.welcome, function(data) {
-		$scope.addMessage(data.message, data.sender, data.date, data.data);
+		//$scope.addMessage(data.message, data.sender, data.date, data.data);
 		$scope.connected = true;
 		//$scope.addControlData(events.welcome, data.data);
 		for (var i = 0; i< data.data.length; i++) {
@@ -95,7 +96,7 @@ function Trump($scope) {
 			}
 		});
 		socket.on(events.playerLeave, function(data) {
-			$scope.addMessage(data.message, data.sender, data.date, data.data);
+			//$scope.addMessage(data.message, data.sender, data.date, data.data);
 			$scope.addControlData(events.playerLeave, data.data);
 			if (data.data.inProgress) {
 				$scope.tableData.players[data.data.position] = data.data.name;
@@ -103,21 +104,22 @@ function Trump($scope) {
 			}
 		});
 		socket.on(events.round, function(data) {
-			$scope.addMessage(data.message, data.sender, data.date, data.data);
+			//$scope.addMessage(data.message, data.sender, data.date, data.data);
 			$scope.tableData.prevRound = data.data.prevRound;
 			$scope.setDefaultBg(1);
-			$scope.addControlData(events.round, data.data);
+			//$scope.addControlData(events.round, data.data);
 			$scope.$apply();
 		});
 		socket.on(events.game, function(data) {
-			$scope.addMessage(data.message, data.sender, data.date, data.data);
+			//$scope.addMessage(data.message, data.sender, data.date, data.data);
 			$scope.trump.card = null;
 			$scope.trump.setter ='';
 			$scope.trump.points ='';
+			$scope.trump.revealed = false;
 			$scope.bidOver = false;
 			$scope.setDefaultBg(0);
 			$scope.tableData.prevGame = data.data.prevGame;
-			$scope.addControlData(events.game, data.data);
+			//$scope.addControlData(events.game, data.data);
 			$scope.$apply();
 		});
 		socket.on(events.ready, function(data) {
@@ -149,7 +151,7 @@ function Trump($scope) {
 			$scope.$apply();
 		});
 		socket.on(events.cards, function(data) {
-			$scope.addMessage(data.message, data.sender, data.date, data.data);
+			//$scope.addMessage(data.message, data.sender, data.date, data.data);
 			$scope.cards = $scope.cards.concat(data.data.cards);
 			//$scope.addControlData(events.cards, data.data);
 			$scope.$apply();
@@ -159,52 +161,9 @@ function Trump($scope) {
 			//$scope.addControlData(events.play, data.data);
 			$scope.token = data.data.player;
 			if (data.data.play) {
-				if (data.data.cardObj) {
-					if (data.data.cardObj.player == $scope.position) {
-						$scope.cards.splice(data.data.cardObj.index, 1);
-					}
-					$scope.tableData.round[data.data.cardObj.player] = data.data.cardObj.card;
-				}
-				if ($scope.token == $scope.position) {
-					$scope.action = "Play";
-				} else {
-					$scope.action = "Wait";
-				}
+				$scope.playFunction(data);
 			} else {
-				$scope.oldBidObj = data.data.bidObj;
-				$scope.bidObj.bid = data.data.bidObj.bid;
-				$scope.bidObj.bidder = data.data.bidObj.bidder;
-				$scope.bidObj.points = data.data.bidObj.points;
-				$scope.bidObj.minimum = data.data.bidObj.minimum;
-				if (data.data.bidObj.bid && $scope.token == $scope.position) {
-					$scope.action = "Bid";
-				} else {
-					$scope.action = "Wait";
-				}
-
-				//Setting trump for the first time
-				if ($scope.bidObj.bid === false) {
-					if($scope.position == data.data.player) {
-						$scope.action = "Set Trump";
-					}
-					if (data.data.bidObj.trump === true) {
-						$scope.trump.setter = data.data.bidObj.bidder;
-						if ($scope.trump.setter != $scope.position)
-							$scope.trump.card = joker;
-						$scope.trump.points = data.data.bidObj.points;
-						$scope.clearBidData();
-						if (data.data.bidObj.round == 2) {
-							$scope.bidOver = true;
-							$scope.setDefaultBg(1);
-						}
-					}else {
-						if (data.data.pass === true) {
-							$scope.tableData.bidData[data.data.bidObj.bidder] = '-';
-						} else {
-							$scope.tableData.bidData[data.data.bidObj.bidder] = data.data.bidObj.points;
-						}
-					}
-				}
+				$scope.bidFunction(data);
 			}
 			$scope.$apply();
 		});
@@ -215,6 +174,76 @@ function Trump($scope) {
 	socket.on('disconnect', function(data) {
 		window.location.reload(true);
 	});
+	$scope.playFunction = function (data) {
+		$scope.info = data.message;
+		if (data.data.cardObj) {
+			if (data.data.cardObj.player == $scope.position) {
+				$scope.cards.splice(data.data.cardObj.index, 1);
+			}
+			$scope.tableData.round[data.data.cardObj.player] = data.data.cardObj.card;
+		}
+		if (data.data.reveal && data.data.reveal === true) {
+			if (data.data.card !== null) {
+				$scope.trump.revealed = true;
+				$scope.trump.card = data.data.card;
+				if ($scope.token == $scope.position) {
+					$scope.info = "Trump Revealed by you";
+				}
+				if ($scope.trump.setter == $scope.position) {
+					$scope.cards.push($scope.trump.card);
+				}
+			}
+		}
+		if ($scope.token == $scope.position) {
+			$scope.action = "Play";
+		} else {
+			$scope.action = "Wait";
+		}
+
+	};
+	$scope.bidFunction = function (data) {
+		$scope.oldBidObj = data.data.bidObj;
+		$scope.bidObj.bid = data.data.bidObj.bid;
+		$scope.bidObj.bidder = data.data.bidObj.bidder;
+		$scope.bidObj.points = data.data.bidObj.points;
+		$scope.bidObj.minimum = data.data.bidObj.minimum;
+		if (data.data.bidObj.bid && $scope.token == $scope.position) {
+			$scope.action = "Bid";
+			$("#bid-modal").modal();
+		} else {
+			$scope.action = "Wait";
+		}
+
+		//Setting trump for the first time
+		if ($scope.bidObj.bid === false) {
+			if($scope.position == data.data.player) {
+				$scope.action = "Set Trump";
+			}
+			if (data.data.bidObj.trump === true) {
+				$scope.trump.setter = data.data.bidObj.bidder;
+				$scope.addControlData(events.play, data.data);
+				if ($scope.trump.setter != $scope.position)
+					$scope.trump.card = joker;
+				else
+					$scope.trump.card = $scope.cards[data.data.bidObj.index];
+				$scope.trump.points = data.data.bidObj.points;
+				$scope.clearBidData();
+				if (data.data.bidObj.round == 2) {
+					$scope.bidOver = true;
+					$scope.setDefaultBg(1);
+					if ($scope.trump.setter == $scope.position)
+						$scope.cards.splice(data.data.bidObj.index, 1);
+				}
+			}else {
+				if (data.data.pass === true) {
+					$scope.tableData.bidData[data.data.bidObj.bidder] = '-';
+				} else {
+					$scope.tableData.bidData[data.data.bidObj.bidder] = data.data.bidObj.points;
+				}
+			}
+		}
+
+	};
 	$scope.clearBidData = function () {
 		for (var i = 0; i< $scope.tableData.bidData.length ; i++) {
 			$scope.tableData.bidData[i] = '';
@@ -232,7 +261,7 @@ function Trump($scope) {
 		$scope.$apply();
 	};
 	$scope.addMessage = function (msg, sender, date, data) {
-		$("#ccbox").append("<p class=small><span class=date>"+date+"</span><span class=sender>"+sender+"</span><span class=message>"+msg+"</span></p>");
+		$("#ccbox").append("<p class=small><span class=date>"+date+" : </span><span class=sender>"+sender+" : </span><span class=message>"+msg+"</span></p>");
 		$('#ccbox').scrollTop($("#ccbox").prop('scrollHeight'));
 	};
 	$scope.addControlData = function (event, data) {
@@ -244,7 +273,7 @@ function Trump($scope) {
 	$scope.sendMessage = function() {
 		if ($scope.message !== "") {
 			socket.emit(events.message, $scope.message);
-			$scope.addMessage($scope.message, "Me :", new Date().toLocaleString(), null);
+			$scope.addMessage($scope.message, "Me : ", new Date().toLocaleString(), null);
 			$scope.message = '';
 		} else {
 			socket.emit('event1', {});
@@ -259,6 +288,12 @@ function Trump($scope) {
 		if ($scope.token == $scope.position && $scope.action == "Play") {
 			//$("#control-data").append("Click : "+card.name);
 			socket.emit(events.play, {play:true, userInfo:userInfo, player:$scope.position, cardObj:{card:card, player:$scope.position, index:index}});
+			$scope.action = "Wait";
+		}
+	};
+	$scope.revealTrump = function () {
+		if ($scope.token == $scope.position && $scope.action == "Play") {
+			socket.emit(events.play, {play:true, userInfo:userInfo, player:$scope.position, reveal:true});
 			$scope.action = "Wait";
 		}
 	};
