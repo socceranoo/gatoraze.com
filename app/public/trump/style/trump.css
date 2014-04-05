@@ -117,7 +117,7 @@ table.gradient-style tr {
 }
 body.trump {
   z-index: 1;
-  background-image: url('../../money/images/money-7.1.jpg');
+  background-image: url('../images/plain-grey.jpg');
   background-size: cover;
   background-repeat: repeat;
 }
@@ -125,7 +125,7 @@ body.modal-open {
   overflow: auto;
 }
 .table-layout {
-  background-image: url('../images/table2.png');
+  background-image: url('../images/table3.png');
   background-size: 100% 100%;
   position: relative;
   height: 588px;
