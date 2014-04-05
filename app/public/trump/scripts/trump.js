@@ -7,7 +7,22 @@ function Trump($scope) {
 		playerLeave:"player-leave", cards:"cards", play:"play",
 		round:"round", game:"game", ready:"ready", addComputer:"add-computer"
 	};
+	$scope.suitImg = {
+		"C": {bgPos:[222, 0]},
+		"S": {bgPos:[111, -111]},
+		"H": {bgPos:[111, 0]},
+		"D": {bgPos:[222, -111]},
+	};
+	$scope.cardBackArr = [
+		{name:"CB1", index:0, bgPos:[999, -888], valid:false},
+		{name:"CB2", index:0, bgPos:[888, -888], valid:false},
+		{name:"CB3", index:0, bgPos:[777, -888], valid:false},
+		{name:"CB4", index:0, bgPos:[666, -888], valid:false},
+		{name:"CB5", index:0, bgPos:[555, -888], valid:false},
+		{name:"CB6", index:0, bgPos:[444, -888], valid:false},
+	];
 	var socket = io.connect();
+	$scope.starter = -1;
 	var maxArraySize = 5;
 	$scope.position = 0;
 	$scope.message = '';
@@ -16,9 +31,10 @@ function Trump($scope) {
 	$scope.cards = [];
 	$scope.token = -1;
 	$scope.oldBidObj = null;
-	var joker = {name:"JOKER", index:0, bgPos:[111, 0]};
-	var blank = {name:"BLANK", index:0, bgPos:[222, 0]};
-	$scope.trump = {card:null, setter:'', points:'', revealed:false};
+	var joker = {name:"JOKER", index:0, bgPos:[888, -888], valid:false};
+	var blank = {name:"BLANK", index:0, bgPos:[222, 0], valid:false};
+	$scope.cardBack = joker;
+	$scope.trump = {card:null, setter:-1, points:0, revealed:false, index:-1};
 	$scope.tableData = {players : [], round :[], prevRound:[], bidData:[], prevGame:[]};
 	$scope.bidOver = false;
 	var defaultInfo = 'Welcome';
@@ -88,36 +104,41 @@ function Trump($scope) {
 			}
 		}
 		socket.on(events.playerJoin, function(data) {
-			$scope.addMessage(data.message, data.sender, data.date, data.data);
+			$scope.info = data.message;
+			//$scope.addMessage(data.message, data.sender, data.date, data.data);
 			$scope.addControlData(events.playerJoin, data.data);
 			if (data.data.inProgress) {
 				$scope.tableData.players[data.data.position] = data.data.name;
-				$scope.$apply();
 			}
+			$scope.$apply();
 		});
 		socket.on(events.playerLeave, function(data) {
+			$scope.info = data.message;
 			//$scope.addMessage(data.message, data.sender, data.date, data.data);
 			$scope.addControlData(events.playerLeave, data.data);
 			if (data.data.inProgress) {
 				$scope.tableData.players[data.data.position] = data.data.name;
-				$scope.$apply();
 			}
+			$scope.$apply();
 		});
 		socket.on(events.round, function(data) {
 			//$scope.addMessage(data.message, data.sender, data.date, data.data);
 			$scope.tableData.prevRound = data.data.prevRound;
+			$scope.starter = data.data.winner.player;
 			$scope.setDefaultBg(1);
 			//$scope.addControlData(events.round, data.data);
 			$scope.$apply();
 		});
 		socket.on(events.game, function(data) {
 			//$scope.addMessage(data.message, data.sender, data.date, data.data);
+			$scope.starter = -1;
 			$scope.trump.card = null;
-			$scope.trump.setter ='';
-			$scope.trump.points ='';
+			$scope.trump.setter = -1;
+			$scope.trump.points = 0;
 			$scope.trump.revealed = false;
 			$scope.bidOver = false;
 			$scope.setDefaultBg(0);
+			$scope.tableData.prevRound = [];
 			$scope.tableData.prevGame = data.data.prevGame;
 			//$scope.addControlData(events.game, data.data);
 			$scope.$apply();
@@ -128,8 +149,13 @@ function Trump($scope) {
 			//$scope.addControlData(events.ready, data.data);
 			$scope.tableData.players = data.data.players;
 			$scope.tableData.players[$scope.position] = "You";
+			//$scope.tableData.players[$scope.position] = "You ("+$scope.tableData.players[$scope.position]+")";
 			for (i = 0; i< $scope.tableData.players.length ; i++) {
-				$scope.tableData.round[i] = blank;
+				if (data.data.round) {
+					$scope.tableData.round[i] = $scope.cardBack;
+				} else {
+					$scope.tableData.round[i] = blank;
+				}
 				$scope.tableData.bidData[i] = '';
 			}
 			if (data.data.round) {
@@ -142,10 +168,15 @@ function Trump($scope) {
 					$scope.tableData.bidData[data.data.bidData[i][0]] = data.data.bidData[i][1];
 				}
 			}
-			if (data.data.trumpData && data.data.trumpData.setter !== '') {
-				$scope.trump.card = joker;
+			if (data.data.trumpData && data.data.trumpData.setter != -1) {
 				$scope.trump.setter = data.data.trumpData.setter;
 				$scope.trump.points = data.data.trumpData.points;
+				$scope.trump.revealed = data.data.trumpData.revealed;
+				if ($scope.trump.revealed === true) {
+					$scope.trump.card = data.data.trumpData.card;
+				} else {
+					$scope.trump.card = $scope.cardBack;
+				}
 			}
 			$scope.action = "Wait";
 			$scope.$apply();
@@ -167,6 +198,9 @@ function Trump($scope) {
 			}
 			$scope.$apply();
 		});
+		$("#myCarousel").carousel({interval: false});
+		for (i = 1 ; i < total; i++)
+			$scope.addComputer();
 	});
 	socket.on(events.message, function(data) {
 		$scope.addMessage(data.message, data.sender, data.date, data.data);
@@ -190,7 +224,7 @@ function Trump($scope) {
 					$scope.info = "Trump Revealed by you";
 				}
 				if ($scope.trump.setter == $scope.position) {
-					$scope.cards.push($scope.trump.card);
+					$scope.cards[$scope.trump.index] = $scope.trump.card;
 				}
 			}
 		}
@@ -223,7 +257,7 @@ function Trump($scope) {
 				$scope.trump.setter = data.data.bidObj.bidder;
 				$scope.addControlData(events.play, data.data);
 				if ($scope.trump.setter != $scope.position)
-					$scope.trump.card = joker;
+					$scope.trump.card = $scope.cardBack;
 				else
 					$scope.trump.card = $scope.cards[data.data.bidObj.index];
 				$scope.trump.points = data.data.bidObj.points;
@@ -231,8 +265,10 @@ function Trump($scope) {
 				if (data.data.bidObj.round == 2) {
 					$scope.bidOver = true;
 					$scope.setDefaultBg(1);
-					if ($scope.trump.setter == $scope.position)
-						$scope.cards.splice(data.data.bidObj.index, 1);
+					if ($scope.trump.setter == $scope.position) {
+						$scope.trump.index = data.data.bidObj.index;
+						$scope.cards[data.data.bidObj.index] = $scope.cardBack;
+					}
 				}
 			}else {
 				if (data.data.pass === true) {
@@ -254,7 +290,7 @@ function Trump($scope) {
 		if (option === 0)
 			card = blank;
 		else
-			card = joker;
+			card = $scope.cardBack;
 		for (var i = 0; i< $scope.tableData.round.length ; i++) {
 			$scope.tableData.round[i] = card;
 		}
@@ -286,6 +322,10 @@ function Trump($scope) {
 			$scope.action = "Wait";
 		}
 		if ($scope.token == $scope.position && $scope.action == "Play") {
+			if (card.name == blank.name || card.name == $scope.cardBack.name) {
+				$scope.info = "Cannot play closed card";
+				return;
+			}
 			//$("#control-data").append("Click : "+card.name);
 			socket.emit(events.play, {play:true, userInfo:userInfo, player:$scope.position, cardObj:{card:card, player:$scope.position, index:index}});
 			$scope.action = "Wait";
@@ -297,4 +337,9 @@ function Trump($scope) {
 			$scope.action = "Wait";
 		}
 	};
+	$scope.changeCardBack = function (option) {
+		$scope.cardBack.bgPos = $scope.cardBackArr[option].bgPos;
+		$scope.$apply();
+	};
+
 }

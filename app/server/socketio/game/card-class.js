@@ -18,6 +18,7 @@ function card(rank, suit) {
 	this.suit = suit;
 	this.index = (suit.index * 13) + rank.index;
 	this.bgPos = bgPosForCardIndex(this.index);
+	this.valid = true;
 }
 exports.createCardDeck = function () {
 	var masterCardDeck = [];

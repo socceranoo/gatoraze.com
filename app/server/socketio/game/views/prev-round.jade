@@ -1,11 +1,11 @@
 #prev-round.modal.fade(style='overflow:auto')
-	.modal-dialog.modal-sm
+	.modal-dialog
 		.modal-content
 			.modal-header.text-center
 				a.close(data-dismiss='modal') &times;
 				h3 Previous Round
 			.modal-body.text-center
-				ul.position-set.card-set.clearfix.list-unstyled.list-inline(ng-cloak)
-					li.card-holder.card-position(ng-repeat='obj in tableData.prevRound track by $index')
-						.card.green-border(ng-class="{'red-border': obj.player%2 == 1}" style='background-position:{{obj.card.bgPos[0]}}px {{obj.card.bgPos[1]}}px')
+				.table-layout.clearfix(ng-cloak ng-show='tableData.prevRound.length')
+					.card-holder(ng-repeat='obj in tableData.prevRound track by $index' class='pos'+total+'-{{obj.player}}')
+						.card.green-border(ng-class="{'red-border': obj.player%2 == 1, 'blue-border': $index == 0}" style='background-position:{{obj.card.bgPos[0]}}px {{obj.card.bgPos[1]}}px')
 						span.player-name(ng-class="{'color-metroRed': obj.player%2 == 1}" ng-bind='tableData.players[obj.player]')

@@ -47,6 +47,9 @@ exports.setTrump = function (playerObj, trump) {
 exports.bestCard = function (playerObj, round, trump) {
 	var index = 0;
 	var i = 0;
+	if (playerObj.hand.length === 1 && trump.revealed === false && playerObj.position == trump.setter) {
+		return {card: trump.card, index:index, reveal:true};
+	}
 	if (round.length === 0 ) {
 		//console.log("First Card");
 		return {card: playerObj.hand[index], index:index};
@@ -75,6 +78,9 @@ exports.revealTrump = function (playerObj, round, trump) {
 	if (trump.revealed === true) {
 		message = 'Trump already revealed';
 		return [false, message];
+	}
+	if (playerObj.hand.length === 1 && playerObj.position == trump.setter) {
+		return [true, message];
 	}
 	if (round.length === 0 ) {
 		message = 'Cannot reveal trump when you are playing first';

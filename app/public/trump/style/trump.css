@@ -117,74 +117,71 @@ table.gradient-style tr {
 }
 body.trump {
   z-index: 1;
+  background-image: url('../../money/images/money-7.1.jpg');
+  background-size: cover;
+  background-repeat: repeat;
 }
 body.modal-open {
   overflow: auto;
 }
-#der {
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -o-border-radius: 5px;
-  border-radius: 5px;
+.table-layout {
+  background-image: url('../images/table2.png');
+  background-size: 100% 100%;
+  position: relative;
+  height: 588px;
+  border-radius: 50%;
+  transform: scale(1);
+  -ms-transform: scale(1);
+  -webkit-transform: scale(1);
+  transition: transform .3s linear;
+  -webkit-transition: -webkit-transform 0.3s linear;
 }
-#ter {
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -ms-border-radius: 10px;
-  -o-border-radius: 10px;
-  border-radius: 10px;
-}
-ul.card-set {
+.card-set {
   width: auto;
-  margin: 5px auto;
+  margin: 0px auto;
   padding-left: 70px;
   min-height: 194px;
 }
-ul.card-set li.card-holder {
+.card-set .card-holder {
   position: relative;
   margin-left: -70px;
   padding: 0px 0px 0px 0px;
+  transform: scale(0.85);
+  -ms-transform: scale(0.85);
+  -webkit-transform: scale(0.85);
+  transition: transform .3s linear;
+  -webkit-transition: -webkit-transform 0.3s linear;
+}
+.table-layout .card-holder,
+.trump-card {
+  transform: scale(0.85);
+  -ms-transform: scale(0.85);
+  -webkit-transform: scale(0.85);
+  transition: transform .3s linear;
+  -webkit-transition: -webkit-transform 0.3s linear;
 }
 .card {
   position: relative;
+  margin: 0px auto;
   width: 111px;
   height: 148px;
   background-image: url("../images/cardset3.jpg");
   background-position: 111px 0px;
   box-shadow: 0 0 10px #9ecaed;
-  /*
-	top:-30px;
-	*/
-  transform: scale(0.75);
-  -ms-transform: scale(0.75);
-  -webkit-transform: scale(0.75);
-  transition: transform .3s linear;
-  -webkit-transition: -webkit-transform 0.3s linear;
+  border-radius: 15px;
 }
 .player-name {
   position: relative;
-  top: 10px;
-  font-size: 20px;
+  top: 4px;
   color: #339966;
+  font-size: 20px;
 }
-ul.player-hand .card:hover {
-  /*
-	top:-30px;
-	*/
-  transform: scale(1.2);
-  -ms-transform: scale(1.2);
-  -webkit-transform: scale(1.2);
-  transition: transform .3s linear;
-  -webkit-transition: -webkit-transform 0.3s linear;
+.player-hand .card {
+  cursor: pointer;
 }
-ul.position-set {
-  padding: 0px !important;
-  min-height: 0px !important;
-}
-.card-position {
-  margin: 10px !important;
-  padding: 5px !important;
+.blue-border {
+  outline: 5px solid #3498db !important;
+  border-radius: 10px;
 }
 .bid-data {
   line-height: 148px;
@@ -192,13 +189,146 @@ ul.position-set {
   margin: 0px;
   padding: 0px;
 }
-.active {
-  /*
-	top:-30px;
-	*/
-  transform: scale(1.2);
-  -ms-transform: scale(1.2);
-  -webkit-transform: scale(1.2);
-  transition: transform .3s linear;
-  -webkit-transition: -webkit-transform 0.3s linear;
+.control {
+  position: absolute;
+  top: 0px;
+  font-size: 55px;
+  z-index: 156;
+}
+.control-left {
+  left: 0px;
+}
+.control-right {
+  right: 0px;
+}
+.our-turn .card {
+  opacity: 0.4;
+}
+.pos4-0 {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  margin-left: -55.5px;
+}
+.pos4-2 {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  margin-left: -55.5px;
+}
+.pos4-1 {
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  margin-top: -84px;
+  margin-left: 0px;
+}
+.pos4-3 {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  margin-top: -84px;
+  margin-right: 0px;
+}
+.pos6-0 {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  margin-left: -55.5px;
+}
+.pos6-1 {
+  position: absolute;
+  left: 50px;
+  bottom: 33%;
+  margin-bottom: -84px;
+  margin-right: 0px;
+}
+.pos6-2 {
+  position: absolute;
+  left: 50px;
+  top: 33%;
+  margin-top: -84px;
+  margin-right: 0px;
+}
+.pos6-3 {
+  position: absolute;
+  top: 5px;
+  right: 50%;
+  margin-right: -55.5px;
+}
+.pos6-4 {
+  position: absolute;
+  right: 50px;
+  top: 33%;
+  margin-top: -84px;
+  margin-right: 0px;
+}
+.pos6-5 {
+  position: absolute;
+  right: 50px;
+  bottom: 33%;
+  margin-bottom: -84px;
+  margin-right: 0px;
+}
+.pos8-0 {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  margin-left: -55.5px;
+}
+.pos8-1 {
+  position: absolute;
+  bottom: 55px;
+  left: 25%;
+  margin-left: -55.5px;
+}
+.pos8-2 {
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  margin-top: -84px;
+  margin-left: 0px;
+}
+.pos8-3 {
+  position: absolute;
+  top: 55px;
+  left: 25%;
+  margin-left: -55.5px;
+}
+.pos8-4 {
+  position: absolute;
+  top: 55px;
+  right: 25%;
+  margin-right: -55.5px;
+}
+.pos8-5 {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  margin-left: -55.5px;
+}
+.pos8-6 {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  margin-top: -84px;
+  margin-right: 0px;
+}
+.pos8-7 {
+  position: absolute;
+  bottom: 55px;
+  right: 25%;
+  margin-right: -55.5px;
+}
+.trump-position {
+  background-image: url("../images/suits222.png");
+  background-position: 222px -222px;
+  width: 111px;
+  height: 111px;
+  font-size: 18px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -55.5px;
+  margin-left: -55.5px;
 }

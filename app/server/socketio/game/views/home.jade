@@ -1,25 +1,17 @@
 extends layout
 
 block content
+	//modals
 	include control
+	include cardback
 	include prev-round
 	include prev-game
-	.row
-		.well.text-center
-			h3= site
-			h4.color-metroRed(ng-bind='info')
-			a.btn.btn-success(data-toggle='modal' href='#prev-round') Previous Round
-			a.btn.btn-warning(data-toggle='modal' href='#control-modal') Control data
-			a.btn.btn-warning(data-toggle='modal' href='#prev-game') Previous Game
-			a.btn.btn-primary(href='javascript:void(0);' ng-click='addComputer()') Add Computer
-			a.btn.btn-danger(href='/' ng-click='addComputer()') Back to Lobby
-		div.col-md-12.text-center
-			include table-layout
-		div.col-md-12.text-center
-			include cards
-		div.col-md-3
-			include bid-area
-		div.col-md-6
-			include trump-area
-		div.col-md-6
-			include message-area
+	include message-area
+	include bid-area
+	.row.text-center
+		include buttons
+		h3= site
+		h4.color-metroRed(ng-bind='info')
+		include table-layout
+		include cards
+		include trump-area

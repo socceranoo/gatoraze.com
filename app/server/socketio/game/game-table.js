@@ -1,6 +1,6 @@
 var cardClass = require('./card-class');
 var ALL = 2, ALL_BUT_SENDER = 1, SENDER = 0;
-var sleepSeconds = 1;
+var sleepSeconds = 0.0 * 200000;
 var events = require('./events').events;
 var gameEngine = require('./trump-engine');
 
@@ -22,19 +22,19 @@ player.prototype.getCardSet = function (set) {
 	return ret;
 };
 function table(num, room) {
-	var autoBid = false;
+	var autoBid = true;
 	this.room = room;
 	this.totalPoints = gameEngine.getTotalPoints(num);
 	this.cardDeck = gameEngine.pruneCardDeck(cardClass.createCardDeck(), num);
 	this.totalPlayers = num;
 	this.handCount = parseInt(this.cardDeck.length/this.totalPlayers, 10);
-	this.trump = {card:null, setter:'', points:'', revealed:false, revealer:-1, revealRound:-1, revealPosition:-1};
+	this.trump = {card:null, setter:-1, points:0, revealed:false, revealer:-1, revealRound:-1, revealPosition:-1};
 	this.games = [];
 
 	this.resetTrump = function () {
 		this.trump.card =null;
-		this.trump.setter = '';
-		this.trump.points = '';
+		this.trump.setter = -1;
+		this.trump.points = 0;
 		this.trump.revealed = false;
 		this.trump.revealer = -1;
 		this.trump.revealRound = -1;
@@ -103,7 +103,7 @@ function table(num, room) {
 			sendData.push({dest:SENDER, event:events.cards, message:"CARDS",  data:{set:1, cards:playerObj.getCardSet(1)}});
 			if (this.biddingOver === true) {
 				sendData.push({dest:SENDER, event:events.cards, message:"CARDS",  data:{set:1, cards:playerObj.getCardSet(2)}});
-				sendData.push({dest:SENDER, event:events.ready, message:"READY", data:{inProgress:true, players:this.playerArr, round:this.currentRound}});
+				sendData.push({dest:SENDER, event:events.ready, message:"READY", data:{inProgress:true, players:this.playerArr, round:this.currentRound, trumpData:{setter:this.trump.setter, points:this.trump.points, revealed:this.trump.revealed, card:(this.trump.revealed === true)?this.trump.card:null }}});
 			} else {
 				sendData.push( {dest:SENDER, event:events.ready, message:"READY",
 					data:{inProgress:true, players:this.playerArr, bidData:this.bidData, trumpData:{setter:this.trump.setter, points:this.trump.points}}

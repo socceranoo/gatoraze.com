@@ -76,7 +76,7 @@ module.exports = function(IO) {
 		for (var i = 0; i < sendData.length; i++) {
 			//console.log(JSON.stringify(sendData[i]));
 			if (sendData[i].event == "sleep") {
-				sleep.sleep(sendData[i].data);
+				sleep.usleep(sendData[i].data);
 				continue;
 			}
 			if (sendData[i].receiver) {
@@ -151,6 +151,14 @@ module.exports = function(IO) {
 	};
 	exportObj.availableServers = Object.keys(servers);
 
+	exportObj.getRoomInfo = function (room) {
+		var gameRoomObj = socketRoomsHash[room];
+		if (gameRoomObj) {
+			return gameRoomObj.getRoomInfo();
+		} else {
+			return null;
+		}
+	};
 	exportObj.getSessionCount = function (site) {
 		return servers[site].sessionCount;
 	};

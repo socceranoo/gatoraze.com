@@ -1,0 +1,10 @@
+#card-back.modal.fade
+	.modal-dialog.modal-sm
+		.modal-content
+			.modal-header.text-center
+				a.close(data-dismiss='modal') &times;
+				h3 Choose Card back
+			.modal-body.text-center
+				ul.list-inline.list-unstyled
+					li.card-holder(ng-repeat='obj in cardBackArr track by $index' style="cursor:pointer;" ng-click='changeCardBack($index)')
+						.card.green-border(style='background-position:{{obj.bgPos[0]}}px {{obj.bgPos[1]}}px')
