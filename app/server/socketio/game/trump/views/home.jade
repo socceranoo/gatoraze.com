@@ -2,15 +2,14 @@ extends layout
 
 block content
 	//modals
-	include control
-	include cardback
+	include ../../common/control
+	include ../../common/message-area
+	include ../../common/cardback
 	include prev-round
 	include prev-game
-	include message-area
 	include bid-area
 	.row.text-center
 		include buttons
-		h3= site
 		h4.color-metroRed(ng-bind='info')
 		include table-layout
 		include cards

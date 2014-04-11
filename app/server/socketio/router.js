@@ -20,11 +20,23 @@ module.exports = function(app, module_obj, io) {
 			players = temp.total;
 		}
 		count++;
-		res.render('socketio/game/views/home', {site:site, user:user, room:room, session:session, total:players});
+		res.render('socketio/game/trump/views/home', {site:site, user:user, room:room, session:session, total:players});
 	});
 	app.get('/tube', function(req, res){
 		var site = "Tube";
 		res.render('socketio/tube/views/home', {site:site, user:user, room:room, session:session});
+	});
+	app.get('/hearts', function(req, res){
+		var rand = Math.floor((Math.random()*500)+1);
+		var user = "Guest"+rand;
+		var site = "hearts";
+		var session = req.query.session;
+		var players = req.query.players;
+		session = (!session) ? rand : session;
+		var room = site+session;
+		players = 4;
+		count++;
+		res.render('socketio/game/hearts/views/home', {site:site, user:user, room:room, session:session, total:players});
 	});
 
 	app.get('/', function(req, res){

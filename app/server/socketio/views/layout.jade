@@ -3,11 +3,13 @@ html(ng-app='')
 	head
 		title= title
 		include ../../common-css
-	body
+		link(rel='STYLESHEET', type='text/css', href='/socketio/style/lobby.css')
+	body.lobby
 		.container
 			block content
 		include ../../common-scripts
 		//
+			script(src="/socketio/scripts/trump.js").
 			script.
 				var user= '!{user}';
 				var site= '!{site}';

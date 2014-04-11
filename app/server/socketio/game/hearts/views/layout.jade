@@ -1,0 +1,18 @@
+doctype html
+html(ng-app='')
+	head
+		title= site+'- home'
+		include ../../../../common-css
+		link(rel='STYLESHEET', type='text/css', href='/socketio/style/trump.css')
+	body.hearts
+		.container(ng-controller='Hearts')
+			block content
+		include ../../../../common-scripts
+		script(src="/socket.io/socket.io.js").
+		script(src="/socketio/scripts/hearts.js").
+		script.
+			var user= '!{user}';
+			var site= '!{site}';
+			var session= '!{session}';
+			var room= '!{room}';
+			var total= '!{total}';

@@ -2,14 +2,14 @@ doctype html
 html(ng-app='')
 	head
 		title= site+'- home'
-		include ../../../common-css
-		link(rel='STYLESHEET', type='text/css', href='/trump/style/trump.css')
+		include ../../../../common-css
+		link(rel='STYLESHEET', type='text/css', href='/socketio/style/trump.css')
 	body.trump
 		.container(ng-controller='Trump')
 			block content
-		include ../../../common-scripts
+		include ../../../../common-scripts
 		script(src="/socket.io/socket.io.js").
-		script(src="/trump/scripts/trump.js").
+		script(src="/socketio/scripts/trump.js").
 		script.
 			var user= '!{user}';
 			var site= '!{site}';

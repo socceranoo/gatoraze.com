@@ -1,0 +1,16 @@
+#prev-game.modal.fade(style='overflow:auto')
+	.modal-dialog
+		.modal-content
+			.modal-header.text-center
+				a.close(data-dismiss='modal') &times;
+				h3 Previous game
+			#myCarousel.carousel.slide.modal-body.text-center(ng-show='tableData.prevGame.length')
+				a.control.control-left(href="#myCarousel" data-slide="prev") <
+				a.control.control-right(href="#myCarousel" data-slide="next") >
+				.carousel-inner
+					.item(ng-repeat='round in tableData.prevGame track by $index' ng-class="{'active':$index == 0}")
+						h2 Round{{$index+1}}
+						.table-layout
+							.card-holder(ng-repeat='obj in round track by $index' class='pos'+total+'-{{obj.player}}')
+								.card.green-border(ng-class="{'red-border': obj.player%2 == 1, 'blue-border':$index == 0}" style='background-position:{{obj.card.bgPos[0]}}px {{obj.card.bgPos[1]}}px')
+								span.player-name(ng-class="{'color-metroRed': obj.player%2 == 1}" ng-bind='tableData.players[obj.player]')

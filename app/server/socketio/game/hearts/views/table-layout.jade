@@ -1,0 +1,9 @@
+.col-md-12(ng-cloak ng-show='tableData.round.length')
+	.table-layout.clearfix.col-md-6.col-md-offset-3.background-clous.ackground-opacity
+		.card-holder(ng-repeat='card in tableData.round track by $index' class='pos'+total+'-{{$index}}')
+			.card(ng-class="{'active': $index == token, 'blue-border': $index == starter}" style='background-position:{{card.bgPos[0]}}px {{card.bgPos[1]}}px')
+				span.bid-data(ng-bind='tableData.bidData[$index]')
+			.player-name(ng-class="{'color-metroRed': $index == 1, 'color-metroCyan': $index == 2, 'color-metroPurple': $index == 3}")
+				span(ng-bind='tableData.players[$index]')
+		.trump-position(ng-show='firstHearts' style='background-position:{{suitImg.H.bgPos[0]}}px {{suitImg.H.bgPos[1]}}px')
+		a.trump-position(href='javascript:void(0);' ng-click='submitPass()' ng-hide='passOver' style='background-position:{{suitImg[bgIcon].bgPos[0]}}px {{suitImg[bgIcon].bgPos[1]}}px')

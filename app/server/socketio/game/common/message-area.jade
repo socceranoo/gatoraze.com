@@ -1,0 +1,15 @@
+#chat-modal.modal.fade
+	.modal-dialog.modal-sm
+		.modal-content
+			.modal-header.text-center
+				a.close(data-dismiss='modal') &times;
+				h3 Chat
+			.modal-body.text-justify
+				.col-md-12
+					.input-group
+						input.form-control(type='text' placeholder='type to chat' ng-model='message')
+						.input-group-btn
+							button.btn.btn-default(ng-click='sendMessage()') Send
+				div.well(style='height:300px; overflow:auto;')
+					div#ocbox
+					div#ccbox

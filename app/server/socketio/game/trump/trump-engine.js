@@ -41,7 +41,7 @@ exports.processRound = function (round, trump) {
 	return {player:leadObj.player, points:points};
 };
 exports.setTrump = function (playerObj, trump) {
-	var index = 0;
+	var index = 1;
 	return playerObj.hand[index];
 };
 exports.bestCard = function (playerObj, round, trump) {

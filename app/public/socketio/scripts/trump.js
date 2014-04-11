@@ -224,7 +224,12 @@ function Trump($scope) {
 					$scope.info = "Trump Revealed by you";
 				}
 				if ($scope.trump.setter == $scope.position) {
-					$scope.cards[$scope.trump.index] = $scope.trump.card;
+					for (var i = 0; i < $scope.cards.length; i++) {
+						if ($scope.cards[i].name == $scope.cardBack.name) {
+							$scope.cards[i] = $scope.trump.card;
+							break;
+						}
+					}
 				}
 			}
 		}
@@ -266,7 +271,6 @@ function Trump($scope) {
 					$scope.bidOver = true;
 					$scope.setDefaultBg(1);
 					if ($scope.trump.setter == $scope.position) {
-						$scope.trump.index = data.data.bidObj.index;
 						$scope.cards[data.data.bidObj.index] = $scope.cardBack;
 					}
 				}
@@ -297,6 +301,10 @@ function Trump($scope) {
 		$scope.$apply();
 	};
 	$scope.addMessage = function (msg, sender, date, data) {
+		if (data.error) {
+			$scope.info = msg;
+			$scope.$apply();
+		}
 		$("#ccbox").append("<p class=small><span class=date>"+date+" : </span><span class=sender>"+sender+" : </span><span class=message>"+msg+"</span></p>");
 		$('#ccbox').scrollTop($("#ccbox").prop('scrollHeight'));
 	};

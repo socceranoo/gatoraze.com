@@ -6,9 +6,9 @@ module.exports = function(IO) {
 	var exportObj = {};
 	var events = require('./game/events').events;
 	var servers = {
-		trump: {name:"trump", sessionCount: 0, tableObj:require('./game/game-table')},
+		trump: {name:"trump", sessionCount: 0, tableObj:require('./game/trump/trump-table')},
 		tube:{name:"tube", sessionCount:0, tableObj:null},
-		hearts:{name:"hearts", sessionCount:0, tableObj:null},
+		hearts:{name:"hearts", sessionCount:0, tableObj:require('./game/hearts/hearts-table')},
 	};
 
 	function socketRoom(data) {

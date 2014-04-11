@@ -115,7 +115,8 @@ table.gradient-style tr {
 .img-responsive {
   margin: 0px auto;
 }
-body.trump {
+body.trump,
+body.hearts {
   z-index: 1;
   background-image: url('../images/plain-grey.jpg');
   background-size: cover;
@@ -125,8 +126,6 @@ body.modal-open {
   overflow: auto;
 }
 .table-layout {
-  background-image: url('../images/table3.png');
-  background-size: 100% 100%;
   position: relative;
   height: 588px;
   border-radius: 50%;
@@ -140,17 +139,11 @@ body.modal-open {
   width: auto;
   margin: 0px auto;
   padding-left: 70px;
-  min-height: 194px;
 }
 .card-set .card-holder {
   position: relative;
   margin-left: -70px;
   padding: 0px 0px 0px 0px;
-  transform: scale(0.85);
-  -ms-transform: scale(0.85);
-  -webkit-transform: scale(0.85);
-  transition: transform .3s linear;
-  -webkit-transition: -webkit-transform 0.3s linear;
 }
 .table-layout .card-holder,
 .trump-card {
@@ -174,7 +167,7 @@ body.modal-open {
   position: relative;
   top: 4px;
   color: #339966;
-  font-size: 20px;
+  font-size: 25px;
 }
 .player-hand .card {
   cursor: pointer;
@@ -188,6 +181,12 @@ body.modal-open {
   font-size: 55px;
   margin: 0px;
   padding: 0px;
+}
+.icon-top {
+  font-size: 25px;
+  margin: 0px 25px 0px 25px;
+  color: #333;
+  text-transform: uppercase;
 }
 .control {
   position: absolute;
@@ -321,7 +320,7 @@ body.modal-open {
   margin-right: -55.5px;
 }
 .trump-position {
-  background-image: url("../images/suits222.png");
+  background-image: url("../images/suits333.png");
   background-position: 222px -222px;
   width: 111px;
   height: 111px;
@@ -331,4 +330,7 @@ body.modal-open {
   left: 50%;
   margin-top: -55.5px;
   margin-left: -55.5px;
+}
+.clicked {
+  top: -40px;
 }
