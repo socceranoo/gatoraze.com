@@ -5,12 +5,14 @@ html(ng-app='')
 		include ../../../common-css
 		
 	body.trump
-		.container
+		.container(ng-controller='Tube')
 			block content
 			
 		include ../../../common-scripts
-		script(src="/socket.io/socket.io.js")
-		script(src="/trump/scripts/trump.js")
+		script(src="/socket.io/socket.io.js").
+		script(src="http://www.google.com/jsapi").
+		script(src="/socketio/scripts/newtube.js").
+		script(src="/socketio/scripts/ytembed.js").
 		script.
 			var user= '!{user}';
 			var site= '!{site}';

@@ -1,0 +1,10 @@
+extends layout
+
+block content
+	include navbar
+	.row.text-center.home-stats(ng-controller='Index')
+		- each item, i in data.data
+			.eight-300.stat-point(class=item.bg+' col-md-'+item.columns+' col-sm-'+item.columns)
+				h2.count.increment= item.count
+				h2.string= item.item
+		span= data.date+' ('+data.time+' seconds)'

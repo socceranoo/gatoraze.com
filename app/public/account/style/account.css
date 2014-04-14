@@ -10,6 +10,12 @@
   font-weight: 300;
   src: local('Lato Light Italic'), local('Lato-LightItalic'), url(http://themes.googleusercontent.com/static/fonts/lato/v7/2HG_tEPiQ4Z6795cGfdivLO3LdcAZYWl9Si6vvxL-qU.woff) format('woff');
 }
+@font-face {
+  font-family: 'Josefin Sans';
+  font-style: normal;
+  font-weight: 100;
+  src: local('Josefin Sans Thin'), local('JosefinSans-Thin'), url(http://themes.googleusercontent.com/static/fonts/josefinsans/v4/q9w3H4aeBxj0hZ8Osfi3dy1dfeF-hbOdKKuBDEXxqhQ.woff) format('woff');
+}
 /*
 	src: local('Lato Light'), local('Lato-Light'), url('../fonts/lato.woff') format('woff');
 	src: local('Lato Light Italic'), local('Lato-LightItalic'), url('../fonts/lato-italic.woff') format('woff');
@@ -33,11 +39,20 @@ body {
   font-family: "Trebuchet MS", sans-serif;
   font-size: 16px;
 }
+body.modal-open {
+  overflow: auto;
+}
 .full-width {
   width: 100%;
 }
 .full-height {
   height: 100%;
+}
+.half-width {
+  width: 50%;
+}
+.half-height {
+  height: 50%;
 }
 h1,
 h2,
@@ -97,6 +112,11 @@ table.gradient-style tr {
 }
 .featurette-divider4 {
   margin: 5px 0px 5px 0px;
+  /* Space out the Bootstrap <hr> more */
+  clear: both;
+}
+.featurette-divider5 {
+  margin: 10px 0px 5px 0px;
   /* Space out the Bootstrap <hr> more */
   clear: both;
 }

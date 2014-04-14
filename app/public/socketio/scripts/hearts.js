@@ -22,11 +22,11 @@ function Hearts($scope) {
 	};
 	$scope.cardBackArr = [
 		{name:"CB1", index:0, bgPos:[999, -888], valid:false},
-		{name:"CB2", index:0, bgPos:[888, -888], valid:false},
-		{name:"CB3", index:0, bgPos:[777, -888], valid:false},
-		{name:"CB4", index:0, bgPos:[666, -888], valid:false},
-		{name:"CB5", index:0, bgPos:[555, -888], valid:false},
-		{name:"CB6", index:0, bgPos:[444, -888], valid:false},
+		{name:"CB2", index:0, bgPos:[777, -888], valid:false},
+		{name:"CB3", index:0, bgPos:[555, -888], valid:false},
+		{name:"CB4", index:0, bgPos:[333, -888], valid:false},
+		{name:"CB5", index:0, bgPos:[111, -888], valid:false},
+		{name:"CB6", index:0, bgPos:[888, -1036], valid:false}
 	];
 	var socket = io.connect();
 	$scope.starter = -1;
@@ -35,7 +35,7 @@ function Hearts($scope) {
 	$scope.connected = false;
 	$scope.cards = [];
 	$scope.token = -1;
-	var joker = {name:"JOKER", index:0, bgPos:[888, -888], valid:false};
+	var joker = {name:"JOKER", index:0, bgPos:[777, -888], valid:false};
 	var blank = {name:"BLANK", index:0, bgPos:[222, 0], valid:false};
 	$scope.cardBack = joker;
 	$scope.tableData = {players : [], round :[], prevRound:[], prevGame:[]};
@@ -81,7 +81,7 @@ function Hearts($scope) {
 			//$scope.addMessage(data.message, data.sender, data.date, data.data);
 			$scope.addControlData(events.playerJoin, data.data);
 			if (data.data.inProgress) {
-				$scope.tableData.players[data.data.position] = data.data.name;
+				$scope.tableData.players[$scope.shifter(data.data.position)] = data.data.name;
 			}
 			$scope.$apply();
 		});
@@ -90,7 +90,7 @@ function Hearts($scope) {
 			//$scope.addMessage(data.message, data.sender, data.date, data.data);
 			$scope.addControlData(events.playerLeave, data.data);
 			if (data.data.inProgress) {
-				$scope.tableData.players[data.data.position] = data.data.name;
+				$scope.tableData.players[$scope.shifter(data.data.position)] = data.data.name;
 			}
 			$scope.$apply();
 		});
@@ -115,15 +115,17 @@ function Hearts($scope) {
 		});
 		socket.on(events.ready, function(data) {
 			var i = 0;
-			$scope.tableData.players = data.data.players;
-			$scope.tableData.players[$scope.position] = "You";
+			$scope.tableData.players = data.data.players.concat(data.data.players.splice(0, $scope.position));
+			$scope.tableData.players[$scope.shifter($scope.position)] = "You";
+			//$scope.tableData.players = data.data.players;
+			//$scope.tableData.players[$scope.position] = "You";
 			//$scope.tableData.players[$scope.position] = "You ("+$scope.tableData.players[$scope.position]+")";
 			for (i = 0; i< $scope.tableData.players.length ; i++) {
 				$scope.tableData.round[i] = $scope.cardBack;
 			}
 			if (data.data.round) {
 				for (i = 0; i< data.data.round.length ; i++) {
-					$scope.tableData.round[data.data.round[i].player] = data.data.round[i].card;
+					$scope.tableData.round[$scope.shifter(data.data.round[i].player)] = data.data.round[i].card;
 				}
 			}
 			$scope.action = "Wait";
@@ -162,7 +164,7 @@ function Hearts($scope) {
 			if (data.data.cardObj.player == $scope.position) {
 				$scope.cards.splice(data.data.cardObj.index, 1);
 			}
-			$scope.tableData.round[data.data.cardObj.player] = data.data.cardObj.card;
+			$scope.tableData.round[$scope.shifter(data.data.cardObj.player)] = data.data.cardObj.card;
 		}
 		if (data.data.reveal && data.data.reveal === true) {
 		}
@@ -262,5 +264,7 @@ function Hearts($scope) {
 		$scope.cardBack.bgPos = $scope.cardBackArr[option].bgPos;
 		$scope.$apply();
 	};
-
+	$scope.shifter = function (number) {
+		return (total + number - $scope.position ) % total;
+	};
 }

@@ -7,8 +7,8 @@ module.exports = function(IO) {
 	var events = require('./game/events').events;
 	var servers = {
 		trump: {name:"trump", sessionCount: 0, tableObj:require('./game/trump/trump-table')},
-		tube:{name:"tube", sessionCount:0, tableObj:null},
 		hearts:{name:"hearts", sessionCount:0, tableObj:require('./game/hearts/hearts-table')},
+		tube:{name:"tube", sessionCount:0, tableObj:null}
 	};
 
 	function socketRoom(data) {
@@ -39,13 +39,9 @@ module.exports = function(IO) {
 			sendEventsSocket(this.game, socket, sendData, this.userSockets);
 		};
 		this.removeUser = function (socket) {
-			var ret = this.gameTable.removeHumanMember(socket.data.user);
-			var success = ret[0];
-			var sendData = ret[1];
-			if (success) {
-				removeFromRoom(socket);
-				delete this.userSockets[socket.data.user];
-			}
+			removeFromRoom(socket);
+			delete this.userSockets[socket.data.user];
+			var sendData = this.gameTable.removeHumanMember(socket.data.user);
 			sendEventsSocket(this.game, socket, sendData, this.userSockets);
 		};
 		this.userPlay = function (socket, data) {

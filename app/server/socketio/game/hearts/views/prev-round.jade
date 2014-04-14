@@ -6,6 +6,6 @@
 				h3 Previous Round
 			.modal-body.text-center
 				.table-layout.clearfix(ng-cloak ng-show='tableData.prevRound.length')
-					.card-holder(ng-repeat='obj in tableData.prevRound track by $index' class='pos'+total+'-{{obj.player}}')
+					.card-holder(ng-repeat='obj in tableData.prevRound track by $index' class='pos'+total+'-{{shifter(obj.player)}}')
 						.card.green-border(ng-class="{'red-border': obj.player%2 == 1, 'blue-border': $index == 0}" style='background-position:{{obj.card.bgPos[0]}}px {{obj.card.bgPos[1]}}px')
-						span.player-name(ng-class="{'color-metroRed': obj.player%2 == 1}" ng-bind='tableData.players[obj.player]')
+						span.player-name(ng-class="{'color-metroRed': obj.player%2 == 1}" ng-bind='tableData.players[shifter(obj.player)]')

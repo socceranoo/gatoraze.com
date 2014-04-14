@@ -1,0 +1,21 @@
+extends layout
+
+block content
+	include navbar
+	.row.text-center(ng-controller='Tags')
+		.col-md-12.col-sm-12
+			h2.heat-table-heading Tags
+			table.heat-table.table-bordered.table-striped(id=data.tags_table.divid)
+				thead
+					tr
+						th(colspan=data.tags_table.column_headers.length) &nbsp;
+					tr
+						-each column, i in data.tags_table.column_headers
+							th= column
+				tbody
+					-each row, i in data.tags_table.rows
+						tr
+							-each item, j in row
+								td= item
+	script.
+		var tags_data= !{JSON.stringify(data)};

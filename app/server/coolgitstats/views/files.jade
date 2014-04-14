@@ -1,0 +1,23 @@
+extends layout
+
+block content
+	include navbar
+	.row.text-center(ng-controller='Files')
+		.col-md-12.col-sm-12
+			.col-md-6
+				h2.heading.color-metroRed= data.total_files+' files'
+				h2.heading.color-metroNavy= data.total_lines+' lines'
+				h2.heading.color-metroPurple= data.total_size+' bytes'
+			.col-md-6
+				h2.heading.color-metroRed= parseInt(data.total_lines/data.total_files, 10)+' lines/file'
+				h2.heading.color-metroNavy= data.average_size+' bytes/file'
+		.col-md-12.col-sm-12
+			.col-md-6
+				.plot(id=data.file_count.divid)
+			.col-md-6
+				.plot(id=data.line_count.divid)
+		.col-md-12.col-sm-12
+			h2.heat-table-heading File Types
+			table.heat-table.table-bordered.table-striped(id=data.file_extension.divid)
+	script.
+		var files_data= !{JSON.stringify(data)};

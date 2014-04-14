@@ -1,0 +1,18 @@
+.navbar.featurette-divider3.background-peterRive
+	.brand.text-center.pull-left
+		a(href='/coolgitstats')
+			img.brand(src="/coolgitstats/images/brand.png" alt="")
+		a.color-peterRiver(href='/coolgitstats')
+			span.cool1.color-metroOrange cool
+			span.git1.color-sunFlower git
+			span.stats1.color-metroGreen stats
+	.brand.text-center.pull-right
+		a.color-peterRiver(href='/'+title+'/'+name)= name
+	ul.list-inline.list-unstyled.main-nav.text-center.clearfix
+		- each val, key in nav
+			if (val === true)
+				li.img-rounded.ell.highlighted.background-sunFlower
+					a(href='/'+title+'/'+name+"/"+key)= key
+			else
+				li.ell
+					a(href='/'+title+'/'+name+"/"+key)= key

@@ -1,6 +1,27 @@
+@import "../../common/less/variables";
+@import "../../common/less/main";
 body.lobby {
-	background: url('../images/orangeback.jpg') top center no-repeat #f86f05;
+	background:#f5f5f5;
 	//background: url('../images/blueback2.jpg') top center no-repeat #f86f05;
 	//background: url('../images/redwallpaper.png') top center no-repeat #f86f05;
-	//background: url('../images/lobby-grey.jpg') top center no-repeat #f5f5f5;
+	background: url('../images/plain-grey2.jpg');
+	background-repeat:repeat-y;
+}
+@bheight:90px;
+.brand {
+	height:@bheight;
+	line-height:@bheight;
+	position:absolute;
+	top:0px;
+}
+.brand h2 {
+	margin:0px;
+	line-height:@bheight;
+	margin-right:10px;
+	color:#666;
+	font-size:20px;
+}
+.brand img {
+	height:100%;
+	margin-right:10px;
 }

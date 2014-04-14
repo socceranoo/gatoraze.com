@@ -7,7 +7,7 @@
 var express = require('express');
 var http = require('http');
 var app = express();
-var port = 4000;
+var port = 9001;
 
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server, {log:false});
@@ -34,6 +34,7 @@ app.configure('development', function(){
 	app.use(express.errorHandler());
 });
 
+require('./app/server/coolgitstats/router')(app, module_obj);
 require('./app/server/socketio/router')(app, module_obj, io);
 
 app.get('*', function(req, res) { res.render('account/views/404', { title: 'Page Not Found'}); });

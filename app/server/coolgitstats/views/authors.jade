@@ -1,0 +1,87 @@
+extends layout
+
+block content
+	include navbar
+	.row.text-center(ng-controller='Authors')
+		#year-month-modal.modal.fade
+			.modal-dialog.modal-sm
+				.modal-content
+					.modal-header.text-center
+						a.close(data-dismiss='modal') &times;
+						h2(ng-bind="year_month.Year_Month")
+					.modal-body.text-center
+						table.table.table-bordered.table-striped
+							tr(ng-repeat="(key, value) in year_month")
+								td {{key}}
+								td {{value}}
+		.col-md-12.col-sm-12
+			h2.heat-table-heading Top Authors
+			- each item, i in data.commits_by_authors.author_arr
+				.col-md-6.col-sm-6
+					.small-plot(id=item.divid)
+
+		.col-md-12.col-sm-12
+			- if (data.lines_by_authors)
+				h2.heat-table-heading Lines by Authors
+				- each item, i in data.lines_by_authors.author_arr
+					.col-md-6.col-sm-6
+						.small-plot(id=item.divid)
+		
+		.col-md-12.col-sm-12
+			h2.heat-table-heading List of Authors
+			table.heat-table(id=data.author_list.divid)
+				thead
+					//
+						tr
+							th(colspan=data.author_list.rows[0].length) &nbsp;
+					tr
+						-each column, i in data.author_list.columns
+							th= column
+				tbody
+					-each row, i in data.author_list.rows
+						tr
+							-each item, j in row
+								- if (j == 0)
+									th= item
+								else
+									td= item
+
+		.col-md-12.col-sm-12
+			h2.heat-table-heading Author of the month
+			table.heat-table.actual-heat-table
+				thead
+					tr
+						th(rowspan=2) &nbsp;
+						th(colspan=3) 1st Qtr
+						th(colspan=3) 2nd Qtr
+						th(colspan=3) 3rd Qtr
+						th(colspan=3) 4th Qtr
+					tr
+						th Jan
+						th Feb
+						th Mar
+						th Apr
+						th May
+						th Jun
+						th Jul
+						th Aug
+						th Sep
+						th Oct
+						th Nov
+						th Dec
+				tbody
+					-each yearObj, i in data.author_of_month
+						tr
+							th= yearObj.name
+							-each monthObj, j in yearObj.data
+								- if (monthObj[2] === true)
+									td.data(style='background-color:'+monthObj[0]+';' ng-click="showDetails("+i+", "+j+")")= monthObj[1]
+								else
+									td(style='background-color:#fff;') &nbsp;
+
+		.col-md-12.col-sm-12
+			h2.heat-table-heading Author of the Year
+			table.heat-table.table-bordered.table-striped(id=data.author_of_year.divid)
+			
+	script.
+		var authors_data= !{JSON.stringify(data)};

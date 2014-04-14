@@ -1,0 +1,8 @@
+.brand.container
+	img.img-responsive(src="/socketio/images/gamecenter-icon.png" alt="").pull-left
+	form(action='/lobby', method='POST').pull-right
+		input.btn.btn-danger(type='submit' value='Leave Lobby')
+	//
+		h2.pull-left
+			span= site
+	h2.pull-left= 'Welcome '+user

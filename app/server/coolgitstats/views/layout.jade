@@ -1,0 +1,20 @@
+doctype html
+html(ng-app='')
+	head
+		title= title
+		include ../../common-css
+		link(rel='icon', type='ico', href='/coolgitstats/images/brand.png')
+		link(rel='STYLESHEET', type='text/css', href='/coolgitstats/style/coolgitstats.css')
+		//
+			link(rel='STYLESHEET', type='text/css', href='/coolgitstats/style/mygitstats.css')
+
+	body
+		.container
+			block content
+			h3.text-center.color-concrete
+				span &copy;&nbsp;
+				span coolgitstats
+
+		include ../../common-scripts
+		include ../../jqplot-scripts
+		script(src="/coolgitstats/scripts/mygitstats.js").

@@ -122,7 +122,7 @@ function table(num, room) {
 				}
 			}
 			sendData.unshift({dest:ALL_BUT_SENDER , event:events.playerLeave, message:message,  data:data});
-			return [true, sendData];
+			return sendData;
 		}
 	};
 

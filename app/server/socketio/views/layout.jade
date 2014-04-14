@@ -1,11 +1,11 @@
 doctype html
-html(ng-app='')
+html(ng-app='').full-height
 	head
 		title= title
 		include ../../common-css
 		link(rel='STYLESHEET', type='text/css', href='/socketio/style/lobby.css')
-	body.lobby
-		.container
+	body.lobby.full-height
+		.container.full-height
 			block content
 		include ../../common-scripts
 		//

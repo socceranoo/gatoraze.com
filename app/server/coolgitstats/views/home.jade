@@ -1,0 +1,26 @@
+extends layout
+
+block content
+	.row.featurette-divider2
+		.col-md-12.col-sm-12
+			.col-md-6.col-sm-6.col-md-offset-3.col-sm-offset-3.text-center
+				img(src="/coolgitstats/images/brand.png" alt="")
+				h1.main-heading
+					span.cool.color-metroOrange cool
+					span.git.color-sunFlower git
+					span.stats.color-metroGreen stats
+					//sup.color-asbestos &trade;
+				.well.text-left
+					include lorem
+					.dropdown.col-md-6.col-sm-6.col-md-offset-3.col-sm-offset-3
+						a.dropdown-toggle.btn.btn-danger.btn-lg.btn-block#dLabel(data-toggle='dropdown' href='javascript:void(0);')
+							| Sample Repos
+							b.caret
+						ul.dropdown-menu.text-center(role="menu" aria-labelledby="dLabel")
+							- each item in repos
+								li
+									a(href=item)= item
+					hr.featurette-divider3
+					.col-md-10.col-sm-10.col-md-offset-1.col-sm-offset-1
+						a.btn.btn-lg.btn-block.btn-success(href='/coolgitstats/images/coolgitstats.tar.gz') Download
+					hr.featurette-divider4

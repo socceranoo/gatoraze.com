@@ -1,0 +1,59 @@
+extends layout
+
+block content
+	include navbar
+	.row.text-center(ng-controller='Activity')
+		.col-md-12.col-sm-12
+			.plot#weekly-activity
+		.col-md-12.col-sm-12
+			.plot#day-of-week
+		.col-md-12.col-sm-12
+			h2.heat-table-heading Hour of day
+			.col-md-offset-2.col-sm-offset-2.col-md-8.col-sm-8.clock.clearfix
+				canvas#hour-of-day(width='600px' height='600px')
+		.col-md-12.col-sm-12
+			h2.heat-table-heading Hour of Week
+			table.plot.heat-table.actual-heat-table#hour-of-week
+				thead
+					tr
+						th(rowspan=2) &nbsp;
+						th(colspan=12) AM
+						th(colspan=12) PM
+					tr
+						- each item, i in data.hour_of_week[0].data
+							- if (i < 10)
+								th= '0'+i
+							else
+								th= i
+				tbody
+					-each dayObj, i in data.hour_of_week
+						tr
+							th= dayObj.name
+							-each hourObj, j in dayObj.data
+								- if (hourObj[2] == true)
+									td.data(style='background-color:'+hourObj[0]+';')= hourObj[1]
+								else
+									td(style='background-color:#fff;') &nbsp;
+
+		.col-md-12.col-sm-12
+			.plot#month-of-year
+		.col-md-12.col-sm-12
+			.plot#year-commits
+		.col-md-12.col-sm-12
+			h2.heat-table-heading Commits by timezone
+			.world-map#timezone-commits
+				- each item, i in data.timezone[0]
+					.timezone(style='background-color:'+item+';')
+
+			table.timezone-table
+				tr
+					- each item, i in data.timezone[2]
+						th= item
+				tr
+					- each item, i in data.timezone[1]
+						td= item
+		.col-md-12.col-sm-12
+			.plot#domain-commits
+
+	script.
+		var activity_data= !{JSON.stringify(data)};

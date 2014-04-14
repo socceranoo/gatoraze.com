@@ -1,7 +1,7 @@
 .col-md-12(ng-cloak ng-show='tableData.round.length')
 	.table-layout.clearfix.col-md-6.col-md-offset-3.background-clous.ackground-opacity
 		.card-holder(ng-repeat='card in tableData.round track by $index' class='pos'+total+'-{{$index}}')
-			.card(ng-class="{'active': $index == token, 'blue-border': $index == starter}" style='background-position:{{card.bgPos[0]}}px {{card.bgPos[1]}}px')
+			.card(ng-class="{'active': $index == token, 'blue-border': $index == shifter(starter)}" style='background-position:{{card.bgPos[0]}}px {{card.bgPos[1]}}px')
 				span.bid-data(ng-bind='tableData.bidData[$index]')
 			.player-name(ng-class="{'color-metroRed': $index == 1, 'color-metroCyan': $index == 2, 'color-metroPurple': $index == 3}")
 				span(ng-bind='tableData.players[$index]')

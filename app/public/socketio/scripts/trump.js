@@ -15,11 +15,11 @@ function Trump($scope) {
 	};
 	$scope.cardBackArr = [
 		{name:"CB1", index:0, bgPos:[999, -888], valid:false},
-		{name:"CB2", index:0, bgPos:[888, -888], valid:false},
-		{name:"CB3", index:0, bgPos:[777, -888], valid:false},
-		{name:"CB4", index:0, bgPos:[666, -888], valid:false},
-		{name:"CB5", index:0, bgPos:[555, -888], valid:false},
-		{name:"CB6", index:0, bgPos:[444, -888], valid:false},
+		{name:"CB2", index:0, bgPos:[777, -888], valid:false},
+		{name:"CB3", index:0, bgPos:[555, -888], valid:false},
+		{name:"CB4", index:0, bgPos:[333, -888], valid:false},
+		{name:"CB5", index:0, bgPos:[111, -888], valid:false},
+		{name:"CB6", index:0, bgPos:[888, -1036], valid:false}
 	];
 	var socket = io.connect();
 	$scope.starter = -1;
@@ -31,7 +31,7 @@ function Trump($scope) {
 	$scope.cards = [];
 	$scope.token = -1;
 	$scope.oldBidObj = null;
-	var joker = {name:"JOKER", index:0, bgPos:[888, -888], valid:false};
+	var joker = {name:"JOKER", index:0, bgPos:[777, -888], valid:false};
 	var blank = {name:"BLANK", index:0, bgPos:[222, 0], valid:false};
 	$scope.cardBack = joker;
 	$scope.trump = {card:null, setter:-1, points:0, revealed:false, index:-1};
@@ -108,7 +108,7 @@ function Trump($scope) {
 			//$scope.addMessage(data.message, data.sender, data.date, data.data);
 			$scope.addControlData(events.playerJoin, data.data);
 			if (data.data.inProgress) {
-				$scope.tableData.players[data.data.position] = data.data.name;
+				$scope.tableData.players[$scope.shifter(data.data.position)] = data.data.name;
 			}
 			$scope.$apply();
 		});
@@ -117,7 +117,7 @@ function Trump($scope) {
 			//$scope.addMessage(data.message, data.sender, data.date, data.data);
 			$scope.addControlData(events.playerLeave, data.data);
 			if (data.data.inProgress) {
-				$scope.tableData.players[data.data.position] = data.data.name;
+				$scope.tableData.players[$scope.shifter(data.data.position)] = data.data.name;
 			}
 			$scope.$apply();
 		});
@@ -147,8 +147,8 @@ function Trump($scope) {
 			var i = 0;
 			//$scope.addMessage(data.message, data.sender, data.date, data.data);
 			//$scope.addControlData(events.ready, data.data);
-			$scope.tableData.players = data.data.players;
-			$scope.tableData.players[$scope.position] = "You";
+			$scope.tableData.players = data.data.players.concat(data.data.players.splice(0, $scope.position));
+			$scope.tableData.players[$scope.shifter($scope.position)] = "You";
 			//$scope.tableData.players[$scope.position] = "You ("+$scope.tableData.players[$scope.position]+")";
 			for (i = 0; i< $scope.tableData.players.length ; i++) {
 				if (data.data.round) {
@@ -160,12 +160,12 @@ function Trump($scope) {
 			}
 			if (data.data.round) {
 				for (i = 0; i< data.data.round.length ; i++) {
-					$scope.tableData.round[data.data.round[i].player] = data.data.round[i].card;
+					$scope.tableData.round[$scope.shifter(data.data.round[i].player)] = data.data.round[i].card;
 				}
 			}
 			if (data.data.bidData) {
 				for (i = 0; i< data.data.bidData.length ; i++) {
-					$scope.tableData.bidData[data.data.bidData[i][0]] = data.data.bidData[i][1];
+					$scope.tableData.bidData[$scope.shifter(data.data.bidData[i][0])] = data.data.bidData[i][1];
 				}
 			}
 			if (data.data.trumpData && data.data.trumpData.setter != -1) {
@@ -214,7 +214,9 @@ function Trump($scope) {
 			if (data.data.cardObj.player == $scope.position) {
 				$scope.cards.splice(data.data.cardObj.index, 1);
 			}
-			$scope.tableData.round[data.data.cardObj.player] = data.data.cardObj.card;
+			$scope.tableData.round[$scope.shifter(data.data.cardObj.player)] = data.data.cardObj.card;
+			$scope.addControlData("PLAYER:", data.data.cardObj.player);
+			$scope.addControlData("SHIFTER", $scope.shifter(data.data.cardObj.player));
 		}
 		if (data.data.reveal && data.data.reveal === true) {
 			if (data.data.card !== null) {
@@ -275,11 +277,11 @@ function Trump($scope) {
 					}
 				}
 			}else {
+				var value = data.data.bidObj.points;
 				if (data.data.pass === true) {
-					$scope.tableData.bidData[data.data.bidObj.bidder] = '-';
-				} else {
-					$scope.tableData.bidData[data.data.bidObj.bidder] = data.data.bidObj.points;
+					value = '-';
 				}
+				$scope.tableData.bidData[$scope.shifter(data.data.bidObj.bidder)] = value;
 			}
 		}
 
@@ -349,5 +351,7 @@ function Trump($scope) {
 		$scope.cardBack.bgPos = $scope.cardBackArr[option].bgPos;
 		$scope.$apply();
 	};
-
+	$scope.shifter = function (number) {
+		return (total + number - $scope.position ) % total;
+	};
 }

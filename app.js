@@ -8,10 +8,10 @@
 var express = require('express');
 var http = require('http');
 var app = express();
-var port = 443;
+var port = 80;
 
 var server = require('http').createServer(app);
-var io = require('socket.io').listen(server, {log:false});
+//var io = require('socket.io').listen(server, {log:false});
 
 var CT = require('./app/modules/country-list');
 var DBlayer = require('./app/modules/dbaccess-mysql');
@@ -43,7 +43,6 @@ app.configure('development', function(){
 });
 
 require('./app/server/portfolio/router')(app, module_obj);
-require('./app/server/socketio/router')(app, module_obj, io);
 require('./app/server/account/router')(app, module_obj);
 require('./app/server/money/router')(app, module_obj);
 
