@@ -48,6 +48,12 @@ body.modal-open {
 .full-height {
   height: 100%;
 }
+.half-width {
+  width: 50%;
+}
+.half-height {
+  height: 50%;
+}
 h1,
 h2,
 h3,
@@ -106,6 +112,11 @@ table.gradient-style tr {
 }
 .featurette-divider4 {
   margin: 5px 0px 5px 0px;
+  /* Space out the Bootstrap <hr> more */
+  clear: both;
+}
+.featurette-divider5 {
+  margin: 10px 0px 5px 0px;
   /* Space out the Bootstrap <hr> more */
   clear: both;
 }

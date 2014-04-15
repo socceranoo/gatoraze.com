@@ -1,13 +1,12 @@
-!!! 5
+doctype html
 html(ng-app='')
 	head
-		title= title
+		title= site+'- home'
 		include ../../../common-css
-		
-	body.trump
+		link(rel='STYLESHEET', type='text/css', href='/socketio/style/tube.css')
+	body.tube
 		.container(ng-controller='Tube')
 			block content
-			
 		include ../../../common-scripts
 		script(src="/socket.io/socket.io.js").
 		script(src="http://www.google.com/jsapi").

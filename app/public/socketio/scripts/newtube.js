@@ -1,56 +1,64 @@
 $(document).ready(function() {
-	createScript();
 });
 
 function Tube($scope) {
+	$scope.player = null;
 	var events = {
 		message:"message", welcome:"welcome", playerJoin:"player-join",
 		playerLeave:"player-leave", cards:"cards", play:"play",
 		round:"round", game:"game", ready:"ready", addComputer:"add-computer"
 	};
-}	
-function onPlayerError(errorCode) {
-	alert("An error occured of type:" + errorCode);
-}
-function createScript() {
-	var tag = document.createElement('script');
-	tag.src = "//www.youtube.com/iframe_api";
-	var firstScriptTag = document.getElementsByTagName('script')[0];
-	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-}
-// 3. This function creates an <iframe> (and YouTube player)
-//    after the API code downloads.
-function onYouTubeIframeAPIReady() {
-	mainplayer = new YT.Player('player', {
-		height: '450',
-		width: '640',
-		videoId: '1G4isv_Fylg',
-		//videoId: 'u1zgFlCw8Aw',
-		playerVars: {
-			autoplay: '1',
-			controls: '1'
-		},
-		events: {
-			'onReady': onPlayerReady,
-			'onStateChange': onPlayerStateChange,
-			'onError': onPlayerError
+
+	// 3. This function creates an <iframe> (and YouTube player)
+	//    after the API code downloads.
+	$scope.onYouTubeIframeAPIReady = function () {
+		$scope.player = new YT.Player('player', {
+			height: '450',
+			width: '100%',
+			videoId: '1G4isv_Fylg',
+			playerVars: {
+				autoplay: '0',
+				controls: '1'
+			},
+			events: {
+				'onReady': $scope.onPlayerReady,
+				'onStateChange': $scope.onPlayerStateChange,
+				'onError': $scope.onPlayerError
+			}
+		});
+	};
+	$scope.onPlayerError = function (errorCode) {
+		//alert("An error occured of type:" + errorCode);
+	};
+
+	$scope.createScript = function () {
+		var tag = document.createElement('script');
+		tag.src = "//www.youtube.com/iframe_api";
+		var firstScriptTag = document.getElementsByTagName('script')[0];
+		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+	};
+
+	// 4. The API will call this function when the video player is ready.
+	$scope.onPlayerReady = function (event) {
+		//alert("READY");
+	};
+
+	// 5. The API calls this function when the player's state changes.
+	//    The function indicates that when playing a video (state=1),
+	//    the player should play for six seconds and then stop.
+	$scope.onPlayerStateChange = function (event) {
+		if (event.data == 1) {
+			//alert("PLAY");
 		}
-	});
+		if (event.data != 2) {
+			pause = false;
+		}
+	};
+	window.onYouTubeIframeAPIReady = $scope.onYouTubeIframeAPIReady;
+	$scope.createScript();
+	$scope.searchVideos = function (search_query) {
+		ytEmbed.init({'block':'divsearch','type':'search','q':search_query,'results': 10,'layout':'thumbnails', 'order':'most_relevance'});
+	};
+	$scope.searchVideos("madonna dont tell me");
 }
 
-// 4. The API will call this function when the video player is ready.
-function onPlayerReady(event) {
-	sockinit(user);
-}
-
-// 5. The API calls this function when the player's state changes.
-//    The function indicates that when playing a video (state=1),
-//    the player should play for six seconds and then stop.
-function onPlayerStateChange(event) {
-	if (event.data == 1) {
-		play_since_seek = true;
-	}
-	if (event.data != 2) {
-		pause = false;
-	}
-}
