@@ -32,10 +32,16 @@ module.exports = function(app, module_obj, io) {
 			res.redirect('/');
 			return;
 		}
-		var site = "Tube";
+		var site = "tube";
+		var rand = Math.floor((Math.random()*500)+1);
+		var session = req.query.session;
+		var players = 10;
+		session = (!session) ? rand : session;
+		var room = site+session;
 		var user = req.session.user.name;
-		res.render('socketio/tube/views/home', {site:site, user:user});
+		res.render('socketio/tube/views/home', {site:site, user:user, room:room, session:session, total:players});
 	});
+
 	app.get('/hearts', function(req, res){
 		if (!check_user_name(req)) {
 			res.redirect('/');

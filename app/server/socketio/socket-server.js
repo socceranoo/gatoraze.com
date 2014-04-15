@@ -8,7 +8,7 @@ module.exports = function(IO) {
 	var servers = {
 		trump: {name:"trump", sessionCount: 0, tableObj:require('./game/trump/trump-table')},
 		hearts:{name:"hearts", sessionCount:0, tableObj:require('./game/hearts/hearts-table')},
-		tube:{name:"tube", sessionCount:0, tableObj:null}
+		tube:{name:"tube", sessionCount:0, tableObj:require('./tube/tube-server.js')}
 	};
 
 	function socketRoom(data) {
@@ -123,6 +123,7 @@ module.exports = function(IO) {
 		});
 
 		if (!socketRoomsHash[data.room]) {
+			console.log(data);
 			socketRoomsHash[data.room] = new socketRoom(data);
 			servers[data.site].sessionCount++;
 		}

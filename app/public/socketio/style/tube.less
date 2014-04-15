@@ -6,23 +6,32 @@ body.tube {
 	background-repeat:repeat;
 }
 #player {
-	opacity:0.8;
+	border:5px solid @metro_green;
 }
-@bheight:90px;
-.brand {
-	height:@bheight;
-	line-height:@bheight;
-	position:absolute;
-	top:0px;
+ul.search-list {
+	max-height:500px;	
+	overflow:auto;
+	
 }
-.brand h2 {
-	margin:0px;
-	line-height:@bheight;
-	margin-right:10px;
-	color:#666;
+ul.search-list li {
+	cursor:pointer;
+	clear:both;
+	margin:10px;
+}
+.control {
 	font-size:20px;
+	color:#444;
 }
-.brand img {
-	height:100%;
-	margin-right:10px;
+.title {
+	margin:10px;
+}
+.thumbnail {
+	margin:0px 5px 0px 5px;
+}
+
+.icon-top {
+	font-size:25px;
+	margin:0px 25px 0px 25px;
+	color:#333;
+	text-transform:uppercase;
 }

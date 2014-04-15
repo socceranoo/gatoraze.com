@@ -3,19 +3,30 @@ $(document).ready(function() {
 
 function Tube($scope) {
 	$scope.player = null;
+	$scope.apiReady = false;
+	$scope.searchList = [];
+	$scope.playList = {current:"", shuffle:false, repeat:false, videos:{},
+		nextVideo : function () {
+		},
+		prevVideo : function () {
+		}
+	};
+	$scope.nextPageToken = "";
+	$scope.prevPageToken = "";
+	$scope.prevQuery = "";
 	var events = {
 		message:"message", welcome:"welcome", playerJoin:"player-join",
 		playerLeave:"player-leave", cards:"cards", play:"play",
 		round:"round", game:"game", ready:"ready", addComputer:"add-computer"
 	};
-
-	// 3. This function creates an <iframe> (and YouTube player)
-	//    after the API code downloads.
+	var socket = io.connect();
+	var userInfo = {user:user, site:site, room:room , session:session, total:total};
 	$scope.onYouTubeIframeAPIReady = function () {
 		$scope.player = new YT.Player('player', {
-			height: '450',
+			height: '500',
 			width: '100%',
-			videoId: '1G4isv_Fylg',
+			//videoId: '1G4isv_Fylg',
+			videoId: '5mqhI2pActU',
 			playerVars: {
 				autoplay: '0',
 				controls: '1'
@@ -31,34 +42,158 @@ function Tube($scope) {
 		//alert("An error occured of type:" + errorCode);
 	};
 
+	$scope.loadGoogleAPIClient = function () {
+		var CLIENT_ID = 'AIzaSyDa3b-SfgFF9rYXsiWHKUjzrsiCYYSzTKI';
+		gapi.client.setApiKey(CLIENT_ID);
+		gapi.client.load('youtube', 'v3', function() {
+			$scope.handleAPILoaded();
+		});
+	};
 	$scope.createScript = function () {
 		var tag = document.createElement('script');
 		tag.src = "//www.youtube.com/iframe_api";
+		var ytapi = document.createElement('script');
+		ytapi.src = "https://apis.google.com/js/client.js?onload=loadGoogleAPIClient";
 		var firstScriptTag = document.getElementsByTagName('script')[0];
 		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+		firstScriptTag.parentNode.insertBefore(ytapi, firstScriptTag);
 	};
 
-	// 4. The API will call this function when the video player is ready.
 	$scope.onPlayerReady = function (event) {
 		//alert("READY");
 	};
 
-	// 5. The API calls this function when the player's state changes.
-	//    The function indicates that when playing a video (state=1),
-	//    the player should play for six seconds and then stop.
 	$scope.onPlayerStateChange = function (event) {
-		if (event.data == 1) {
-			//alert("PLAY");
-		}
-		if (event.data != 2) {
-			pause = false;
-		}
+		if (event.data== -1) {
+			$scope.addControlData("STATE", "New Video");
+		} else if (event.data == 1) {
+			$scope.addControlData("STATE", "Play");
+		} else if (event.data == 2) {
+			$scope.addControlData("STATE", "Pause");
+		} else if (event.data == 5) {
+			$scope.addControlData("STATE", "Cue");
+		} else if (event.data === 0) {
+			$scope.addControlData("STATE", "Ended");
+		} else if (event.data == 4) {
+			$scope.addControlData("STATE", "Stopped");
+		}	
 	};
-	window.onYouTubeIframeAPIReady = $scope.onYouTubeIframeAPIReady;
-	$scope.createScript();
-	$scope.searchVideos = function (search_query) {
-		ytEmbed.init({'block':'divsearch','type':'search','q':search_query,'results': 10,'layout':'thumbnails', 'order':'most_relevance'});
-	};
-	$scope.searchVideos("madonna dont tell me");
-}
 
+	$scope.handleAPILoaded = function () {
+		$scope.apiReady = true;
+		$scope.searchVideos("madonna dont tell me");
+	};
+
+	$scope.searchVideos = function (search_string) {
+		var query = (search_string === undefined) ? $scope.query : search_string;
+		var obj = {
+			q:query,
+			part: 'snippet',
+			type: 'video',
+			maxResults:10,
+			videoEmbeddable: true
+		};
+		$scope.prevQuery = query;
+		$scope.executeQuery(obj);
+	};
+	$scope.showSearchPage = function (token) {
+		if (token !== "") {
+			var obj = {
+				q:$scope.prevQuery,
+				pageToken:token,
+				part: 'snippet',
+				type: 'video',
+				maxResults:10,
+				videoEmbeddable: true
+			};
+			$scope.executeQuery(obj);
+		}
+	};
+
+	$scope.executeQuery = function (queryObj) {
+		var request = gapi.client.youtube.search.list(queryObj);
+		request.execute(function(response) {
+			$scope.nextPageToken = response.result.nextPageToken;
+			$scope.prevPageToken = response.result.prevPageToken;
+			$scope.searchList = response.result.items;
+			$scope.$apply();
+		});
+	};
+	$scope.playVideo = function (videoId) {
+		$scope.player.loadVideoById(videoId);
+	};
+	$scope.addVideo = function (videoObj) {
+		$scope.playList.videos[videoObj.id.videoId] = videoObj;
+	};
+	window.loadGoogleAPIClient = $scope.loadGoogleAPIClient;
+	window.onYouTubeIframeAPIReady = $scope.onYouTubeIframeAPIReady;
+
+	//Socket functions
+	socket.on('connect', function() {
+		// Connected, let's sign-up for to receive messages for this room
+		socket.emit('setPseudo', {userInfo: userInfo});
+	});
+	socket.on(events.welcome, function(data) {
+		$scope.addMessage(data.message, data.sender, data.date, data.data);
+		$scope.connected = true;
+		$scope.addControlData(events.welcome, data.data);
+		for (var i = 0; i< data.data.length; i++) {
+			if (data.data[i] == user) {
+				$scope.position = i;
+				break;
+			}
+		}
+		socket.on(events.playerJoin, function(data) {
+			$scope.info = data.message;
+			$scope.addMessage(data.message, data.sender, data.date, data.data);
+			$scope.addControlData(events.playerJoin, data.data);
+			if (data.data.inProgress) {
+				//$scope.tableData.players[$scope.shifter(data.data.position)] = data.data.name;
+			}
+			$scope.$apply();
+		});
+		socket.on(events.playerLeave, function(data) {
+			$scope.info = data.message;
+			$scope.addMessage(data.message, data.sender, data.date, data.data);
+			$scope.addControlData(events.playerLeave, data.data);
+			if (data.data.inProgress) {
+				//$scope.tableData.players[$scope.shifter(data.data.position)] = data.data.name;
+			}
+			$scope.$apply();
+		});
+		socket.on(events.ready, function(data) {
+			$scope.createScript();
+			$scope.addMessage(data.message, data.sender, data.date, data.data);
+			$scope.addControlData(events.ready, data.data);
+			$scope.$apply();
+		});
+		socket.on(events.play, function(data) {
+			$scope.addMessage(data.message, data.sender, data.date, data.data);
+			$scope.addControlData(events.play, data.data);
+			$scope.token = data.data.player;
+			$scope.$apply();
+		});
+	});
+
+	//MESSAGE and CONTROL data Handling.
+	socket.on(events.message, function(data) {
+		$scope.addMessage(data.message, data.sender, data.date, data.data);
+	});
+	socket.on('disconnect', function(data) {
+		window.location.reload(true);
+	});
+
+	$scope.addMessage = function (msg, sender, date, data) {
+		if (data.error) {
+			$scope.info = msg;
+			$scope.$apply();
+		}
+		$("#ccbox").append("<p class=small><span class=date>"+date+" : </span><span class=sender>"+sender+" : </span><span class=message>"+msg+"</span></p>");
+		$('#ccbox').scrollTop($("#ccbox").prop('scrollHeight'));
+	};
+	$scope.addControlData = function (event, data) {
+		$("#control-data").append(event+" : "+JSON.stringify(data));
+	};
+
+	//playerfunctions
+}
