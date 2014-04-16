@@ -81,7 +81,7 @@ module.exports = function(app, module_obj, io) {
 	});
 	app.post('/', function(req, res){
 		var user = {name:req.param('user')};
-		res.cookie('user', user.name, { maxAge: 900000 });
+		res.cookie('user', user.name );
 		res.redirect('/lobby');
 	});
 

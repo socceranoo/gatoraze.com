@@ -29,7 +29,7 @@ function tube(num, room) {
 		message = newPlayer + " joined this room.";
 		data = {name:newPlayer, position:position};
 		sendData.push({dest:ALL_BUT_SENDER, event:events.playerJoin, message:message, data:data});
-		console.log("New player:"+newPlayer+"ROOM COUNT : "+Object.keys(this.members).length);
+		//console.log("New player:"+newPlayer+"ROOM COUNT : "+Object.keys(this.members).length);
 		sendData.push({dest:ALL , event:events.ready, message:"READY",  data:{players:this.playerArr}});
 		return [true, sendData];
 	};

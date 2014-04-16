@@ -123,7 +123,7 @@ module.exports = function(IO) {
 		});
 
 		if (!socketRoomsHash[data.room]) {
-			console.log(data);
+			//console.log(data);
 			socketRoomsHash[data.room] = new socketRoom(data);
 			servers[data.site].sessionCount++;
 		}

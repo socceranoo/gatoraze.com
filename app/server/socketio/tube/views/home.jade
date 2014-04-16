@@ -7,7 +7,7 @@ block content
 		.col-md-12.col-sm-12
 			.col-md-6.col-sm-6
 				h1
-					span.color-metroOrange.heading= site
+					span.color-metroYellow= site
 					include buttons
 			.col-md-6.col-sm-6
 				h1
@@ -17,27 +17,36 @@ block content
 							span.input-group-btn
 								input.btn.btn-success(type='submit' value='search')
 
-		hr.featurette-divider3
+			hr.featurette-divider3
+		.col-md-12.col-sm-12
+			h4.text-center.title(ng-class="{'color-metroGreen':connected === true, 'color-metroRed':connected === false}" ng-bind='info')
+			//
+				a.control.glyphicon.glyphicon-log-in.pull-right(href='javascript:void(0);' ng-click='reconnect()' ng-hide='connected')
+			hr.featurette-divider3
 		.col-md-12.col-sm-12
 			.col-md-7(ng-cloak ng-show='player')
-				#player Connect to continue
+				#player.green-border Connect to continue
 			.col-md-5(ng-cloak ng-show='searchList.length')
 				ul.search-list.list-unstyled
 					li(ng-repeat='video in searchList').clearfix
 						a(href='javascript:void(0);' ng-click='playVideo(video.id.videoId)')
 							img.thumbnail.img-thumbnail.pull-left(ng-src='{{video.snippet.thumbnails.default.url}}')
 							h4.text-justify.title(ng-bind='video.snippet.title')
-						a.control.glyphicon.glyphicon-plus(href='javascript:void(0);' ng-click='addVideo(video)')
+						a.control.glyphicon.glyphicon-plus(ng-hide='playList.videos[video.id.videoId]' href='javascript:void(0);' ng-click='addVideo(video)')
+						span(ng-show='playList.videos[video.id.videoId]')
+							span.background-clouds.color-metroGreen Added
 						//
+							a.glyphicon.glyphicon-remove-circle.control.pull-right(href='javascript:void(0);' ng-click='removeVideo(video)')
 							span Views:1000000
 							p(ng-bind='video.snippet.description')
-				a.control.glyphicon.glyphicon-backward.pull-left(href='javascript:void(0);' ng-click='showSearchPage(prevPageToken)')
-				a.control.glyphicon.glyphicon-forward.pull-right(href='javascript:void(0);' ng-click='showSearchPage(nextPageToken)')
-		hr.featurette-divider3
+				a.control.glyphicon.glyphicon-chevron-left.pull-left(href='javascript:void(0);' ng-click='showSearchPage(prevPageToken)')
+				a.control.glyphicon.glyphicon-chevron-right.pull-right(href='javascript:void(0);' ng-click='showSearchPage(nextPageToken)')
+		.col-md-12.col-sm-12
+			hr.featurette-divider3
 		.col-md-12.col-sm-12(ng-cloak)
-				ul.list-unstyled.list-inline
-					li(ng-repeat='(key, video) in playList.videos').clearfix
+				ul.play-list.list-unstyled.list-inline
+					li(ng-repeat='(key, video) in playList.videos').clearfix.text-center
 						a(href='javascript:void(0);' ng-click='playVideo(video.id.videoId)')
-							img.thumbnail.img-thumbnail(ng-src='{{video.snippet.thumbnails.default.url}}')
-							//
-								span.text-justify.title(ng-bind='video.snippet.title')
+							img.thumbnail.img-thumbnail(ng-attr-tooltip='video.snippet.title' ng-src='{{video.snippet.thumbnails.default.url}}')
+						p.text-justify.small-title(ng-bind='video.snippet.title')
+						a.glyphicon.glyphicon-remove-circle.pull-right.icon-close(href='javascript:void(0);' ng-click='removeVideo(video)')

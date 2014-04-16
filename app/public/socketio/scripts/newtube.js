@@ -2,6 +2,21 @@ $(document).ready(function() {
 });
 
 function Tube($scope) {
+	var PLAY = 1, PAUSE = 2, CUE = 5, ENDED = 0, STOPPED = 4, NEWVIDEO = -1, INIT = -2;
+	var NO_OP = function () {
+		//Do nothing
+	};
+	var stateFunctionMap = [
+		[0, 1, 2, NO_OP, 4, 5, -1], //ENDED
+		[0, 1, 2, NO_OP, 4, 5, -1], //PLAY
+		[0, 1, 2, NO_OP, 4, 5, -1], //PAUSE
+		[NO_OP, NO_OP, NO_OP, NO_OP, NO_OP, NO_OP, NO_OP], //no-op
+		[0, 1, 2, NO_OP, 4, 5, -1], //STOPPED
+		[0, 1, 2, NO_OP, 4, 5, -1], //CUE
+		[0, 1, 2, NO_OP, 4, 5, -1], //-1 function
+	];
+	$scope.prevState = INIT;
+	$scope.state = INIT;
 	$scope.player = null;
 	$scope.apiReady = false;
 	$scope.searchList = [];
@@ -14,12 +29,14 @@ function Tube($scope) {
 	$scope.nextPageToken = "";
 	$scope.prevPageToken = "";
 	$scope.prevQuery = "";
+	$scope.info = "";
+	$scope.connected = false;
 	var events = {
 		message:"message", welcome:"welcome", playerJoin:"player-join",
 		playerLeave:"player-leave", cards:"cards", play:"play",
 		round:"round", game:"game", ready:"ready", addComputer:"add-computer"
 	};
-	var socket = io.connect();
+	var socket = io.connect('', {reconnect:true, 'reconnection delay':5000});
 	var userInfo = {user:user, site:site, room:room , session:session, total:total};
 	$scope.onYouTubeIframeAPIReady = function () {
 		$scope.player = new YT.Player('player', {
@@ -50,20 +67,25 @@ function Tube($scope) {
 		});
 	};
 	$scope.createScript = function () {
-		var tag = document.createElement('script');
-		tag.src = "//www.youtube.com/iframe_api";
-		var ytapi = document.createElement('script');
-		ytapi.src = "https://apis.google.com/js/client.js?onload=loadGoogleAPIClient";
 		var firstScriptTag = document.getElementsByTagName('script')[0];
-		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-		firstScriptTag.parentNode.insertBefore(ytapi, firstScriptTag);
+		if ($scope.player === null) {
+			var tag = document.createElement('script');
+			tag.src = "https://www.youtube.com/iframe_api";
+			firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+		}
+		if ($scope.apiReady === false) {
+			var ytapi = document.createElement('script');
+			ytapi.src = "https://apis.google.com/js/client.js?onload=loadGoogleAPIClient";
+			firstScriptTag.parentNode.insertBefore(ytapi, firstScriptTag);
+		}
 	};
 
 	$scope.onPlayerReady = function (event) {
-		//alert("READY");
 	};
 
 	$scope.onPlayerStateChange = function (event) {
+		$scope.prevState = $scope.state;
+		$scope.state = event.data;
 		if (event.data== -1) {
 			$scope.addControlData("STATE", "New Video");
 		} else if (event.data == 1) {
@@ -76,12 +98,15 @@ function Tube($scope) {
 			$scope.addControlData("STATE", "Ended");
 		} else if (event.data == 4) {
 			$scope.addControlData("STATE", "Stopped");
-		}	
+		}
+		$scope.processState($scope.state, $scope.prevState);
+	};
+	$scope.processState = function (cur, prev) {
 	};
 
 	$scope.handleAPILoaded = function () {
 		$scope.apiReady = true;
-		$scope.searchVideos("madonna dont tell me");
+		$scope.searchVideos("");
 	};
 
 	$scope.searchVideos = function (search_string) {
@@ -119,12 +144,17 @@ function Tube($scope) {
 			$scope.$apply();
 		});
 	};
+
 	$scope.playVideo = function (videoId) {
 		$scope.player.loadVideoById(videoId);
 	};
 	$scope.addVideo = function (videoObj) {
 		$scope.playList.videos[videoObj.id.videoId] = videoObj;
 	};
+	$scope.removeVideo = function (videoObj) {
+		delete $scope.playList.videos[videoObj.id.videoId];
+	};
+
 	window.loadGoogleAPIClient = $scope.loadGoogleAPIClient;
 	window.onYouTubeIframeAPIReady = $scope.onYouTubeIframeAPIReady;
 
@@ -134,9 +164,11 @@ function Tube($scope) {
 		socket.emit('setPseudo', {userInfo: userInfo});
 	});
 	socket.on(events.welcome, function(data) {
+		$("#player").removeClass("red-border").addClass("green-border");
 		$scope.addMessage(data.message, data.sender, data.date, data.data);
 		$scope.connected = true;
 		$scope.addControlData(events.welcome, data.data);
+		$scope.info = "Welcome";
 		for (var i = 0; i< data.data.length; i++) {
 			if (data.data[i] == user) {
 				$scope.position = i;
@@ -180,7 +212,10 @@ function Tube($scope) {
 		$scope.addMessage(data.message, data.sender, data.date, data.data);
 	});
 	socket.on('disconnect', function(data) {
-		window.location.reload(true);
+		$scope.connected = false;
+		$scope.info = "Disconnected from Server";
+		$("#player").removeClass("green-border").addClass("red-border");
+		$scope.$apply();
 	});
 
 	$scope.addMessage = function (msg, sender, date, data) {

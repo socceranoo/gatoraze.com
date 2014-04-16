@@ -6,21 +6,59 @@ body.tube {
 	background-repeat:repeat;
 }
 #player {
-	border:5px solid @metro_green;
+}
+.player-wrapper {
+	box-sizing:border-box;
+}
+.green-border {
+	border:6px solid @metro_green;
+	/*
+	border-right:5px solid @metro_green;
+	border-left:5px solid @metro_green;
+	border-top:5px solid @metro_green;
+	border-bottom:1px solid @metro_green;
+	*/
+}
+.red-border {
+	border:6px solid @metro_red;
+	/*
+	border-right:5px solid @metro_red;
+	border-left:5px solid @metro_red;
+	border-top:5px solid @metro_red;
+	border-bottom:1px solid @metro_red;
+	*/
 }
 ul.search-list {
-	max-height:500px;	
+	max-height:500px;
 	overflow:auto;
-	
 }
 ul.search-list li {
-	cursor:pointer;
 	clear:both;
 	margin:10px;
+}
+ul.play-list {
+}
+ul.play-list li {
+	width:100px;
+	position:relative;
 }
 .control {
 	font-size:20px;
 	color:#444;
+}
+p.small-title {
+	text-overflow: ellipsis; /* will make [...] at the end */
+	width: 100px; /* change to your preferences */
+	white-space: nowrap; /* paragraph to one line */
+	overflow:hidden; /* older browsers */
+	font-size:13px;
+}
+.icon-close {
+	color:#444;
+	font-size:20px;
+	position:absolute;
+	top:-10px;
+	right:-10px;
 }
 .title {
 	margin:10px;
