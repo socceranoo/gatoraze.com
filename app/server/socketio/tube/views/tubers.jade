@@ -1,0 +1,11 @@
+#tubers-modal.modal.fade
+	.modal-dialog.modal-sm
+		.modal-content
+			.modal-header.text-center
+				a.close(data-dismiss='modal') &times;
+				h3 Other Tubers
+			.modal-body.text-justify
+				ul.search-list.list-unstyled
+					li(ng-repeat='(key, tuber) in tubers').clearfix.text-center
+						span.glyphicon.glyphicon-user.pull-left(href='javascript:void(0);')
+						p.text-justify.small-title.small(ng-bind='tuber.name')

@@ -1,6 +1,8 @@
 .brand.container
 	img.img-responsive(src="/socketio/images/gamecenter-icon.png" alt="").pull-left
 	form(action='/lobby', method='POST').pull-right
+		- if (list)
+			a(href="/lobby").btn.btn-success Back to Lobby
 		input.btn.btn-danger(type='submit' value='Leave Lobby')
 	//
 		h2.pull-left

@@ -3,6 +3,7 @@ extends layout
 block content
 	include ../../game/common/control
 	include ../../game/common/message-area
+	include tubers
 	.row
 		.col-md-12.col-sm-12
 			.col-md-6.col-sm-6
@@ -25,18 +26,22 @@ block content
 			hr.featurette-divider3
 		.col-md-12.col-sm-12
 			.col-md-7(ng-cloak ng-show='player')
+				h3
+					p.small-title.pull-left(ng-bind='video.snippet.title')
+					a.control.glyphicon.glyphicon-plus.pull-right(ng-hide='playList.videos[video.id.videoId]' href='javascript:void(0);' ng-click='addVideoClick(video)')
 				#player.green-border Connect to continue
 			.col-md-5(ng-cloak ng-show='searchList.length')
+				h3 Results
 				ul.search-list.list-unstyled
 					li(ng-repeat='video in searchList').clearfix
-						a(href='javascript:void(0);' ng-click='playVideo(video.id.videoId)')
+						a(href='javascript:void(0);' ng-click='loadVideoClick(video)')
 							img.thumbnail.img-thumbnail.pull-left(ng-src='{{video.snippet.thumbnails.default.url}}')
 							h4.text-justify.title(ng-bind='video.snippet.title')
-						a.control.glyphicon.glyphicon-plus(ng-hide='playList.videos[video.id.videoId]' href='javascript:void(0);' ng-click='addVideo(video)')
+						a.control.glyphicon.glyphicon-plus(ng-hide='playList.videos[video.id.videoId]' href='javascript:void(0);' ng-click='addVideoClick(video)')
 						span(ng-show='playList.videos[video.id.videoId]')
 							span.background-clouds.color-metroGreen Added
 						//
-							a.glyphicon.glyphicon-remove-circle.control.pull-right(href='javascript:void(0);' ng-click='removeVideo(video)')
+							a.glyphicon.glyphicon-remove-circle.control.pull-right(href='javascript:void(0);' ng-click='removeVideoClick(video)')
 							span Views:1000000
 							p(ng-bind='video.snippet.description')
 				a.control.glyphicon.glyphicon-chevron-left.pull-left(href='javascript:void(0);' ng-click='showSearchPage(prevPageToken)')
@@ -46,7 +51,7 @@ block content
 		.col-md-12.col-sm-12(ng-cloak)
 				ul.play-list.list-unstyled.list-inline
 					li(ng-repeat='(key, video) in playList.videos').clearfix.text-center
-						a(href='javascript:void(0);' ng-click='playVideo(video.id.videoId)')
+						a(href='javascript:void(0);' ng-click='loadVideoClick(video)')
 							img.thumbnail.img-thumbnail(ng-attr-tooltip='video.snippet.title' ng-src='{{video.snippet.thumbnails.default.url}}')
-						p.text-justify.small-title(ng-bind='video.snippet.title')
-						a.glyphicon.glyphicon-remove-circle.pull-right.icon-close(href='javascript:void(0);' ng-click='removeVideo(video)')
+						p.text-justify.small-title.small(ng-bind='video.snippet.title')
+						a.glyphicon.glyphicon-remove-circle.pull-right.icon-close(href='javascript:void(0);' ng-click='removeVideoClick(video)')

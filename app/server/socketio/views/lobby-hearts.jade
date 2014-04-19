@@ -1,0 +1,28 @@
+extends layout
+block content
+	include navbar
+	.row
+		h1.text-center Hearts
+		.col-md-12.col-sm-12.featurette-divider.background-unFlower
+			.col-md-2.col-sm-2
+				img.img-responsive(src="/socketio/images/hearts.png" alt="")
+			.col-md-10.col-sm-10
+				h3.text-center Tables
+				table.table.table-bordered.table-striped
+					tr
+						th Server
+						th Room
+						th In Progress
+						th Players
+						th Info
+						th Join
+					- each stuff in list.hearts
+						tr
+							td= stuff.game+' ('+stuff.totalPoints+')'
+							td= stuff.room
+							td= stuff.inProgress
+							td= stuff.active+'/'+stuff.total
+							td= stuff.playerInfo
+							td
+								a(href='/'+stuff.game+'/?session='+stuff.session) Join
+				a.btn.btn-sm.btn-success(href='/hearts') New game

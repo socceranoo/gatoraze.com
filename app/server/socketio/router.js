@@ -4,14 +4,31 @@ module.exports = function(app, module_obj, io) {
 	var EM = module_obj.EM;
 	var socketServer = require("./socket-server")(io);
 	var sleep = require('sleep');
-	var playsite = "RazeIO";
+	var playsite = "razeConnect";
 	var lobbysite = "Lobby";
+	var list = {};
 	//Routes 
-	app.get('/trump', function(req, res){
+	app.get('/', function(req, res){
+		if (check_user_name(req)) {
+			res.redirect('/lobby');
+			return;
+		}
+		res.render('socketio/views/home', {site:playsite, title:playsite+' - home', name: get_guest_name(5000)});
+	});
+	app.post('/', function(req, res){
+		var user = {name:req.param('user')};
+		res.cookie('user', user.name );
+		res.redirect('/lobby');
+	});
+	app.all('*', function(req, res, next){
 		if (!check_user_name(req)) {
 			res.redirect('/');
 			return;
+		} else {
+			next();
 		}
+	});
+	app.get('/trump', function(req, res){
 		var rand = Math.floor((Math.random()*500)+1);
 		var site = "trump";
 		var session = req.query.session;
@@ -28,10 +45,6 @@ module.exports = function(app, module_obj, io) {
 		res.render('socketio/game/trump/views/home', {site:site, user:user, room:room, session:session, total:players});
 	});
 	app.get('/tube', function(req, res){
-		if (!check_user_name(req)) {
-			res.redirect('/');
-			return;
-		}
 		var site = "tube";
 		var rand = Math.floor((Math.random()*500)+1);
 		var session = req.query.session;
@@ -39,14 +52,11 @@ module.exports = function(app, module_obj, io) {
 		session = (!session) ? rand : session;
 		var room = site+session;
 		var user = req.session.user.name;
+		user = "Guest-"+rand;
 		res.render('socketio/tube/views/home', {site:site, user:user, room:room, session:session, total:players});
 	});
 
 	app.get('/hearts', function(req, res){
-		if (!check_user_name(req)) {
-			res.redirect('/');
-			return;
-		}
 		var rand = Math.floor((Math.random()*500)+1);
 		var site = "hearts";
 		var session = req.query.session;
@@ -59,38 +69,41 @@ module.exports = function(app, module_obj, io) {
 		res.render('socketio/game/hearts/views/home', {site:site, user:user, room:room, session:session, total:players});
 	});
 
-	app.get('/', function(req, res){
-		if (check_user_name(req)) {
-			res.redirect('/lobby');
-			return;
-		}
-		res.render('socketio/views/home', {site:playsite, title:playsite+' - home', name: get_guest_name(5000)});
-	});
-	app.get('/lobby', function(req, res) {
-		if (!check_user_name(req)) {
-			res.redirect('/');
-			return;
-		}
-		var list = {};
+	app.get('/*lobby', function(req, res, next) {
 		for (var i = 0; i < socketServer.availableServers.length; i++) {
 			list[socketServer.availableServers[i]] = [];
 		}
 		socketServer.getActiveRooms(list);
-		var user = req.session.user.name;
-		res.render('socketio/views/lobby', {site:lobbysite, title: lobbysite+' - home', user:user, list:list});
-	});
-	app.post('/', function(req, res){
-		var user = {name:req.param('user')};
-		res.cookie('user', user.name );
-		res.redirect('/lobby');
+		next();
 	});
 
-	app.post('/lobby', function(req, res){
+	app.post('/*lobby', function(req, res){
 		res.clearCookie('user');
 		req.session.destroy( function(e) {
 			res.redirect('/');
 		});
 	});
+
+	app.get('/trump-lobby', function(req, res) {
+		var user = req.session.user.name;
+		res.render('socketio/views/lobby-trump', {site:lobbysite, title: lobbysite+' - home', user:user, list:list});
+	});
+
+	app.get('/hearts-lobby', function(req, res) {
+		var user = req.session.user.name;
+		res.render('socketio/views/lobby-hearts', {site:lobbysite, title: lobbysite+' - home', user:user, list:list});
+	});
+
+	app.get('/tube-lobby', function(req, res) {
+		var user = req.session.user.name;
+		res.render('socketio/views/lobby-tube', {site:lobbysite, title: lobbysite+' - home', user:user, list:list});
+	});
+
+	app.get('/lobby', function(req, res) {
+		var user = req.session.user.name;
+		res.render('socketio/views/lobby-home', {site:lobbysite, title: lobbysite+' - home', user:user, serverList:socketServer.availableServers});
+	});
+
 	var check_user_name = function (req) {
 		if (req.cookies.user === undefined){
 			return false;

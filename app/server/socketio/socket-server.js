@@ -164,7 +164,6 @@ module.exports = function(IO) {
 		var socketRoomObj = null;
 		for (var key in socketRoomsHash) {
 			socketRoomObj = socketRoomsHash[key];
-			console.log(JSON.stringify(socketRoomObj.game));
 			retdata[socketRoomObj.game].push(socketRoomObj.getRoomInfo());
 		}
 	};

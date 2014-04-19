@@ -14,18 +14,22 @@ function Tube($scope) {
 		[0, 1, 2, NO_OP, 4, 5, -1], //STOPPED
 		[0, 1, 2, NO_OP, 4, 5, -1], //CUE
 		[0, 1, 2, NO_OP, 4, 5, -1], //-1 function
+
 	];
+	$scope.video = null;
 	$scope.prevState = INIT;
 	$scope.state = INIT;
+	$scope.stateObj = null;
 	$scope.player = null;
 	$scope.apiReady = false;
 	$scope.searchList = [];
-	$scope.playList = {current:"", shuffle:false, repeat:false, videos:{},
+	$scope.playList = {current:"", shuffle:false, repeat:false, videos:null,
 		nextVideo : function () {
 		},
 		prevVideo : function () {
 		}
 	};
+	$scope.tubers = {};
 	$scope.nextPageToken = "";
 	$scope.prevPageToken = "";
 	$scope.prevQuery = "";
@@ -34,18 +38,19 @@ function Tube($scope) {
 	var events = {
 		message:"message", welcome:"welcome", playerJoin:"player-join",
 		playerLeave:"player-leave", cards:"cards", play:"play",
-		round:"round", game:"game", ready:"ready", addComputer:"add-computer"
+		seek:"round", game:"game", ready:"ready", addComputer:"add-computer"
 	};
-	var socket = io.connect('', {reconnect:true, 'reconnection delay':5000});
+	var socket = io.connect('', {reconnect:true, 'reconnection delay':15000});
 	var userInfo = {user:user, site:site, room:room , session:session, total:total};
+	$scope.name = user;
 	$scope.onYouTubeIframeAPIReady = function () {
 		$scope.player = new YT.Player('player', {
 			height: '500',
 			width: '100%',
 			//videoId: '1G4isv_Fylg',
-			videoId: '5mqhI2pActU',
+			//videoId: $scope.video.id.videoId,
 			playerVars: {
-				autoplay: '0',
+				autoplay:$scope.stateObj.data,
 				controls: '1'
 			},
 			events: {
@@ -66,21 +71,21 @@ function Tube($scope) {
 			$scope.handleAPILoaded();
 		});
 	};
-	$scope.createScript = function () {
+	$scope.createPlayer = function () {
 		var firstScriptTag = document.getElementsByTagName('script')[0];
-		if ($scope.player === null) {
-			var tag = document.createElement('script');
-			tag.src = "https://www.youtube.com/iframe_api";
-			firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-		}
-		if ($scope.apiReady === false) {
-			var ytapi = document.createElement('script');
-			ytapi.src = "https://apis.google.com/js/client.js?onload=loadGoogleAPIClient";
-			firstScriptTag.parentNode.insertBefore(ytapi, firstScriptTag);
-		}
+		var tag = document.createElement('script');
+		tag.src = "https://www.youtube.com/iframe_api";
+		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+	};
+	$scope.createAPI = function () {
+		var firstScriptTag = document.getElementsByTagName('script')[0];
+		var ytapi = document.createElement('script');
+		ytapi.src = "https://apis.google.com/js/client.js?onload=loadGoogleAPIClient";
+		firstScriptTag.parentNode.insertBefore(ytapi, firstScriptTag);
 	};
 
 	$scope.onPlayerReady = function (event) {
+		$scope.initVideo();	
 	};
 
 	$scope.onPlayerStateChange = function (event) {
@@ -144,9 +149,37 @@ function Tube($scope) {
 			$scope.$apply();
 		});
 	};
-
-	$scope.playVideo = function (videoId) {
-		$scope.player.loadVideoById(videoId);
+	$scope.loadVideoClick = function (videoObj) {
+		if ($scope.video.id.videoId == videoObj.id.videoId) {
+			return;
+		}
+		if ($scope.connected) {
+			socket.emit(events.play, {userInfo: userInfo, play:true, player:$scope.name, new:true, video:videoObj});
+		} else {
+			$scope.loadVideo(videoObj);
+		}
+	};
+	$scope.addVideoClick = function (videoObj) {
+		if ($scope.connected) {
+			socket.emit(events.play, {userInfo: userInfo, play:false, player:$scope.name, add:true, video:videoObj});
+		} else {
+			$scope.addVideo(videoObj);
+		}
+		return;
+	};
+	$scope.removeVideoClick = function (videoObj) {
+		if ($scope.connected) {
+			socket.emit(events.play, {userInfo: userInfo, play:false, player:$scope.name, add:false, video:videoObj});
+		} else {
+			$scope.removeVideo(videoObj);
+		}
+		return;
+	};
+	$scope.cueVideo = function (videoObj) {
+		$scope.player.cueVideoById(videoObj.id.videoId);
+	};
+	$scope.loadVideo = function (videoObj) {
+		$scope.player.loadVideoById(videoObj.id.videoId);
 	};
 	$scope.addVideo = function (videoObj) {
 		$scope.playList.videos[videoObj.id.videoId] = videoObj;
@@ -155,6 +188,13 @@ function Tube($scope) {
 		delete $scope.playList.videos[videoObj.id.videoId];
 	};
 
+	$scope.initVideo = function () {
+		if ($scope.data == 1) {
+			$scope.loadVideo($scope.video);
+		} else {
+			$scope.cueVideo($scope.video);
+		}
+	};
 	window.loadGoogleAPIClient = $scope.loadGoogleAPIClient;
 	window.onYouTubeIframeAPIReady = $scope.onYouTubeIframeAPIReady;
 
@@ -167,44 +207,64 @@ function Tube($scope) {
 		$("#player").removeClass("red-border").addClass("green-border");
 		$scope.addMessage(data.message, data.sender, data.date, data.data);
 		$scope.connected = true;
+		$scope.tubers = data.data.tubers;
+
+		$scope.playList.videos = data.data.playList.videos;
+		$scope.playList.shuffle = data.data.playList.shuffle;
+		$scope.playList.repeat = data.data.playList.repeat;
+
+		$scope.video = data.data.video;
+		$scope.stateObj = data.data.state;
+
 		$scope.addControlData(events.welcome, data.data);
 		$scope.info = "Welcome";
-		for (var i = 0; i< data.data.length; i++) {
-			if (data.data[i] == user) {
-				$scope.position = i;
-				break;
-			}
-		}
 		socket.on(events.playerJoin, function(data) {
 			$scope.info = data.message;
 			$scope.addMessage(data.message, data.sender, data.date, data.data);
 			$scope.addControlData(events.playerJoin, data.data);
-			if (data.data.inProgress) {
-				//$scope.tableData.players[$scope.shifter(data.data.position)] = data.data.name;
-			}
+			$scope.tubers = data.data;
 			$scope.$apply();
 		});
 		socket.on(events.playerLeave, function(data) {
 			$scope.info = data.message;
 			$scope.addMessage(data.message, data.sender, data.date, data.data);
 			$scope.addControlData(events.playerLeave, data.data);
-			if (data.data.inProgress) {
-				//$scope.tableData.players[$scope.shifter(data.data.position)] = data.data.name;
-			}
-			$scope.$apply();
-		});
-		socket.on(events.ready, function(data) {
-			$scope.createScript();
-			$scope.addMessage(data.message, data.sender, data.date, data.data);
-			$scope.addControlData(events.ready, data.data);
+			$scope.tubers = data.data;
 			$scope.$apply();
 		});
 		socket.on(events.play, function(data) {
 			$scope.addMessage(data.message, data.sender, data.date, data.data);
 			$scope.addControlData(events.play, data.data);
-			$scope.token = data.data.player;
+			var action = "";
+			var actor = (data.data.player == $scope.name) ? "You" : data.data.player;
+			if (data.data.play) {
+				if (data.data.new) {
+					$scope.video = data.data.video;
+					$scope.loadVideo(data.data.video);
+					action = " changed the video to ";
+				}
+			} else {
+				if (data.data.add) {
+					$scope.addVideo(data.data.video);
+					action = " added the video ";
+
+				} else {
+					$scope.removeVideo(data.data.video);
+					action = " deleted the video ";
+				}
+			}
+			$scope.info = actor+action+data.data.video.snippet.title;
 			$scope.$apply();
 		});
+		$scope.$apply();
+		if ($scope.player === null) {
+			$scope.createPlayer();
+		} else {
+			$scope.initVideo();
+		}
+		if($scope.apiReady === false) {
+			$scope.createAPI();
+		}
 	});
 
 	//MESSAGE and CONTROL data Handling.

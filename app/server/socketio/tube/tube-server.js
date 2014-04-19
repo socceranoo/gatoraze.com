@@ -1,15 +1,14 @@
 var ALL = 2, ALL_BUT_SENDER = 1, SENDER = 0;
 var events = require('../game/events').events;
-function player(name, position) {
+function player(name) {
 	this.name = name;
-	this.position = position;
 }
 function tube(num, room) {
 	this.room = room;
 	this.totalPlayers = num;
 	this.addHumanMember = function (newPlayer) {
 		var sendData = [];
-		var message, position, compName, data, playerObj;
+		var message, compName, data, playerObj;
 		if (this.members[newPlayer]) {
 			message = newPlayer+" duplicate login ";
 			sendData.push({dest:SENDER , event:events.message, message:message,  data:{error:true}});
@@ -20,33 +19,30 @@ function tube(num, room) {
 			sendData.push({dest:SENDER , event:events.message, message:message,  data:{error:true}});
 			return [false, sendData];
 		}
-		position = Object.keys(this.members).length;
-		playerObj = new player(newPlayer, position);
+		playerObj = new player(newPlayer);
 		this.members[newPlayer] = playerObj;
-		this.playerArr[position] = newPlayer;
 		message = "Welcome to the game room "+this.room;
-		sendData.push({dest:SENDER, event:events.welcome, message:message, data:this.playerArr});
+		this.welcomeObj.video = this.video;
+		console.log(JSON.stringify(this.welcomeObj.video));
+		sendData.push({dest:SENDER, event:events.welcome, message:message, data:this.welcomeObj});
 		message = newPlayer + " joined this room.";
-		data = {name:newPlayer, position:position};
+		data = this.members;
 		sendData.push({dest:ALL_BUT_SENDER, event:events.playerJoin, message:message, data:data});
-		//console.log("New player:"+newPlayer+"ROOM COUNT : "+Object.keys(this.members).length);
-		sendData.push({dest:ALL , event:events.ready, message:"READY",  data:{players:this.playerArr}});
 		return [true, sendData];
 	};
 
 	this.removeHumanMember = function (exitingPlayer) {
 		var sendData = [];
-		var message, position, compName, data, playerObj;
+		var message, compName, data, playerObj;
 		if (this.members[exitingPlayer]) {
 			message = exitingPlayer + " left this room " +this.room;
 			playerObj = this.members[exitingPlayer];
-			position = playerObj.position;
-			data = {name:exitingPlayer, position:position};
+			data = {name:exitingPlayer};
 			delete this.members[exitingPlayer];
 			if (this.humanCount() === 0) {
-				this.resetTable();
-				console.log("RESET TABLE");
+				//this.resetTable();
 			}
+			data = this.members;
 			sendData.unshift({dest:ALL_BUT_SENDER , event:events.playerLeave, message:message,  data:data});
 			return sendData;
 		}
@@ -56,6 +52,35 @@ function tube(num, room) {
 		return (Object.keys(this.members).length == this.totalPlayers);
 	};
 
+	this.getStartingVideo = function () {
+		return {
+			kind: "youtube#video",
+			etag: "\"X98aQHqGvPBJLZLOiSGUHCM9jnE/EbMttCmcY_CyWoS4drM1HKEojlc\"",
+			id: {
+				videoId : "1G4isv_Fylg",
+			},
+			snippet: {
+				publishedAt: "2011-10-19T02:42:54.000Z",
+				channelId: "UCDPM_n1atn2ijUwHd0NNRQw",
+				title: "Coldplay - Paradise",
+				description: "This video was directed by Mat Whitecross in 2011 and was filmed in South Africa and London\n.",
+				thumbnails: {
+					default: {
+						url: "https://i1.ytimg.com/vi/1G4isv_Fylg/default.jpg"
+					},
+					medium: {
+						url: "https://i1.ytimg.com/vi/1G4isv_Fylg/mqdefault.jpg"
+					},
+					high: {
+						url: "https://i1.ytimg.com/vi/1G4isv_Fylg/hqdefault.jpg"
+					}
+				},
+				channelTitle: "Coldplay Official",
+				categoryId: "10",
+				liveBroadcastContent: "none"
+			}
+		};
+	};
 	this.humanCount = function () {
 		return Object.keys(this.members).length;
 	};
@@ -64,23 +89,51 @@ function tube(num, room) {
 		retdata.total = this.totalPlayers;
 		retdata.active = this.humanCount();
 		retdata.totalPoints = this.totalPoints;
-		retdata.playerInfo = this.playerArr;
+		retdata.playerInfo = Object.keys(this.members);
 	};
 
 	this.resetTable = function () {
-		this.video = "";
-		this.state = "";
-		this.time = "";
+		this.video = this.getStartingVideo();
+		this.state = {data:-1, time:0};
 		this.members = {};
-		this.playerArr = [];
-		this.playList = {};
+		this.playList = {shuffle:false, repeat:false, videos:{}};
+		this.welcomeObj = {state:this.state, video:this.video, playList:this.playList, tubers:this.members};
 	};
 	this.resetTable();
 
 	this.playerPlay = function (data) {
 		var sendData = [];
 		delete data.userInfo;
-		this.nextPlay(data, sendData, true);
+		if (data.play)
+			return this.stateOperation(data, sendData);
+		else
+			return this.listOperation(data, sendData);
+	};
+
+	this.stateOperation = function (data, sendData) {
+		var message = data.player;
+		if (data.new === true) {
+			message = message + " changed the video to "+data.video.snippet.title;
+			this.video = data.video;
+		} else {
+			//message = message + " removed the video "+data.video.snippet.title;
+		}
+		console.log(JSON.stringify(this.video));
+		sendData.push({dest:ALL, event:events.play, message:message, data:data});
+		return sendData;
+	};
+	this.listOperation = function (data, sendData) {
+		var message = data.player;
+		if (data.add && data.add === true) {
+			this.playList.videos[data.video.id.videoId] = data.video;
+			message = message + " added the video "+data.video.snippet.title;
+		} else if (data.add && data.add === false) {
+			delete this.playList.videos[data.video.id.videoId];
+			message = message + " removed the video "+data.video.snippet.title;
+		}
+		//console.log(JSON.stringify(this.welcomeObj));
+		sendData.push({dest:ALL, event:events.play, message:message, data:data});
+		return sendData;
 	};
 }
 exports.createGame = function(data) {
