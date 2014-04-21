@@ -1,5 +1,6 @@
 .col-md-8.col-md-offset-2.text-center.background-sunFloer
-	h3.text-center(ng-bind='action')
-	ul.card-set.player-hand.clearfix.list-unstyled.list-inline(ng-cloak ng-show='tableData.players.length')
-		li.card-holder(ng-class="{'clicked': card.valid === false && passOver === false}" ng-repeat='card in cards')
+	ul.card-set.player-hand.clearfix.list-unstyled.list-inline(ng-cloak ng-class="{'your-turn': action == 'Pass' || action == 'Play'}" ng-show='tableData.players.length')
+		li.highlight.card-holder(ng-class="{'clicked': card.valid === true && passOver === false }" ng-repeat='card in cards')
 			.card(style='background-position:{{card.bgPos[0]}}px {{card.bgPos[1]}}px' ng-click='cardClick(card, $index)')
+	h3.text-center(ng-bind='action')
+	h4.color-metroRed(ng-bind='info')

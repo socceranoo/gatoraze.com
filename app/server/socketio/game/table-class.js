@@ -88,7 +88,7 @@ function table(num, room) {
 		sendData.push({dest:ALL, event:events.playerJoin, message:message, data:data});
 		if (this.roomFull()) {
 			if (this.inProgress === false) {
-				sendData.push({dest:ALL , event:events.ready, message:"READY",  data:{players:this.playerArr, round:this.currentRound}});
+				sendData.push({dest:ALL , event:events.ready, message:"READY",  data:{players:this.playerArr}});
 				this.inProgress = true;
 				this.startPrePlay(sendData);
 			}

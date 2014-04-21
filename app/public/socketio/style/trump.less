@@ -2,7 +2,7 @@
 @import "../../common/less/main";
 body.trump , body.hearts {
 	z-index : 1;
-	background-image: url('../images/plain-grey.jpg');
+	background-image: url('../images/plain-grey2.jpg');
 	background-size: cover;
 	background-repeat: repeat;
 }
@@ -16,7 +16,7 @@ body.hearts {
 	position:relative;
 	height:3.5*(@cardHeight+20);
 	border-radius:50%;
-	.scale-mixin(1);
+	.scale-mixin(0.8);
 }
 .card-set {
 	width:auto;
@@ -27,36 +27,50 @@ body.hearts {
 	position:relative;
 	margin-left: -1 * @paddingLeft;
 	padding:0px 0px 0px 0px;
+	opacity:0.6;
+	.scale-mixin(.7);
 }
-.table-layout .card-holder , .trump-card{
-	.scale-mixin(0.85);
-}
+
 .card {
 	position:relative;
 	margin:0px auto;
 	width:@cardWidth;
 	height:@cardHeight;
 	background-image:url("../images/cardset3.jpg");
-	background-position:111px 0px;
+	background-position:222px 0px;
 	box-shadow: 0 0 10px #9ecaed;
 	border-radius:15px;
 }
+
 .player-name {
 	position :relative;
 	top:4px;
 	color:@metro_green;
-	font-size:25px;
+	font-size:15px;
 	//font-weight:bold;
 }
 .scale-mixin(@scale:1.2) {
 	transform:scale(@scale);
 	-ms-transform:scale(@scale);
 	-webkit-transform:scale(@scale);
-	transition: transform .3s linear;
+	transition: all .3s linear;
 	-webkit-transition: -webkit-transform .3s linear;
 }
 .player-hand .card {
 	cursor:pointer;
+}
+.round-starter {
+	outline:5px solid @peterRiver !important;
+}
+.current-turn {
+	.scale-mixin(1.3);
+}
+.team1 {
+	//outline:5px solid @metro_red !important;
+}
+
+.team2 {
+	//outline:5px solid @metro_green;
 }
 
 .blue-border {
@@ -94,9 +108,14 @@ body.hearts {
 .control-right {
 	right:0px;
 }
-.our-turn .card {
-	opacity:0.4;
+
+.your-turn .highlight {
+	opacity:1.0 !important;
+	.scale-mixin(1) !important;
+	z-index:150;
+	top:40px;
 }
+
 @shift4:50%;
 @base4:5px;
 .pos4-0 { position:absolute; bottom:@base4; left:@shift4; margin-left:-1 * @cardWidth/2 }
@@ -132,7 +151,35 @@ body.hearts {
 	font-size:18px;
 	position:absolute; top:@shift4; left:@shift4; margin-top:-1 * (@cardWidth)/2; margin-left:-1 * @cardWidth/2;
 }
-
+.trump-card {
+	opacity:0.7;
+	.scale-mixin(.7);
+}
+.bid-icon {
+	font-size:20px;
+	margin:0px 0px 0px 5px;
+	color:#333;
+	text-transform:uppercase;
+}
+.bid-points {
+	line-height:120px;
+	font-size:50px;
+	margin:0px;
+	padding:0px;
+}
+.bid-area {
+	opacity:1.0 !important;
+	.scale-mixin(1.3);
+}
 .clicked {
 	top: -40px;
+}
+@media (max-width: 501px) {
+	.table-layout {
+		.scale-mixin(0.6);
+		height:2.5*(@cardHeight+20);
+	}
+	.card-set {
+		.scale-mixin(0.6);
+	}
 }

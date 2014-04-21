@@ -26,14 +26,27 @@ exports.getTotalPoints = function (num) {
 	var game = [28, 0, 48, 0, 88];
 	return game[num - 4];
 };
-exports.processRound = function (round, trump) {
-	var leadObj = round[0];
-	var points = 0;
+exports.processRound = function (round, roundNumber, trump) {
 	var pointsObj = getPointsObj();
-	for (var i = 0; i < round.length; i++) {
+	var leadObj = round[0];
+	var points = pointsObj[round[0].card.rank.name].points;
+	var firstTrump = false;
+	for (var i = 1; i < round.length; i++) {
 		if (round[i].card.suit.name == leadObj.card.suit.name) {
 			if (pointsObj[round[i].card.rank.name].rank <= pointsObj[leadObj.card.rank.name].rank) {
 				leadObj = round[i];
+			}
+		} else if (trump.revealed === true && round[i].card.suit.name == trump.card.suit.name) {
+			if (firstTrump === false) {
+				if (roundNumber == trump.revealRound && i < trump.revealPosition) {
+					continue;
+				}
+				firstTrump = true;
+				leadObj = round[i];
+			} else {
+				if (pointsObj[round[i].card.rank.name].rank <= pointsObj[leadObj.card.rank.name].rank) {
+					leadObj = round[i];
+				}
 			}
 		}
 		points += pointsObj[round[i].card.rank.name].points;
@@ -60,6 +73,7 @@ exports.bestCard = function (playerObj, round, trump) {
 			return {card: playerObj.hand[i], index:i};
 		}
 	}
+	/*
 	if (trump.revealed === false) {
 		for (i = 0; i < playerObj.hand.length ; i++) {
 			if(trump.card.suit.name == playerObj.hand[i].suit.name){
@@ -70,6 +84,7 @@ exports.bestCard = function (playerObj, round, trump) {
 		//console.log("Trump revealed and no trump");
 		return {card: playerObj.hand[index], index:index, reveal:true};
 	}
+   */
 	//console.log("Lead Card:"+round[0].card.name+" My card:"+playerObj.hand[index].name+" Trump Revealed is :"+trump.revealed);
 	return {card: playerObj.hand[index], index:index};
 };
@@ -88,6 +103,8 @@ exports.revealTrump = function (playerObj, round, trump) {
 	}
 	var suitFound = false;
 	for (var i = 0; i < playerObj.hand.length ; i++) {
+		if (trump.card.name == playerObj.hand[i].name)
+			continue;
 		if (round[0].card.suit.name == playerObj.hand[i].suit.name){
 			suitFound = true;
 			message = 'Cannot reveal trump when you have the suit';
@@ -95,49 +112,31 @@ exports.revealTrump = function (playerObj, round, trump) {
 	}
 	return [!suitFound, message];
 };
-exports.isValidCard = function (playerObj, card, round, roundNumber, trump) {
-	var message = '';
-	var i = 0;
-	var trumpCount = 0;
-	var trumpFound = false;
-	var suitFound = false;
-
-	var message1 = 'Cannot play trump before it is revealed';
-	var message2 = 'Cannot play other suit than the trump when you have revealed it';
-	var message3 = 'Cannot play some other suit than the lead card suit';
-	for (i = 0; i < playerObj.hand.length ; i++) {
-		if (trump.card.suit.name == playerObj.hand[i].suit.name){
-			trumpCount++;
-		}
-		if (round.length > 0 && round[0].card.suit.name == playerObj.hand[i].suit.name){
-			suitFound = true;
-		}
+exports.isValidCard = function (playerObj, cardObj, round, roundNumber, trump) {
+	var validArr = null;
+	var message = 'Not a valid Card';
+	if (round.length) {
+		validArr = getValidMiddleCards(playerObj, round, trump, roundNumber);
+	} else {
+		validArr = getValidOpeningCards(playerObj, trump);
+		message = 'Cannot play trump before it is revealed';
 	}
-	if (round.length === 0 ) {
-		if (playerObj.position == trump.setter && card.suit.name == trump.card.suit.name && trump.revealed === false) {
-			if (trumpCount < playerObj.hand.length) {
-				return [false, message1];
-			}
-		}
-		return [true, message];
+	if (validArr[cardObj.index]) {
+		return [true, ''];
+	} else {
+		return [false, message];
 	}
-	if (card.suit.name == round[0].card.suit.name) {
-		return [true, message];
-	}
-	if (trump.revealRound == roundNumber && trump.revealer == playerObj.position) {
-		if (card.suit.name != trump.card.suit.name && trumpCount > 0) {
-			return [false, message2];
-		}
-		return [true, message];
-	}
-	return [!suitFound, message3];
 };
+
 exports.bestBid = function (playerObj, bidObj, trump) {
+	return {pass:true, points: bidObj.points};
+	/*
 	if (trump === null) {
 		return {points: bidObj.points+1};
 	}else {
 		return {pass:true, points: bidObj.points};
 	}
+   */
 };
 exports.pruneCardDeck = function (cardDeck, num) {
 	var ret = [];
@@ -155,3 +154,82 @@ exports.pruneCardDeck = function (cardDeck, num) {
 	return ret;
 };
 
+exports.getValidCards = function (playerObj, round, roundNumber, trump) {
+	if (playerObj.human === false) {
+		return null;
+	}
+	var cardIndexArr;
+	if (round.length) {
+		cardIndexArr = Object.keys(getValidMiddleCards(playerObj, round, trump, roundNumber));
+	} else {
+		cardIndexArr = Object.keys(getValidOpeningCards(playerObj, trump));
+	}
+	var ret = exports.revealTrump(playerObj, round, trump);
+	return {cards:cardIndexArr, canReveal:ret[0]};
+};
+
+var getValidOpeningCards = function (playerObj, trump) {
+	var ret = {};
+	var i = 0;
+	var trumpCount = 0;
+	var message1 = 'Cannot play trump before it is revealed';
+	//If the current player is not the trump setter or trump is already revealed
+	//then any player is free to play any card.
+	if (trump.revealed === true || playerObj.position != trump.setter) {
+		for (i = 0; i < playerObj.hand.length ; i++) {
+			ret[i] = true;
+		}
+		return ret;
+	}
+	var fullTrump = {};
+	for (i = 0; i < playerObj.hand.length ; i++) {
+		if (trump.card.name == playerObj.hand[i].name){
+			trumpCount++;
+			continue;
+		}
+		if (trump.card.suit.name == playerObj.hand[i].suit.name){
+			trumpCount++;
+			fullTrump[i] = true;
+		} else {
+			ret[i] = true;
+		}
+	}
+	//If the player only have trumps in hand and no other cards and Trump not revealed.
+	if (trumpCount == playerObj.hand.length) {
+		return fullTrump;
+	}
+	return ret;
+};
+var getValidMiddleCards = function (playerObj, round, trump, roundNumber) {
+	var anyArr = {};
+	var suitArr = {};
+	var trumpArr = {};
+	var i = 0;
+	var trumpCount = 0;
+	var trumpFound = false;
+	var message2 = 'Cannot play other suit than the trump when you have revealed it';
+	var message3 = 'Cannot play some other suit than the lead card suit';
+	for (i = 0; i < playerObj.hand.length ; i++) {
+		if (trump.revealed === false && trump.card.name == playerObj.hand[i].name){
+			trumpCount++;
+			continue;
+		}
+		anyArr[i] = true;
+		if (trump.card.suit.name == playerObj.hand[i].suit.name){
+			trumpCount++;
+			trumpArr[i] = true;
+		}
+		if (round[0].card.suit.name == playerObj.hand[i].suit.name){
+			suitArr[i] = true;
+		}
+	}
+	if (Object.keys(suitArr).length) {
+		return suitArr;
+	}
+	if (trump.revealRound == roundNumber && trump.revealer == playerObj.position) {
+		if (Object.keys(trumpArr).length) {
+			return trumpArr;
+		}
+	}
+	return anyArr;
+};

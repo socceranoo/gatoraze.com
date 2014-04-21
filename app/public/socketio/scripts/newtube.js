@@ -48,7 +48,7 @@ function Tube($scope) {
 			height: '500',
 			width: '100%',
 			//videoId: '1G4isv_Fylg',
-			//videoId: $scope.video.id.videoId,
+			//videoId: $scope.video.id,
 			playerVars: {
 				autoplay:$scope.stateObj.data,
 				controls: '1'
@@ -61,7 +61,7 @@ function Tube($scope) {
 		});
 	};
 	$scope.onPlayerError = function (errorCode) {
-		//alert("An error occured of type:" + errorCode);
+		alert("An error occured of type:" + errorCode);
 	};
 
 	$scope.loadGoogleAPIClient = function () {
@@ -118,7 +118,7 @@ function Tube($scope) {
 		var query = (search_string === undefined) ? $scope.query : search_string;
 		var obj = {
 			q:query,
-			part: 'snippet',
+			part: "snippet",
 			type: 'video',
 			maxResults:10,
 			videoEmbeddable: true
@@ -141,16 +141,25 @@ function Tube($scope) {
 	};
 
 	$scope.executeQuery = function (queryObj) {
+		$scope.searchList2 = [];
 		var request = gapi.client.youtube.search.list(queryObj);
 		request.execute(function(response) {
 			$scope.nextPageToken = response.result.nextPageToken;
 			$scope.prevPageToken = response.result.prevPageToken;
-			$scope.searchList = response.result.items;
-			$scope.$apply();
+			response.result.items.forEach(function (elem, index, array) {
+				var request2 = gapi.client.youtube.videos.list({part:'snippet, contentDetails, statistics', id: elem.id.videoId});
+				request2.execute(function(response2) {
+					$scope.searchList2.push(response2.result.items[0]);
+					if ($scope.searchList2.length == response.result.items.length) {
+						$scope.searchList = $scope.searchList2;
+						$scope.$apply();
+					}
+				});
+			});
 		});
 	};
 	$scope.loadVideoClick = function (videoObj) {
-		if ($scope.video.id.videoId == videoObj.id.videoId) {
+		if ($scope.video.id == videoObj.id) {
 			return;
 		}
 		if ($scope.connected) {
@@ -176,16 +185,16 @@ function Tube($scope) {
 		return;
 	};
 	$scope.cueVideo = function (videoObj) {
-		$scope.player.cueVideoById(videoObj.id.videoId);
+		$scope.player.cueVideoById(videoObj.id);
 	};
 	$scope.loadVideo = function (videoObj) {
-		$scope.player.loadVideoById(videoObj.id.videoId);
+		$scope.player.loadVideoById(videoObj.id);
 	};
 	$scope.addVideo = function (videoObj) {
-		$scope.playList.videos[videoObj.id.videoId] = videoObj;
+		$scope.playList.videos[videoObj.id] = videoObj;
 	};
 	$scope.removeVideo = function (videoObj) {
-		delete $scope.playList.videos[videoObj.id.videoId];
+		delete $scope.playList.videos[videoObj.id];
 	};
 
 	$scope.initVideo = function () {
@@ -216,7 +225,7 @@ function Tube($scope) {
 		$scope.video = data.data.video;
 		$scope.stateObj = data.data.state;
 
-		$scope.addControlData(events.welcome, data.data);
+		//$scope.addControlData(events.welcome, data.data);
 		$scope.info = "Welcome";
 		socket.on(events.playerJoin, function(data) {
 			$scope.info = data.message;
@@ -290,5 +299,19 @@ function Tube($scope) {
 		$("#control-data").append(event+" : "+JSON.stringify(data));
 	};
 
+	$scope.convertNumber = function (number) {
+		if(number === undefined || number === null) {
+			return "";
+		}
+		$scope.addControlData("NUMBER", number);
+		return (number+"").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	};
+	$scope.convertDuration = function (timeStr) {
+		if(timeStr === undefined || timeStr === null) {
+			return "";
+		}
+		timeStr = timeStr.replace(/[PTS]/g, "");
+		return timeStr.replace(/[HM]/g, ":");
+	};
 	//playerfunctions
 }

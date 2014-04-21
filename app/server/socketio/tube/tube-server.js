@@ -56,9 +56,7 @@ function tube(num, room) {
 		return {
 			kind: "youtube#video",
 			etag: "\"X98aQHqGvPBJLZLOiSGUHCM9jnE/EbMttCmcY_CyWoS4drM1HKEojlc\"",
-			id: {
-				videoId : "1G4isv_Fylg",
-			},
+			id: "1G4isv_Fylg",
 			snippet: {
 				publishedAt: "2011-10-19T02:42:54.000Z",
 				channelId: "UCDPM_n1atn2ijUwHd0NNRQw",
@@ -78,6 +76,20 @@ function tube(num, room) {
 				channelTitle: "Coldplay Official",
 				categoryId: "10",
 				liveBroadcastContent: "none"
+			},
+			contentDetails: {
+				duration: "PT4M21S",
+				dimension: "2d",
+				definition: "hd",
+				caption: "false",
+				licensedContent: true,
+			},
+			statistics: {
+				viewCount: "271369335",
+				likeCount: "1222130",
+				dislikeCount: "24588",
+				favoriteCount: "0",
+				commentCount: "214801"
 			}
 		};
 	};
@@ -125,10 +137,10 @@ function tube(num, room) {
 	this.listOperation = function (data, sendData) {
 		var message = data.player;
 		if (data.add && data.add === true) {
-			this.playList.videos[data.video.id.videoId] = data.video;
+			this.playList.videos[data.video.id] = data.video;
 			message = message + " added the video "+data.video.snippet.title;
 		} else if (data.add && data.add === false) {
-			delete this.playList.videos[data.video.id.videoId];
+			delete this.playList.videos[data.video.id];
 			message = message + " removed the video "+data.video.snippet.title;
 		}
 		//console.log(JSON.stringify(this.welcomeObj));

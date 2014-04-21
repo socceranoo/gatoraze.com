@@ -1,9 +1,8 @@
 .col-md-12(ng-cloak ng-show='tableData.round.length')
 	.table-layout.clearfix.col-md-6.col-md-offset-3.background-clous.ackground-opacity
-		.card-holder(ng-repeat='card in tableData.round track by $index' class='pos'+total+'-{{$index}}')
-			.card.green-border(ng-class="{'red-border': $index%2 == 1, 'active': $index == token, 'blue-border': $index == shifter(starter)}" style='background-position:{{card.bgPos[0]}}px {{card.bgPos[1]}}px')
+		.card-holder(ng-class="{'current-turn': $index == shifter(token), 'team1': $index%2 == 0, 'team2': $index%2 == 1}" ng-repeat='card in tableData.round track by $index' class='pos'+total+'-{{$index}}')
+			.card(ng-class="{'round-starter': $index == shifter(starter)}" style='background-position:{{card.bgPos[0]}}px {{card.bgPos[1]}}px')
 				span.bid-data(ng-bind='tableData.bidData[$index]')
-			.player-name(ng-class="{'color-metroRed': $index%2 == 1}")
-				span(ng-bind='tableData.players[$index]')
+			span.player-name(ng-bind='tableData.players[$index]' ng-hide='$index == 0')
 		.trump-position(ng-show='trump.revealed' style='background-position:{{suitImg[trump.card.suit.name].bgPos[0]}}px {{suitImg[trump.card.suit.name].bgPos[1]}}px')
-		a.trump-position(href='javascript:void(0);' ng-click='revealTrump()' ng-hide='trump.revealed || action != "Play"')
+		a.trump-position(href='javascript:void(0);' ng-click='revealTrump()' ng-hide='trump.revealed || action != "Play" || canReveal != true')

@@ -1,0 +1,18 @@
+h4
+	p.small-title.pull-left(ng-bind='video.snippet.title')
+hr.featurette-divider5
+h5
+	span.video-detail.pull-left
+		span.glyphicon.glyphicon-eye-open.control.color-metroGreen
+		span(ng-bind='convertNumber(video.statistics.viewCount)')
+	span.video-detail
+		span.glyphicon.glyphicon-thumbs-up.control.color-metroGreen
+		span.color-metroGreen(ng-bind='convertNumber(video.statistics.likeCount)')
+	span.video-detail
+		span.glyphicon.glyphicon-thumbs-down.control.color-metroRed
+		span.color-metroRed(ng-bind='convertNumber(video.statistics.dislikeCount)')
+	span.video-detail.pull-right
+		span.color-metroNavy(ng-bind='convertDuration(video.contentDetails.duration)')
+	span.video-detail.pull-right
+		a.control.glyphicon.glyphicon-plus-sign.color-metroGreen(ng-hide='playList.videos[video.id]' href='javascript:void(0);' ng-click='addVideoClick(video)')
+		span.control.glyphicon.glyphicon-ok-sign(ng-show='playList.videos[video.id]').color-metroGreen

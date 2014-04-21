@@ -6,11 +6,11 @@ block content
 	include tubers
 	.row
 		.col-md-12.col-sm-12
-			.col-md-6.col-sm-6
+			.col-md-7.col-sm-6
 				h1
-					span.color-metroYellow= site
+					span.color-metroOrange= site
 					include buttons
-			.col-md-6.col-sm-6
+			.col-md-5.col-sm-6
 				h1
 					form(ng-submit='searchVideos()' ng-cloak ng-show='apiReady')
 						.input-group
@@ -20,38 +20,19 @@ block content
 
 			hr.featurette-divider3
 		.col-md-12.col-sm-12
-			h4.text-center.title(ng-class="{'color-metroGreen':connected === true, 'color-metroRed':connected === false}" ng-bind='info')
+			.col-md-7(ng-cloak ng-show='player')
+				.ell.wrapper.player-wrapper(ng-class="{'background-metroGreen':connected === true, 'background-metroRed':connected === false}")
+					#player.green-border Connect to continue
+				.ell.wrapper.video-detail-wrapper(ng-class="{'ackground-metroGreen':connected === true, 'ackground-metroRed':connected === false}")
+					include video-detail
+				hr.featurette-divider5
+				.ell.wrapper.play-list-wrapper.ackground-metroYellow
+					h4.text-center(ng-class="{'color-metroGreen':connected === true, 'color-metroRed':connected === false}" ng-bind='info')
+					include playlist
+				hr.featurette-divider5
+			.col-md-5(ng-cloak ng-show='searchList.length')
+				.ell.wrapper.search-list-wrapper.ackground-metroYellow
+					include searchlist
+				hr.featurette-divider5
 			//
 				a.control.glyphicon.glyphicon-log-in.pull-right(href='javascript:void(0);' ng-click='reconnect()' ng-hide='connected')
-			hr.featurette-divider3
-		.col-md-12.col-sm-12
-			.col-md-7(ng-cloak ng-show='player')
-				h3
-					p.small-title.pull-left(ng-bind='video.snippet.title')
-					a.control.glyphicon.glyphicon-plus.pull-right(ng-hide='playList.videos[video.id.videoId]' href='javascript:void(0);' ng-click='addVideoClick(video)')
-				#player.green-border Connect to continue
-			.col-md-5(ng-cloak ng-show='searchList.length')
-				h3 Results
-				ul.search-list.list-unstyled
-					li(ng-repeat='video in searchList').clearfix
-						a(href='javascript:void(0);' ng-click='loadVideoClick(video)')
-							img.thumbnail.img-thumbnail.pull-left(ng-src='{{video.snippet.thumbnails.default.url}}')
-							h4.text-justify.title(ng-bind='video.snippet.title')
-						a.control.glyphicon.glyphicon-plus(ng-hide='playList.videos[video.id.videoId]' href='javascript:void(0);' ng-click='addVideoClick(video)')
-						span(ng-show='playList.videos[video.id.videoId]')
-							span.background-clouds.color-metroGreen Added
-						//
-							a.glyphicon.glyphicon-remove-circle.control.pull-right(href='javascript:void(0);' ng-click='removeVideoClick(video)')
-							span Views:1000000
-							p(ng-bind='video.snippet.description')
-				a.control.glyphicon.glyphicon-chevron-left.pull-left(href='javascript:void(0);' ng-click='showSearchPage(prevPageToken)')
-				a.control.glyphicon.glyphicon-chevron-right.pull-right(href='javascript:void(0);' ng-click='showSearchPage(nextPageToken)')
-		.col-md-12.col-sm-12
-			hr.featurette-divider3
-		.col-md-12.col-sm-12(ng-cloak)
-				ul.play-list.list-unstyled.list-inline
-					li(ng-repeat='(key, video) in playList.videos').clearfix.text-center
-						a(href='javascript:void(0);' ng-click='loadVideoClick(video)')
-							img.thumbnail.img-thumbnail(ng-attr-tooltip='video.snippet.title' ng-src='{{video.snippet.thumbnails.default.url}}')
-						p.text-justify.small-title.small(ng-bind='video.snippet.title')
-						a.glyphicon.glyphicon-remove-circle.pull-right.icon-close(href='javascript:void(0);' ng-click='removeVideoClick(video)')

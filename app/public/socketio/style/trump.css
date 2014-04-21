@@ -138,7 +138,7 @@ table.gradient-style tr {
 body.trump,
 body.hearts {
   z-index: 1;
-  background-image: url('../images/plain-grey.jpg');
+  background-image: url('../images/plain-grey2.jpg');
   background-size: cover;
   background-repeat: repeat;
 }
@@ -146,10 +146,10 @@ body.hearts {
   position: relative;
   height: 588px;
   border-radius: 50%;
-  transform: scale(1);
-  -ms-transform: scale(1);
-  -webkit-transform: scale(1);
-  transition: transform .3s linear;
+  transform: scale(0.8);
+  -ms-transform: scale(0.8);
+  -webkit-transform: scale(0.8);
+  transition: all .3s linear;
   -webkit-transition: -webkit-transform 0.3s linear;
 }
 .card-set {
@@ -161,13 +161,11 @@ body.hearts {
   position: relative;
   margin-left: -70px;
   padding: 0px 0px 0px 0px;
-}
-.table-layout .card-holder,
-.trump-card {
-  transform: scale(0.85);
-  -ms-transform: scale(0.85);
-  -webkit-transform: scale(0.85);
-  transition: transform .3s linear;
+  opacity: 0.6;
+  transform: scale(0.7);
+  -ms-transform: scale(0.7);
+  -webkit-transform: scale(0.7);
+  transition: all .3s linear;
   -webkit-transition: -webkit-transform 0.3s linear;
 }
 .card {
@@ -176,7 +174,7 @@ body.hearts {
   width: 111px;
   height: 148px;
   background-image: url("../images/cardset3.jpg");
-  background-position: 111px 0px;
+  background-position: 222px 0px;
   box-shadow: 0 0 10px #9ecaed;
   border-radius: 15px;
 }
@@ -184,10 +182,20 @@ body.hearts {
   position: relative;
   top: 4px;
   color: #339966;
-  font-size: 25px;
+  font-size: 15px;
 }
 .player-hand .card {
   cursor: pointer;
+}
+.round-starter {
+  outline: 5px solid #3498db !important;
+}
+.current-turn {
+  transform: scale(1.3);
+  -ms-transform: scale(1.3);
+  -webkit-transform: scale(1.3);
+  transition: all .3s linear;
+  -webkit-transition: -webkit-transform 0.3s linear;
 }
 .blue-border {
   outline: 5px solid #3498db !important;
@@ -217,8 +225,15 @@ body.hearts {
 .control-right {
   right: 0px;
 }
-.our-turn .card {
-  opacity: 0.4;
+.your-turn .highlight {
+  opacity: 1.0 !important;
+  transform: scale(1) !important;
+  -ms-transform: scale(1) !important;
+  -webkit-transform: scale(1) !important;
+  transition: all .3s linear !important;
+  -webkit-transition: -webkit-transform 0.3s linear !important;
+  z-index: 150;
+  top: 40px;
 }
 .pos4-0 {
   position: absolute;
@@ -348,6 +363,51 @@ body.hearts {
   margin-top: -55.5px;
   margin-left: -55.5px;
 }
+.trump-card {
+  opacity: 0.7;
+  transform: scale(0.7);
+  -ms-transform: scale(0.7);
+  -webkit-transform: scale(0.7);
+  transition: all .3s linear;
+  -webkit-transition: -webkit-transform 0.3s linear;
+}
+.bid-icon {
+  font-size: 20px;
+  margin: 0px 0px 0px 5px;
+  color: #333;
+  text-transform: uppercase;
+}
+.bid-points {
+  line-height: 120px;
+  font-size: 50px;
+  margin: 0px;
+  padding: 0px;
+}
+.bid-area {
+  opacity: 1.0 !important;
+  transform: scale(1.3);
+  -ms-transform: scale(1.3);
+  -webkit-transform: scale(1.3);
+  transition: all .3s linear;
+  -webkit-transition: -webkit-transform 0.3s linear;
+}
 .clicked {
   top: -40px;
+}
+@media (max-width: 501px) {
+  .table-layout {
+    transform: scale(0.6);
+    -ms-transform: scale(0.6);
+    -webkit-transform: scale(0.6);
+    transition: all .3s linear;
+    -webkit-transition: -webkit-transform 0.3s linear;
+    height: 420px;
+  }
+  .card-set {
+    transform: scale(0.6);
+    -ms-transform: scale(0.6);
+    -webkit-transform: scale(0.6);
+    transition: all .3s linear;
+    -webkit-transition: -webkit-transform 0.3s linear;
+  }
 }

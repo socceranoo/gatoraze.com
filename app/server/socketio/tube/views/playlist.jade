@@ -1,0 +1,6 @@
+ul.play-list.list-unstyled.list-inline.text-center
+	li(ng-repeat='(key, video) in playList.videos').clearfix
+		a(href='javascript:void(0);' ng-click='loadVideoClick(video)')
+			img.img-humbnail(ng-attr-tooltip='video.snippet.title' ng-src='{{video.snippet.thumbnails.default.url}}')
+		p.text-justify.small-title.small(ng-bind='video.snippet.title')
+		a.glyphicon.glyphicon-remove.pull-right.icon-close.color-metroRed(href='javascript:void(0);' ng-click='removeVideoClick(video)')

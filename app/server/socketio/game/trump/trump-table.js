@@ -9,7 +9,7 @@ var gameEngine = require('./trump-engine');
 trump.prototype = new tableClass.obj();
 trump.prototype.constructor = trump;
 function trump (num, room) {
-	this.autoPrePlay = true;
+	this.autoPrePlay = !false;
 	this.room = room;
 	this.totalPoints = gameEngine.getTotalPoints(num);
 	this.cardDeck = gameEngine.pruneCardDeck(cardClass.createCardDeck(), num);
@@ -94,6 +94,22 @@ function trump (num, room) {
 		});
 	};
 
+	this.startPlay = function (sendData) {
+		this.currentPlayer = this.gameStarter;
+		var playerObj = this.members[this.playerArr[this.currentPlayer]];
+		this.prePlayOver = true;
+		this.sendPreGameInfo(sendData, 2);
+		if (playerObj.human === false) {
+			var cardData = {play:true, player:this.currentPlayer, cardObj:{}};
+			this.computerPlay(playerObj, cardData, sendData);
+		}else {
+			var validCards = gameEngine.getValidCards(playerObj, this.currentRound, this.round.length, this.trump);
+			sendData.push({dest:ALL, event:events.play, message:"PLAY",
+				data:{play:true, player:this.currentPlayer, cardObj:null, validCards:validCards}
+			});
+		}
+	};
+
 	this.isValid = function (data, sendData) {
 		var validObj;
 		var playerObj = this.members[this.playerArr[this.currentPlayer]];
@@ -106,13 +122,14 @@ function trump (num, room) {
 				this.trump.revealer = this.currentPlayer;
 				this.trump.revealRound = this.round.length;
 				this.trump.revealPosition = this.currentRound.length;
+				data.validCards = gameEngine.getValidCards(playerObj, this.currentRound, this.round.length, this.trump);
 				sendData.push({dest:ALL, event:events.play, message:validObj[1],  data:data});
 			} else {
 				data.card = null;
 				sendData.push({dest:SENDER, event:events.play, message:validObj[1],  data:data});
 			}
 		} else {
-			validObj = gameEngine.isValidCard(playerObj, data.cardObj.card, this.currentRound, this.round.length, this.trump);
+			validObj = gameEngine.isValidCard(playerObj, data.cardObj, this.currentRound, this.round.length, this.trump);
 			if (validObj[0] === false) {
 				data.cardObj = null;
 				sendData.push({dest:SENDER, event:events.play, message:validObj[1],  data:data});
@@ -132,28 +149,30 @@ function trump (num, room) {
 		this.currentPlayer++;
 		this.currentPlayer %= this.totalPlayers;
 		this.currentRound.push(data.cardObj);
-		var userObj = this.members[this.playerArr[data.cardObj.player]];
-		userObj.hand.splice(data.cardObj.index, 1);
+		var prevPlayerObj = this.members[this.playerArr[data.cardObj.player]];
+		prevPlayerObj.hand.splice(data.cardObj.index, 1);
 		if (this.currentRound.length == this.totalPlayers) {
-			var roundWinner = gameEngine.processRound(this.currentRound, null);
+			var roundWinner = gameEngine.processRound(this.currentRound, this.round.length, this.trump);
 			sendData.push({dest:ALL, event:events.play, message:"PLAY",  data:{play:true, player:-1, cardObj:data.cardObj}});
 			sendData.push({dest:ALL , event:events.sleep, message:"SLEEP",  data:sleepSeconds});
 			sendData.push({dest:ALL, event:events.round, message:"Round",  data:{prevRound:this.currentRound, winner:roundWinner}});
-			this.updatePoints(roundWinner.player, roundWinner.points);
-			this.round.push(this.currentRound);
+			this.round.push({winner:roundWinner.player, points:roundWinner.points, round:this.currentRound});
 			this.currentRound = [];
 			if (this.round.length === this.handCount) {
-				sendData.push({dest:ALL, event:events.game, message:"Game",  data:{prevGame:this.round, winner:true}});
+				//this.updatePoints();
+				sendData.push({dest:ALL, event:events.game, message:"Game",  data:{prevGame:{allRounds:this.round, stats:null}}});
 				this.round = [];
 				this.gameStarter++;
 				this.gameStarter %= this.totalPlayers;
 				this.startPrePlay(sendData);
 			} else {
 				this.currentPlayer = roundWinner.player;
-				sendData.push({dest:ALL, event:events.play, message:"PLAY",  data:{play:true, player:this.currentPlayer, cardObj:null}});
+				var validCards = gameEngine.getValidCards(this.members[this.playerArr[this.currentPlayer]], this.currentRound, this.round.length, this.trump);
+				sendData.push({dest:ALL, event:events.play, message:"PLAY",  data:{play:true, player:this.currentPlayer, cardObj:null, validCards:validCards}});
 			}
 		} else {
 			data.player = this.currentPlayer;
+			data.validCards = gameEngine.getValidCards(this.members[this.playerArr[this.currentPlayer]], this.currentRound, this.round.length, this.trump);
 			sendData.push({dest:ALL, event:events.play, message:"PLAY",  data:data});
 		}
 		playerObj = this.members[this.playerArr[this.currentPlayer]];

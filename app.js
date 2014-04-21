@@ -42,7 +42,7 @@ app.configure('development', function(){
 	app.use(express.errorHandler());
 });
 
-require('./app/server/portfolio/router')(app, module_obj);
+//require('./app/server/portfolio/router')(app, module_obj);
 require('./app/server/account/router')(app, module_obj);
 require('./app/server/money/router')(app, module_obj);
 

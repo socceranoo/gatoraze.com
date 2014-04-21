@@ -6,7 +6,6 @@ module.exports = function(app, module_obj, io) {
 	var sleep = require('sleep');
 	var playsite = "razeConnect";
 	var lobbysite = "Lobby";
-	var list = {};
 	//Routes 
 	app.get('/', function(req, res){
 		if (check_user_name(req)) {
@@ -34,9 +33,12 @@ module.exports = function(app, module_obj, io) {
 		var session = req.query.session;
 		var players = req.query.players;
 		players = (players && (players == 4 || players == 6 || players == 8)) ? players:4;
+		if (!session) {
+			res.redirect('/trump?session='+rand+'&players='+players);
+		}
 		session = (!session) ? rand : session;
 		var room = site+session;
-		var temp = socketServer.getRoomInfo(room);
+		var temp = socketServer.getRoomInfo(site, room);
 		if (temp !== null) {
 			players = temp.total;
 		}
@@ -69,14 +71,6 @@ module.exports = function(app, module_obj, io) {
 		res.render('socketio/game/hearts/views/home', {site:site, user:user, room:room, session:session, total:players});
 	});
 
-	app.get('/*lobby', function(req, res, next) {
-		for (var i = 0; i < socketServer.availableServers.length; i++) {
-			list[socketServer.availableServers[i]] = [];
-		}
-		socketServer.getActiveRooms(list);
-		next();
-	});
-
 	app.post('/*lobby', function(req, res){
 		res.clearCookie('user');
 		req.session.destroy( function(e) {
@@ -85,16 +79,25 @@ module.exports = function(app, module_obj, io) {
 	});
 
 	app.get('/trump-lobby', function(req, res) {
+		var list = [];
 		var user = req.session.user.name;
+		var site = "trump";
+		socketServer.getActiveRooms(site, list);
 		res.render('socketio/views/lobby-trump', {site:lobbysite, title: lobbysite+' - home', user:user, list:list});
 	});
 
 	app.get('/hearts-lobby', function(req, res) {
+		var list = [];
+		var site = "hearts";
+		socketServer.getActiveRooms(site, list);
 		var user = req.session.user.name;
 		res.render('socketio/views/lobby-hearts', {site:lobbysite, title: lobbysite+' - home', user:user, list:list});
 	});
 
 	app.get('/tube-lobby', function(req, res) {
+		var list = [];
+		var site = "tube";
+		socketServer.getActiveRooms(site, list);
 		var user = req.session.user.name;
 		res.render('socketio/views/lobby-tube', {site:lobbysite, title: lobbysite+' - home', user:user, list:list});
 	});

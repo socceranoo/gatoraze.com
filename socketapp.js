@@ -34,6 +34,7 @@ app.configure('development', function(){
 	app.use(express.errorHandler());
 });
 
+require('./app/server/portfolio/router')(app, module_obj);
 require('./app/server/coolgitstats/router')(app, module_obj);
 require('./app/server/socketio/router')(app, module_obj, io);
 

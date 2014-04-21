@@ -1,6 +1,13 @@
 .col-md-8.col-md-offset-2.text-center.background-sunFloer
-	h3.text-center(ng-bind='action')
-	ul.card-set.player-hand.clearfix.list-unstyled.list-inline(ng-cloak ng-class="{'your-turn': action == 'Play'}" ng-show='tableData.players.length')
-		li.card-holder(ng-repeat='card in cards')
+	h4.color-metroRed(ng-bind='info')
+	//h3.text-center(ng-bind='action')
+	ul.card-set.player-hand.clearfix.list-unstyled.list-inline(ng-cloak ng-class="{'your-turn': (action == 'Play' || action == 'Bid' || action == 'Set Trump')}" ng-show='tableData.players.length')
+		li.card-holder.background-peterRiver(ng-class="{'highlight': card.valid === true}" ng-repeat='card in cards')
 			.card(style='background-position:{{card.bgPos[0]}}px {{card.bgPos[1]}}px' ng-click='cardClick(card, $index)')
-	a.btn.btn-primary(data-toggle='modal' href='#bid-modal' ng-cloak ng-show='bidObj.bid') Bid
+		li.pull-right.bid-area(ng-show='bidObj.bid && action == "Bid"')
+			.card
+				h3.bid-points.color-metroPurple(ng-bind='bidObj.points')
+				a.bid-icon.glyphicon.glyphicon-minus.pull-left(href='javascript:void(0);' ng-click='bidObj.decreaseBid()')
+				a.bid-icon.glyphicon.glyphicon-remove(href='javascript:void(0);' ng-hide='bidObj.minimum' ng-click='bidObj.passBid()')
+				a.bid-icon.glyphicon.glyphicon-plus.pull-right(href='javascript:void(0);' ng-click='bidObj.increaseBid()')
+				a.bid-icon.glyphicon.glyphicon-ok(href='javascript:void(0);' ng-click='bidObj.submitBid()')

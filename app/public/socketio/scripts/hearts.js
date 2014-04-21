@@ -52,9 +52,9 @@ function Hearts($scope) {
 			if ($scope.passCards.length == 3) {
 				socket.emit(events.play, {play:false, userInfo:userInfo, player:$scope.position, passCards:$scope.passCards});
 				$scope.action = "Wait";
-				$scope.cards[$scope.passCards[0]].valid = true;
-				$scope.cards[$scope.passCards[1]].valid = true;
-				$scope.cards[$scope.passCards[2]].valid = true;
+				$scope.cards[$scope.passCards[0]].valid = false;
+				$scope.cards[$scope.passCards[1]].valid = false;
+				$scope.cards[$scope.passCards[2]].valid = false;
 				passSent = true;
 			} else {
 				$scope.info = "Please select 3 cards to Pass";
@@ -240,10 +240,10 @@ function Hearts($scope) {
 					$scope.info = "Select only 3 cards";
 					return;
 				}
-				card.valid = false;
+				card.valid = true;
 				$scope.passCards.push(index);
 			} else {
-				card.valid = true;
+				card.valid = false;
 				$scope.passCards.splice(cardFound, 1);
 			}
 			//$scope.addControlData(events.welcome, $scope.passCards);

@@ -27,10 +27,10 @@ module.exports = function (app, module_obj) {
 		{name:"Symantec", image:"symantec", col:4, bg:"metroRed"},
 		{name:"Gator", image:"gator", col:4, bg:"metroNavy"},
 		{name:"Soccer", image:"soccer", col:4, bg:"metroYellow"},
-		{name:"Work out", image:"workout", col:6, bg:"metroPurple"},
+		{name:"Tech", image:"workout", col:6, bg:"metroPurple"},
 		{name:"Ninja 650", image:"ninja", col:6, bg:"asbestos"},
 		{name:"Real Madrid", image:"madrid", col:4, bg:"metroOrange"},
-		{name:"Myself", image:"pofile", col:4, bg:"peterRiver"},
+		{name:"Fitness", image:"running", col:4, bg:"peterRiver"},
 		{name:"Music", image:"music", col:4, bg:"metroMagenta"}
 	];
 	

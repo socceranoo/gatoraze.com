@@ -1,8 +1,8 @@
 @import "../../common/less/variables";
 @import "../../common/less/main";
 body.tube {
-	background:#f5f5f5;
-	background: url('../images/plain-grey2.jpg');
+	background:#f1f1f1;
+	//background: url('../images/plain-grey2.jpg');
 	background-repeat:repeat;
 }
 #player {
@@ -34,17 +34,33 @@ ul.search-list {
 }
 ul.search-list li {
 	clear:both;
-	margin:10px;
+	margin:0px 10px 10px 10px;
 }
+@pl_liWidth:150px;
 ul.play-list {
+	padding-top:10px;
+	max-height:(@pl_liWidth * 2)+10;
+	overflow:auto;
 }
 ul.play-list li {
-	width:100px;
 	position:relative;
+	width:@pl_liWidth;
+	height:@pl_liWidth;
+}
+.icon-close {
+	position:absolute;
+	font-size:20px;
+	top:-10px;
+	right:10px;
 }
 .control {
-	font-size:20px;
+	font-size:16px;
 	color:#444;
+	margin:0px 5px 0px 5px;
+}
+.video-detail {
+	font-size:13px;
+	margin:0px 10px 0px 0px;
 }
 p.small-title {
 	text-overflow: ellipsis; /* will make [...] at the end */
@@ -52,18 +68,8 @@ p.small-title {
 	white-space: nowrap; /* paragraph to one line */
 	overflow:hidden; /* older browsers */
 }
-.icon-close {
-	color:#444;
-	font-size:20px;
-	position:absolute;
-	top:-10px;
-	right:-10px;
-}
 .title {
 	margin:10px;
-}
-.thumbnail {
-	margin:0px 5px 0px 5px;
 }
 
 .icon-top {
@@ -71,4 +77,34 @@ p.small-title {
 	margin:0px 25px 0px 25px;
 	color:#333;
 	text-transform:uppercase;
+}
+.control-left {
+	font-size:25px;
+	position:absolute;
+	left:0px;
+}
+.control-right {
+	font-size:25px;
+	position:absolute;
+	right:0px;
+}
+.search-result {
+	position:relative;
+}
+
+.video-header, .video-footer {
+	font-size:16px;
+	width:90%;
+	position:absolute;
+	left:10px;
+}
+.video-header {
+	top:0px;
+}
+ .video-footer {
+	bottom:0px;
+ }
+
+.my-thumbnail {
+	margin:0px auto;
 }
