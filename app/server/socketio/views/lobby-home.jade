@@ -4,24 +4,27 @@ block content
 	.row
 		h1.text-center Lobby
 		.col-md-12.col-sm-12.featurette-divider3.text-center
-			.col-md-6.col-sm-6.ackground-sunFlower
-				h2 Trump
-				.col-md-6.col-sm-6.col-md-offset-3.col-sm-offset-3
-					a(href='/trump-lobby')
-						img.img-responsive(src="/socketio/images/trump.png" alt="")
+			- each value, server in list
+				.col-md-6.col-sm-6.ackground-sunFlower
+					h2= value.name
+					.col-md-6.col-sm-6.col-md-offset-3.col-sm-offset-3
+						a(href='/'+server+'-lobby')
+							img.img-responsive(src="/socketio/images/"+value.image alt="")
+		//
+
 			.col-md-6.col-sm-6.ackground-emerald.text-center
 				h2 Hearts
 				.col-md-6.col-sm-6.col-md-offset-3.col-sm-offset-3
 					a(href='/hearts-lobby')
 						img.img-responsive(src="/socketio/images/QH.png" alt="")
-		.col-md-12.col-sm-12.featurette-divider3.text-center
-			.col-md-6.col-sm-6.ackground-alizarin
-				h2 Spades
-				.col-md-6.col-sm-6.col-md-offset-3.col-sm-offset-3
-					a(href='/spades-lobby')
-						img.img-responsive(src="/socketio/images/spades.png" alt="")
-			.col-md-6.col-sm-6
-				h2 Connectube
-				.col-md-6.col-sm-6.col-md-offset-3.col-sm-offset-3
-					a(href='/tube-lobby')
-						img.img-responsive(src="/socketio/images/tube.png" alt="")
+			.col-md-12.col-sm-12.featurette-divider3.text-center
+				.col-md-6.col-sm-6.ackground-alizarin
+					h2 Spades
+					.col-md-6.col-sm-6.col-md-offset-3.col-sm-offset-3
+						a(href='/spades-lobby')
+							img.img-responsive(src="/socketio/images/spades.png" alt="")
+				.col-md-6.col-sm-6
+					h2 Connectube
+					.col-md-6.col-sm-6.col-md-offset-3.col-sm-offset-3
+						a(href='/tube-lobby')
+							img.img-responsive(src="/socketio/images/tube.png" alt="")

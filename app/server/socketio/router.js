@@ -27,14 +27,11 @@ module.exports = function(app, module_obj, io) {
 			next();
 		}
 	});
-	app.get('/trump', function(req, res){
+	var process_request = function (req, res, site, players, path) {
 		var rand = Math.floor((Math.random()*500)+1);
-		var site = "trump";
 		var session = req.query.session;
-		var players = req.query.players;
-		players = (players && (players == 4 || players == 6 || players == 8)) ? players:4;
 		if (!session) {
-			res.redirect('/trump?session='+rand+'&players='+players);
+			res.redirect('/'+site+'?session='+rand+'&players='+players);
 		}
 		session = (!session) ? rand : session;
 		var room = site+session;
@@ -44,31 +41,29 @@ module.exports = function(app, module_obj, io) {
 		}
 		var user = req.session.user.name;
 		user = "Guest-"+rand;
-		res.render('socketio/game/trump/views/home', {site:site, user:user, room:room, session:session, total:players});
+		res.render('socketio/'+path+'/views/home', {site:site, user:user, room:room, session:session, total:players});
+	};
+	app.get('/trump', function(req, res){
+		var site = "trump";
+		var players = req.query.players;
+		players = (players && (players == 4 || players == 6 || players == 8)) ? players:4;
+		process_request(req, res, site, players, 'game/'+site);
+	});
+	app.get('/spades', function(req, res){
+		var site = "spades";
+		var players = 4;
+		process_request(req, res, site, players, 'game/trump');
 	});
 	app.get('/tube', function(req, res){
 		var site = "tube";
-		var rand = Math.floor((Math.random()*500)+1);
-		var session = req.query.session;
 		var players = 10;
-		session = (!session) ? rand : session;
-		var room = site+session;
-		var user = req.session.user.name;
-		user = "Guest-"+rand;
-		res.render('socketio/tube/views/home', {site:site, user:user, room:room, session:session, total:players});
+		process_request(req, res, site, players, site);
 	});
 
 	app.get('/hearts', function(req, res){
-		var rand = Math.floor((Math.random()*500)+1);
 		var site = "hearts";
-		var session = req.query.session;
-		var players = req.query.players;
-		session = (!session) ? rand : session;
-		var room = site+session;
-		players = 4;
-		var user = req.session.user.name;
-		user = "Guest-"+rand;
-		res.render('socketio/game/hearts/views/home', {site:site, user:user, room:room, session:session, total:players});
+		var players = 4;
+		process_request(req, res, site, players, site);
 	});
 
 	app.post('/*lobby', function(req, res){
@@ -78,33 +73,24 @@ module.exports = function(app, module_obj, io) {
 		});
 	});
 
-	app.get('/trump-lobby', function(req, res) {
+	var lobby_request = function (req, res, site) {
 		var list = [];
 		var user = req.session.user.name;
-		var site = "trump";
 		socketServer.getActiveRooms(site, list);
-		res.render('socketio/views/lobby-trump', {site:lobbysite, title: lobbysite+' - home', user:user, list:list});
-	});
+		res.render('socketio/views/lobby-'+site, {site:lobbysite, title: lobbysite+' - home', user:user, list:list});
+	};
 
-	app.get('/hearts-lobby', function(req, res) {
-		var list = [];
-		var site = "hearts";
-		socketServer.getActiveRooms(site, list);
-		var user = req.session.user.name;
-		res.render('socketio/views/lobby-hearts', {site:lobbysite, title: lobbysite+' - home', user:user, list:list});
-	});
-
-	app.get('/tube-lobby', function(req, res) {
-		var list = [];
-		var site = "tube";
-		socketServer.getActiveRooms(site, list);
-		var user = req.session.user.name;
-		res.render('socketio/views/lobby-tube', {site:lobbysite, title: lobbysite+' - home', user:user, list:list});
+	app.get('/*-lobby', function(req, res) {
+		var site = req.params[0];
+		if (socketServer.servers[site])
+			lobby_request(req, res, site);
+		else
+			res.redirect('/');
 	});
 
 	app.get('/lobby', function(req, res) {
 		var user = req.session.user.name;
-		res.render('socketio/views/lobby-home', {site:lobbysite, title: lobbysite+' - home', user:user, serverList:socketServer.availableServers});
+		res.render('socketio/views/lobby-home', {site:lobbysite, title: lobbysite+' - home', user:user, list:socketServer.servers});
 	});
 
 	var check_user_name = function (req) {

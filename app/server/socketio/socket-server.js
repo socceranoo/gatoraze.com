@@ -5,15 +5,16 @@ module.exports = function(IO) {
 	var socketRoomsHash = {};
 	var exportObj = {};
 	var events = require('./game/events').events;
+	var trump_table = require('./game/trump/trump-table');
 	var servers = {
-		trump: {name:"trump", sessionCount: 0, tableObj:require('./game/trump/trump-table')},
-		hearts:{name:"hearts", sessionCount:0, tableObj:require('./game/hearts/hearts-table')},
-		tube:{name:"tube", sessionCount:0, tableObj:require('./tube/tube-server.js')}
+		trump: {name:"Trump", image:"trump.png", sessionCount: 0, tableObj:trump_table},
+		spades: {name:"Spades", image:"spades.png", sessionCount: 0, tableObj:trump_table},
+		hearts:{name:"Hearts", image:"QH.png", sessionCount:0, tableObj:require('./game/hearts/hearts-table')},
+		tube:{name:"Connectube", image:"tube.png", sessionCount:0, tableObj:require('./tube/tube-server.js')}
 	};
 	for (var key in servers) {
 		socketRoomsHash[key] = {};
 	}
-
 
 	function socketRoom(data) {
 		this.game = data.site;
@@ -153,6 +154,7 @@ module.exports = function(IO) {
 		}
 	};
 	exportObj.availableServers = Object.keys(servers);
+	exportObj.servers = servers;
 
 	exportObj.getRoomInfo = function (site, room) {
 		var gameRoomObj = socketRoomsHash[site][room];

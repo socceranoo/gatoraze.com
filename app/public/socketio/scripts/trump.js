@@ -267,6 +267,7 @@ function Trump($scope) {
 
 	};
 	$scope.bidFunction = function (data) {
+		var j = 0;
 		$scope.oldBidObj = data.data.bidObj;
 		$scope.bidObj.bid = data.data.bidObj.bid;
 		$scope.bidObj.bidder = data.data.bidObj.bidder;
@@ -274,13 +275,22 @@ function Trump($scope) {
 		$scope.bidObj.minimum = data.data.bidObj.minimum;
 		if (data.data.bidObj.bid && $scope.token == $scope.position) {
 			$scope.action = "Bid";
+			for (j = 0; j < $scope.cards.length; j++) {
+				$scope.cards[j].valid = true;
+			}
 		} else {
 			$scope.action = "Wait";
+			for (j = 0; j < $scope.cards.length; j++) {
+				$scope.cards[j].valid = false;
+			}
 		}
 
 		//Setting trump for the first time
 		if ($scope.bidObj.bid === false) {
 			if($scope.position == data.data.player) {
+				for (j = 0; j < $scope.cards.length; j++) {
+					$scope.cards[j].valid = true;
+				}
 				$scope.action = "Set Trump";
 				$scope.info = "Set Trump";
 			}
@@ -299,7 +309,7 @@ function Trump($scope) {
 					if ($scope.trump.setter == $scope.position) {
 						$scope.cards[data.data.bidObj.index] = $scope.cardBack;
 					}
-					for (var j = 0; j < $scope.cards.length; j++) {
+					for (j = 0; j < $scope.cards.length; j++) {
 						$scope.cards[j].valid = false;
 					}
 				}
