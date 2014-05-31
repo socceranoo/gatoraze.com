@@ -1,17 +1,24 @@
 $(document).ready(function() {
+
 });
 
-function Trump($scope) {
-	var events = {
+function trump($scope) {
+	userInfo = {user:user, site:site, room:room , session:session, total:total};
+	events = {
 		message:"message", welcome:"welcome", playerJoin:"player-join",
 		playerLeave:"player-leave", cards:"cards", play:"play",
 		round:"round", game:"game", ready:"ready", addComputer:"add-computer"
 	};
+	socket = io.connect();
 	$scope.suitImg = {
 		"C": {bgPos:[222, 0]},
 		"S": {bgPos:[111, -111]},
 		"H": {bgPos:[111, 0]},
 		"D": {bgPos:[222, -111]},
+		"L": {bgPos:[111, -333]},
+		"A": {bgPos:[222, -333]},
+		"R": {bgPos:[222, -444]},
+		"-": {bgPos:[111, -444]}
 	};
 	$scope.cardBackArr = [
 		{name:"CB1", index:0, bgPos:[999, -888], valid:false},
@@ -21,9 +28,8 @@ function Trump($scope) {
 		{name:"CB5", index:0, bgPos:[111, -888], valid:false},
 		{name:"CB6", index:0, bgPos:[888, -1036], valid:false}
 	];
-	var socket = io.connect();
+
 	$scope.starter = -1;
-	var maxArraySize = 5;
 	$scope.position = 0;
 	$scope.message = '';
 	$scope.connected = false;
@@ -32,7 +38,7 @@ function Trump($scope) {
 	$scope.token = -1;
 	$scope.oldBidObj = null;
 	var joker = {name:"JOKER", index:0, bgPos:[777, -888], valid:false};
-	var blank = {name:"BLANK", index:0, bgPos:[222, 0], valid:false};
+	$scope.blank = {name:"$scope.blank", index:0, bgPos:[222, 0], valid:false};
 	$scope.cardBack = joker;
 	$scope.trump = {card:null, setter:-1, points:0, revealed:false, index:-1};
 	$scope.tableData = {players : [], round :[], prevRound:[], bidData:[], prevGame:{stats:null, allRounds:[]}};
@@ -40,8 +46,32 @@ function Trump($scope) {
 	var defaultInfo = 'Welcome';
 	$scope.info = defaultInfo;
 
-	var userInfo = {user:user, site:site, room:room , session:session, total:total};
+	$scope.roundOver = function (data) {
+		//$scope.addMessage(data.message, data.sender, data.date, data.data);
+		$scope.tableData.prevRound = data.data.prevRound;
+		$scope.starter = data.data.winner.player;
+		$scope.setDefaultBg(1);
+		//$scope.addControlData(events.round, data.data);
+		$scope.$apply();
+	};
 
+	$scope.gameOver = function (data) {
+		//$scope.addMessage(data.message, data.sender, data.date, data.data);
+		$scope.starter = -1;
+		$scope.trump.card = null;
+		$scope.trump.setter = -1;
+		$scope.trump.points = 0;
+		$scope.trump.revealed = false;
+		$scope.bidOver = false;
+		$scope.setDefaultBg(0);
+		$scope.tableData.prevRound = [];
+		$scope.tableData.prevGame.allRounds = data.data.prevGame.allRounds;
+		$scope.tableData.prevGame.stats = data.data.prevGame.stats;
+		//$scope.addControlData(events.game, data.data);
+		$("#prev-game").modal();
+		$scope.$apply(function () {
+		});
+	};
 	$scope.bidObj = {
 		bid:false,
 		bidder:0,
@@ -120,29 +150,10 @@ function Trump($scope) {
 			$scope.$apply();
 		});
 		socket.on(events.round, function(data) {
-			//$scope.addMessage(data.message, data.sender, data.date, data.data);
-			$scope.tableData.prevRound = data.data.prevRound;
-			$scope.starter = data.data.winner.player;
-			$scope.setDefaultBg(1);
-			//$scope.addControlData(events.round, data.data);
-			$scope.$apply();
+			$scope.roundOver(data);
 		});
 		socket.on(events.game, function(data) {
-			//$scope.addMessage(data.message, data.sender, data.date, data.data);
-			$scope.starter = -1;
-			$scope.trump.card = null;
-			$scope.trump.setter = -1;
-			$scope.trump.points = 0;
-			$scope.trump.revealed = false;
-			$scope.bidOver = false;
-			$scope.setDefaultBg(0);
-			$scope.tableData.prevRound = [];
-			$scope.tableData.prevGame.allRounds = data.data.prevGame.allRounds;
-			$scope.tableData.prevGame.stats = data.data.prevGame.stats;
-			//$scope.addControlData(events.game, data.data);
-			$("#prev-game").modal();
-			$scope.$apply(function () {
-			});
+			$scope.gameOver(data);
 		});
 		socket.on(events.ready, function(data) {
 			var i = 0;
@@ -155,7 +166,7 @@ function Trump($scope) {
 				if (data.data.round) {
 					$scope.tableData.round[i] = $scope.cardBack;
 				} else {
-					$scope.tableData.round[i] = blank;
+					$scope.tableData.round[i] = $scope.blank;
 				}
 				$scope.tableData.bidData[i] = '';
 			}
@@ -331,13 +342,12 @@ function Trump($scope) {
 	$scope.setDefaultBg = function (option) {
 		var card = null;
 		if (option === 0)
-			card = blank;
+			card = $scope.blank;
 		else
 			card = $scope.cardBack;
 		for (var i = 0; i< $scope.tableData.round.length ; i++) {
 			$scope.tableData.round[i] = card;
 		}
-		$scope.$apply();
 	};
 	$scope.addMessage = function (msg, sender, date, data) {
 		if (data.error) {
@@ -369,7 +379,7 @@ function Trump($scope) {
 			$scope.action = "Wait";
 		}
 		if ($scope.token == $scope.position && $scope.action == "Play") {
-			if (card.name == blank.name || card.name == $scope.cardBack.name) {
+			if (card.name == $scope.blank.name || card.name == $scope.cardBack.name) {
 				$scope.info = "Cannot play closed card";
 				return;
 			}
@@ -397,3 +407,126 @@ function Trump($scope) {
 		return (total + number - $scope.position ) % total;
 	};
 }
+
+function spades ($scope) {
+	trump.call(this, $scope);
+}
+
+spades.prototype = Object.create(trump.prototype);
+
+function hearts ($scope) {
+	$scope.passOver = false;
+	$scope.firstHearts = false;
+	$scope.passCards = [];
+	$scope.submitPass = function() {
+		if ($scope.token == $scope.position && $scope.action == "Pass" ){
+			if ($scope.passCards.length == 3) {
+				socket.emit(events.play, {play:false, userInfo:userInfo, player:$scope.position, passCards:$scope.passCards});
+				$scope.action = "Wait";
+				$scope.cards[$scope.passCards[0]].valid = false;
+				$scope.cards[$scope.passCards[1]].valid = false;
+				$scope.cards[$scope.passCards[2]].valid = false;
+				passSent = true;
+			} else {
+				$scope.info = "Please select 3 cards to Pass";
+			}
+		}
+	};
+
+	trump.call(this, $scope);
+
+	var passArr = ["L", "A", "R", "-"];
+	var passSent = false;
+
+	$scope.roundOver = function(data){
+		//$scope.addMessage(data.message, data.sender, data.date, data.data);
+		$scope.tableData.prevRound = data.data.prevRound;
+		$scope.starter = data.data.winner.player;
+		$scope.setDefaultBg(1);
+		//$scope.addControlData(events.round, data.data);
+		$scope.$apply();
+
+	};
+	$scope.gameOver = function(data){
+		//$scope.addMessage(data.message, data.sender, data.date, data.data);
+		$scope.starter = -1;
+		$scope.passOver = false;
+		$scope.firstHearts = false;
+		$scope.setDefaultBg(1);
+		$scope.tableData.prevRound = [];
+		$scope.tableData.prevGame = data.data.prevGame;
+		//$scope.addControlData(events.game, data.data);
+		$scope.$apply();
+	};
+	$scope.bgIcon = "L";
+
+	$scope.playFunction = function (data) {
+		$scope.info = data.message;
+		if (data.data.cardObj) {
+			if (data.data.cardObj.player == $scope.position) {
+				$scope.cards.splice(data.data.cardObj.index, 1);
+			}
+			$scope.tableData.round[$scope.shifter(data.data.cardObj.player)] = data.data.cardObj.card;
+		}
+		if (data.data.reveal && data.data.reveal === true) {
+		}
+		if ($scope.token == $scope.position) {
+			$scope.action = "Play";
+		} else {
+			$scope.action = "Wait";
+		}
+
+	};
+	$scope.bidFunction = function (data) {
+		if (data.data.passOver && data.data.passOver === true) {
+			$scope.passOver = true;
+			passSent = false;
+			if (data.data.cards) {
+				for (var i = 0; i < $scope.passCards.length; i++) {
+					$scope.cards[$scope.passCards[i]] = data.data.cards[i];
+				}
+			}
+			$scope.passCards.splice(0, 3);
+			return;
+		}
+		if ($scope.token == $scope.position) {
+			$scope.action = "Pass";
+		} else {
+			$scope.action = "Wait";
+		}
+		if (data.data.game !== undefined) {
+			$scope.addControlData("Pass", data.data.game);
+			$scope.bgIcon = passArr[data.data.game];
+		}
+		$scope.setDefaultBg(1);
+		$scope.$apply();
+	};
+	$scope.cardClick = function (card, index) {
+		if ($scope.passOver === false && passSent === false) {
+			var cardFound = $.inArray(index, $scope.passCards);
+			if (cardFound == -1) {
+				if ($scope.passCards.length == 3) {
+					$scope.info = "Select only 3 cards";
+					return;
+				}
+				card.valid = true;
+				$scope.passCards.push(index);
+			} else {
+				card.valid = false;
+				$scope.passCards.splice(cardFound, 1);
+			}
+			//$scope.addControlData(events.welcome, $scope.passCards);
+			return;
+		}
+		if ($scope.token == $scope.position && $scope.action == "Play") {
+			if (card.name == $scope.blank.name || card.name == $scope.cardBack.name) {
+				$scope.info = "Cannot play closed card";
+				return;
+			}
+			//$("#control-data").append("Click : "+card.name);
+			socket.emit(events.play, {play:true, userInfo:userInfo, player:$scope.position, cardObj:{card:card, player:$scope.position, index:index}});
+			$scope.action = "Wait";
+		}
+	};
+}
+hearts.prototype = Object.create(trump.prototype);

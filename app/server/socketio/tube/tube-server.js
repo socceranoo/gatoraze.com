@@ -23,7 +23,7 @@ function tube(num, room) {
 		this.members[newPlayer] = playerObj;
 		message = "Welcome to the game room "+this.room;
 		this.welcomeObj.video = this.video;
-		console.log(JSON.stringify(this.welcomeObj.video));
+		//console.log(JSON.stringify(this.welcomeObj.video));
 		sendData.push({dest:SENDER, event:events.welcome, message:message, data:this.welcomeObj});
 		message = newPlayer + " joined this room.";
 		data = this.members;
@@ -130,7 +130,7 @@ function tube(num, room) {
 		} else {
 			//message = message + " removed the video "+data.video.snippet.title;
 		}
-		console.log(JSON.stringify(this.video));
+		//console.log(JSON.stringify(this.video));
 		sendData.push({dest:ALL, event:events.play, message:message, data:data});
 		return sendData;
 	};

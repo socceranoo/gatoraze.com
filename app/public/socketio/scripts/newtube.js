@@ -13,7 +13,7 @@ function Tube($scope) {
 		[NO_OP, NO_OP, NO_OP, NO_OP, NO_OP, NO_OP, NO_OP], //no-op
 		[0, 1, 2, NO_OP, 4, 5, -1], //STOPPED
 		[0, 1, 2, NO_OP, 4, 5, -1], //CUE
-		[0, 1, 2, NO_OP, 4, 5, -1], //-1 function
+		[0, 1, 2, NO_OP, 4, 5, -1] //-1 function
 
 	];
 	$scope.video = null;
@@ -303,7 +303,7 @@ function Tube($scope) {
 		if(number === undefined || number === null) {
 			return "";
 		}
-		$scope.addControlData("NUMBER", number);
+		//$scope.addControlData("NUMBER", number);
 		return (number+"").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	};
 	$scope.convertDuration = function (timeStr) {

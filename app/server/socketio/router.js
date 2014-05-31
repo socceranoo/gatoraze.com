@@ -1,7 +1,4 @@
 module.exports = function(app, module_obj, io) {
-	var AM = module_obj.AM;
-	var MM = module_obj.MM;
-	var EM = module_obj.EM;
 	var socketServer = require("./socket-server")(io);
 	var sleep = require('sleep');
 	var playsite = "razeConnect";
@@ -63,7 +60,7 @@ module.exports = function(app, module_obj, io) {
 	app.get('/hearts', function(req, res){
 		var site = "hearts";
 		var players = 4;
-		process_request(req, res, site, players, site);
+		process_request(req, res, site, players, 'game/'+site);
 	});
 
 	app.post('/*lobby', function(req, res){

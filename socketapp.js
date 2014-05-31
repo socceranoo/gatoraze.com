@@ -1,7 +1,6 @@
 /**
-	* Node.js Login Boilerplate
-	* More Info : http://bit.ly/LsODY8
-	* Copyright (c) 2013 Stephen Braitsch
+	* Socket I/O app
+	* Copyright (c) 2014 Manjunath
 **/
 
 var express = require('express');
@@ -29,6 +28,7 @@ app.configure(function(){
 	app.use(require('less-middleware')({ src : __dirname + '/app/public'}));
 	app.use(express.static(__dirname + '/app/public'));
 });
+
 
 app.configure('development', function(){
 	app.use(express.errorHandler());

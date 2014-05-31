@@ -1,7 +1,7 @@
 $(document).ready(function() {
 });
 
-function Hearts($scope) {
+function hearts($scope) {
 	var events = {
 		message:"message", welcome:"welcome", playerJoin:"player-join",
 		playerLeave:"player-leave", cards:"cards", play:"play",
@@ -18,7 +18,7 @@ function Hearts($scope) {
 		"L": {bgPos:[111, -333]},
 		"A": {bgPos:[222, -333]},
 		"R": {bgPos:[222, -444]},
-		"-": {bgPos:[111, -444]},
+		"-": {bgPos:[111, -444]}
 	};
 	$scope.cardBackArr = [
 		{name:"CB1", index:0, bgPos:[999, -888], valid:false},
@@ -267,4 +267,5 @@ function Hearts($scope) {
 	$scope.shifter = function (number) {
 		return (total + number - $scope.position ) % total;
 	};
+	//comment
 }
