@@ -12,7 +12,7 @@ block content
 							span(ng-bind='Uopr')
 							span &nbsp;bill
 					.modal-body.text-center
-						h4 Are you sure you want to 
+						h4 Are you sure you want to
 							span(ng-bind='opr')
 							span &nbsp;this bill ?
 						a.btn.btn-primary(href='/money/bill?id='+arg.id, ng-show="opr=='edit'" ng-bind='Uopr')
@@ -31,7 +31,7 @@ block content
 							legend.owesyou Active
 							a.btn.btn-primary.btn-block(href='javascript:void(0);' ng-click='popUp(0)') edit bill
 							a.btn.btn-danger.btn-block(href='javascript:void(0);' ng-click='popUp(1)') delete bill
-						else 
+						else
 							legend.youowe Deleted
 							a.btn.btn-success.btn-block(href='javascript:void(0);' ng-click='popUp(2)') revive bill
 							//
@@ -46,7 +46,7 @@ block content
 					else
 						h3
 							span.color-asbestos.featurette-divider3= arg.event+' '
-							small.color-midnightBlue on  
+							small.color-midnightBlue on
 							span.color-asbestos.featurette-divider3= ' '+arg.date
 						h1.color-carrot.featurette-divider2= '$'+arg.amount
 						h4.color-asbestos.featurette-divider3= arg.description
@@ -65,7 +65,7 @@ block content
 						hr
 						h3.color-asbestos Summary
 						- each val in arg.summary
-							h4	
+							h4
 								span.youowe= val.borrower
 								| &nbsp;
 								//
