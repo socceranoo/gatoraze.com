@@ -25,6 +25,6 @@ block content
 								h3.pull-right(ng-class='{owesyou:{{result[0]}}, youowe:{{!result[0]}}}') {{result[1]}}
 							li.clearfix(ng-repeat='todo in friends')
 								h3.text-left.owesyou
-									{{todo}}
+									span {{todo}}
 									a.close(href='javascript:void(0);' ng-click='removeFriend(todo)') &times;
 						input.btn.btn-success(type='submit', value='Submit')
