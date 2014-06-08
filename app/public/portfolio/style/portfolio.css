@@ -149,10 +149,10 @@ body.portfolio {
 }
 .cover {
   background: url('../images/bg1.jpg') no-repeat center center;
-  border-bottom: 10px solid #e5e5e5;
   -webkit-transition: lieft 0.3s ease-in-out;
   -o-transition: left 0.3s ease-in-out;
   transition: left 0.3s ease-in-out;
+  border-bottom: 10px solid #e5e5e5;
   height: 70%;
   background-size: cover;
 }
@@ -168,18 +168,29 @@ body.portfolio {
 }
 .skillSet {
   background: url('../../money/images/money-7.1.jpg') no-repeat center center;
-  border-bottom: 10px solid #e5e5e5;
   -webkit-transition: lieft 0.3s ease-in-out;
   -o-transition: left 0.3s ease-in-out;
   transition: left 0.3s ease-in-out;
 }
 .projects {
   background: url('../../account/images/sfskyline.jpg') no-repeat center center;
-  border-bottom: 10px solid #e5e5e5;
   -webkit-transition: lieft 0.3s ease-in-out;
   -o-transition: left 0.3s ease-in-out;
   transition: left 0.3s ease-in-out;
   color: #efefef;
+}
+.contact {
+  background: url('../../account/images/sfskyline.jpg') no-repeat center center;
+  -webkit-transition: lieft 0.3s ease-in-out;
+  -o-transition: left 0.3s ease-in-out;
+  transition: left 0.3s ease-in-out;
+  color: #efefef;
+}
+.interests {
+  background: url('../images/gaussian-blur.jpg') no-repeat center center;
+  -webkit-transition: lieft 0.3s ease-in-out;
+  -o-transition: left 0.3s ease-in-out;
+  transition: left 0.3s ease-in-out;
 }
 .cover .title {
   font-size: 45px;
@@ -266,11 +277,13 @@ body.portfolio {
   position: absolute;
   right: 1%;
   top: 1%;
+  cursor: pointer;
 }
 .rb-close-bottom {
   position: absolute;
   right: 1%;
   bottom: 1%;
+  cursor: pointer;
 }
 @media (max-width: 998px) {
   .cover .title {

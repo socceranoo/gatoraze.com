@@ -33,16 +33,16 @@
 }
 /* Text Styles, Colors, Backgrounds */
 .pt-page h1 {
-  font-size: 4.4em;
+  font-size: 70px;
   line-height: 1;
   letter-spacing: 6px;
   text-align: center;
   text-transform: uppercase;
   word-spacing: -0.3em;
 }
-.pt-page h1 strong {
+.pt-page strong {
   color: #000;
-  opacity: 0.1;
+  opacity: 0.4;
 }
 .pt-triggers {
   position: absolute;

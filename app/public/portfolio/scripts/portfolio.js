@@ -13,36 +13,21 @@ function Cover($scope) {
 
 function SkillSet($scope) {
 	var boxObj = BoxGrid();
-	var skillHash = {
-		node:["#85CD2B", true],
-		angular:["#E52C3C", false],
-		python:["#ECF0F1", true],
-		php:["#6182b8", false],
-		mysql:["#2c596e", false],
-		mongo:["#82c564", true],
-		vim:["#4e4e4e", true],
-		html5:["#f0652c", false],
-		less:["#223553", false],
-		bootstrap:["#2d143e", false],
-		javascript:["#f0db4f", true],
-		expressjs:["#f0db4f", true],
-		socketio:["#aad959", true],
-		jade:["#67cc9a", true],
-		jquery:["#347cb3", true],
-		photoshop:["#96cafe", true],
-		ubuntu:["#c1392b", false]
-	};
+	$scope.skillSet = skillSet;
+	$scope.currentSkill = $scope.skillSet[0];
 	var background = "#996699";
 	$scope.position = 0;
 	$scope.current = null;
 	$scope.sendMessage = function() {
 	};
 	$scope.skillClose = function () {
+		$scope.currentSkill = null;
 		boxObj.close($scope.current);
 	};
 	$scope.skillClick = function ($event, skill) {
 		$scope.current = $($event.target);
-		boxObj.open($scope.current, skillHash[skill][0], skillHash[skill][1]);
+		boxObj.open($scope.current, skill.bg, skill.invert);
+		$scope.currentSkill = skill;
 	};
 }
 
@@ -50,11 +35,12 @@ function Projects($scope) {
 	var ptObj = PageTransitions();
 	$scope.current = 0;
 	$scope.position = 0;
-	$scope.sendMessage = function() {
+	$scope.projectClick = function() {
+		$scope.moveRight();
 	};
 	$scope.moveRight = function () {
 		$container = $(".projects");
-		var opened = $container.data( 'opened' );
+		var opened = $container.data('opened');
 		if (! opened) {
 			$container.addClass("slideRight").data('opened', true);
 		} else {
@@ -64,6 +50,10 @@ function Projects($scope) {
 	$scope.nextPt = function () {
 		$scope.current = ptObj.click();
 	};
+}
+
+function Contact($scope){
+
 }
 
 function waypoint_init () {

@@ -14,13 +14,14 @@
 	}
 	.setFullBg(@img) {
 		background:url(@img) no-repeat center center;
-		border-bottom:10px solid #e5e5e5;
+
 		-webkit-transition: lieft 0.3s ease-in-out;
 		-o-transition: left 0.3s ease-in-out;
 		transition: left 0.3s ease-in-out;
 	}
 	.cover {
 		.setFullBg('../images/bg1.jpg');
+		border-bottom:10px solid #e5e5e5;
 		//.setFullBg('../images/bg1-full.jpg');
 		height:70%;
 		background-size:cover;
@@ -45,7 +46,13 @@
 		.setFullBg('../../account/images/sfskyline.jpg');
 		color:#efefef;
 	}
-
+	.contact {
+		.setFullBg('../../account/images/sfskyline.jpg');
+		color:#efefef;
+	}
+	.interests {
+		.setFullBg('../images/gaussian-blur.jpg');
+	}
 	.cover .title {
 		font-size:45px;
 		max-width:45%;
@@ -142,11 +149,13 @@
 		position:absolute;
 		right:1%;
 		top:1%;
+		cursor: pointer;
 	}
 	.rb-close-bottom {
 		position:absolute;
 		right:1%;
 		bottom:1%;
+		cursor: pointer;
 	}
 
 @media (max-width: 998px) {
