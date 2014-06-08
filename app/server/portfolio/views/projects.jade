@@ -1,24 +1,22 @@
 .full-height.projects(ng-controller='Projects')
-	.left-pane.background-alizarin.menu-panel
-		h3 Table of Contents
-		ul#menu-toc.menu-toc.list-unstyled
-			li.menu-toc-current
-				a(href='#item1') Self-destruction
-			li
-				a(href='#item2') Why we die
-			li
-				a(href='#item3') The honeymoon
-			li
-				a(href='#item4') A drawing joke
-			li
-				a(href='#item5') Commencing practice
 	.dropdown
 		a#tblcontents.btn.btn-danger.img-circle(ng-click='moveRight();' href='javascript:void(0);')
 			span.glyphicon.glyphicon-list
+	.left-pane.background-metroJade.menu-panel.text-center
+		h1 PROJECTS
+		hr
+		ul#menu-toc.menu-toc.list-unstyled
+			- each project in projects
+				li.menu-toc-current
+					h3
+						a.big(href='javacript:void(0);' ng-click='projectClick()')= project.name
+
 	.pt-triggers
-		button.btn.btn-inverse(ng-click='nextPt()') Show next page transition
+		a.btn.btn-danger(ng-click='nextPt()') next project
 	#pt-main.pt-perspective
 		.pt-page.pt-page-1.background-metroNavy
-			include lorem
+			.container.text-center
+				include lorem
 		.pt-page.pt-page-2.background-metroPurple
-			include lorem
+			.container.text-center
+				include lorem

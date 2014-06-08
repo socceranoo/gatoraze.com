@@ -9,18 +9,16 @@
 				span.glyphicon.glyphicon-list()
 	.container
 		.row
-			h1.text-center About me
+			h1.text-center My Interests
 			ul.grid.cs-style-3.clearfix.interests-metro.list-unstyled.col-md-12.col-sm-12.col-xs-12.background-opacity
-				- each item in aboutMe
+				- each item in interests
 					li(class='col-md-'+item.col+' col-sm-'+item.col+' col-xs-'+item.col)
 						.metro-container
-							.metro(class='background-'+item.bg)
+							.metro(class='img-rounded background-'+item.bg)
 								img.img-responsive.img-item(src='/portfolio/images/about-me/'+item.image+'.png')
 							ul.metro-details.list-unstyled
-								h3.text-center Take a look
-								li
-									span Cummings
-								li
-									span Cummings
-								//
-									a(href='javascript:void(0);') Take a look
+								h3.text-center= item.name
+								ul
+									- each stuff in item.points
+										li
+											span= stuff

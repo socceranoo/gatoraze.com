@@ -19,7 +19,7 @@ EM.dispatchResetPasswordLink = function(account, callback)
 		subject      : 'Password Reset',
 		text         : 'something went wrong... :(',
 		attachment   : EM.composeEmail(account)
-	}, callback );
+	}, callback);
 };
 
 EM.composeEmail = function(o)
@@ -33,4 +33,19 @@ EM.composeEmail = function(o)
 	html += "<a href='http://gatoraze.com:443/'>Home</a><br><br>";
 	html += "</body></html>";
 	return  [{data:html, alternative:true}];
+};
+
+EM.sendHi = function (details, callback)
+{
+	var html = "<html><body>";
+	html += "Hi from "+details.sender+", <br>";
+	html += "<p>"+details.message+"</p><br>";
+	html += "</body></html>";
+	EM.server.send({
+		from         : ES.sender,
+		to           : "socceranoo@gmail.com",
+		subject      : 'Hi from '+details.sender,
+		text         : details.message,
+		attachment   :[{data:html, alternative:true}]
+	}, callback);
 };

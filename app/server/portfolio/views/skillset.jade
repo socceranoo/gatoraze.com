@@ -1,15 +1,19 @@
 .full-height.skillSet(ng-controller='SkillSet')
 	.overlay
-		h2.rb-close-top.pull-right(ng-click='skillClose()') &times;
 		.container
-			legend.text-center Lisbon
-			span.rb-temp 21C
-		h2.rb-close-bottom.pull-right(ng-click='skillClose()') &times;
+			h3.rb-close-top.glyphicon.glyphicon-remove-circle(ng-click='skillClose()')
+			.col-md-12.col-sm-12
+				img.img-responsive.img-circle(ng-src='/portfolio/images/skills/{{currentSkill.image}}.jpg')
+			.col-md-12.col-sm-12
+				.col-md-6.col-sm-6.col-md-offset-3.col-sm-offset-3.clearfix
+					.wel.featurette-divider3
+						h1.text-center(ng-bind='currentSkill.name')
+						ul
+							li(ng-repeat='stuff in currentSkill.points track by $index')
+								span(ng-bind='{{stuff}}')
 	.container
 		.row
 			h1.text-center.featurette-divider Skills
-
 			ul#rb-grid.rb-grid.clearfix.col-md-12.col-sm-12.col-xs-12.background-opacity.list-unstyled
-				- each skill in skillSet
-					li.col-md-3.col-xs-3.col-sm-3(title=skill.name)
-						img.img-responsive.img-skill.img-circle(src='/portfolio/images/skills/'+skill.image+'.jpg' ng-click='skillClick($event, "'+skill.image+'")')
+					li.col-md-3.col-xs-3.col-sm-3(ng-repeat='skill in skillSet' ng-attr-title='{{skill.name}}')
+						img.img-responsive.img-skill.img-circle(ng-src='/portfolio/images/skills/{{skill.image}}.jpg' ng-click='skillClick($event, skill)')
