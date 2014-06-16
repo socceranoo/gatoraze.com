@@ -6,7 +6,7 @@ $(document).ready(function() {
 
 function Cover($scope) {
 	$scope.position = 0;
-	$scope.click1 = function (index) {
+	$scope.navClick = function (index) {
 		navObj.move(index);
 	};
 }
@@ -32,13 +32,24 @@ function SkillSet($scope) {
 }
 
 function Projects($scope) {
-	var ptObj = PageTransitions();
+	var bgArray = [
+		"background-orange",
+		"background-peterRiver",
+		"background-metroRed",
+		"background-metroCyan",
+		"background-metroJade",
+		"background-metroTeal",
+		"background-metroPurple",
+		"background-turquoise"
+	];
+	var ptObj = PageTransitions(bgArray);
 	$scope.current = 0;
 	$scope.position = 0;
 	$scope.projectClick = function() {
 		$scope.moveRight();
+		$scope.nextPt("");
 	};
-	$scope.moveRight = function () {
+	$scope.moveRight = function (callback) {
 		$container = $(".projects");
 		var opened = $container.data('opened');
 		if (! opened) {
@@ -46,13 +57,29 @@ function Projects($scope) {
 		} else {
 			$container.removeClass("slideRight").data('opened', false);
 		}
+
 	};
-	$scope.nextPt = function () {
+	$scope.nextPt = function (arg) {
 		$scope.current = ptObj.click();
 	};
 }
 
 function Contact($scope){
+	$scope.index = 0;
+	$scope.total = 5;
+	setInterval(function() {
+		$scope.index = ($scope.index + 1)%$scope.total;
+		$scope.$apply()
+	}, 3000);
+
+	$scope.arr = [
+		{name:"Facebook", class:"fa-facebook color-merald", href:"https://facebook.com/socceranoo"},
+		{name:"Mail", class:"fa-envelope color-louds", href:"mailto:socceranoo@gmail.com"},
+		{name:"Google Plus", class:"fa-google-plus color-etroCyan", href:"https://plus.google.com/u/0/105434114873208835365/"},
+		{name:"Linked-in", class:"fa-linkedin color-unFlower", href:"https://www.linkedin.com/pub/manjunath-mageswaran/14/466/372/"},
+		{name:"Twitter", class:"fa-twitter color-lizarin", href:"https://twitter.com/socceranoo"},
+		{name:"Pinterest", class:"fa-pinterest color-etroNavy", href:"https://pinterest.com/socceranoo"}
+	];
 
 }
 
@@ -92,8 +119,8 @@ function waypoint_init () {
 				return;
 		}
 		var diff = Math.abs(val - current);
-		var delay = diff * 500 + 100;
-		delay = (delay < 1000)?1000:delay;
+		var delay = diff * 500 + 500;
+		//delay = (delay < 1000)?1000:delay;
 		inprogress = true;
 		$('html, body').animate({ scrollTop: $(".full-height:eq("+val+")").offset().top }, delay , function () {
 			setActive(val);

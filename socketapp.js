@@ -10,8 +10,9 @@ var port = 9001;
 
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server, {log:false});
+var EM = require('./app/modules/email-dispatcher');
 
-var module_obj = {};
+var module_obj = {EM:EM};
 
 app.configure(function(){
 	app.set('port', port);

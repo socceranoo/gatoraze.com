@@ -5,6 +5,8 @@
 		font-weight: 100;
 		height: 100%;
 		overflow-x:hidden;
+		font-family: 'Lato', sans-serif;
+		font-weight:300;
 	}
 
 	.full-height {
@@ -14,8 +16,8 @@
 	}
 	.setFullBg(@img) {
 		background:url(@img) no-repeat center center;
-
-		-webkit-transition: lieft 0.3s ease-in-out;
+		background-size: cover;
+		-webkit-transition: left 0.3s ease-in-out;
 		-o-transition: left 0.3s ease-in-out;
 		transition: left 0.3s ease-in-out;
 	}
@@ -40,24 +42,26 @@
 	}
 
 	.skillSet {
-		.setFullBg('../../money/images/money-7.1.jpg');
+		//.setFullBg('../../money/images/money-7.1.jpg');
+		.setFullBg('../images/gaussian-blur.jpg');
 	}
 	.projects {
-		.setFullBg('../../account/images/sfskyline.jpg');
+		.setFullBg('../../account/images/white-bg.jpg');
 		color:#efefef;
 	}
 	.contact {
-		.setFullBg('../../account/images/sfskyline.jpg');
-		color:#efefef;
+		//.setFullBg('../../account/images/ggbridge-blur.jpg');
+		//.setFullBg('../../account/images/sfskyline.jpg');
+		.setFullBg('../images/dark-2.jpg');
+		font-family: 'Lato', sans-serif !important;
 	}
 	.interests {
-		.setFullBg('../images/gaussian-blur.jpg');
+		.setFullBg('../images/minimal.jpg');
+		//.setFullBg('../../account/images/rm.jpg');
 	}
 	.cover .title {
 		font-size:45px;
-		max-width:45%;
 		margin:0px auto;
-		padding-top:10%;
 		font-family: 'Lato', sans-serif;
 		font-weight:300;
 		font-style:italic;
@@ -67,15 +71,18 @@
 		position:absolute;
 		top:2%;
 		left:2%;
-		font-size:30px;
 		z-index:100;
 		border-radius:50%;
 	}
 
 	.dropdown-menu {
 		background: transparent;
-		min-width: 35px;
-		margin:0px -15px;
+		min-width: 20px;
+		margin:0px -20px;
+	}
+	.dropdown-menu li a {
+		color:@clouds;
+		margin:20px 0px;
 	}
 
 	.img-skill {
@@ -156,6 +163,44 @@
 		right:1%;
 		bottom:1%;
 		cursor: pointer;
+	}
+
+	.overflow-div {
+		max-height:800px;
+		overflow:auto;
+	}
+
+	.highlighted {
+
+		-webkit-animation-name: color2;
+		-webkit-animation-duration: 2s;
+		-webkit-animation-iteration-count: 10;
+		-webkit-animation-timing-function: linear;
+		-webkit-animation-delay: 0s;
+
+	}
+	@-webkit-keyframes color2 {
+		0% {
+			opacity:0;
+		}
+		25% {
+			opacity:0.5;
+		}
+		50% {
+			opacity:1;
+		}
+		75% {
+			opacity:0.5;
+		}
+		100% {
+			opacity: 0;
+		}
+
+	}
+	.contact-method {
+		-webkit-transition: all 2s ease-in-out;
+		-o-transition: all 2s ease-in-out;
+		transition: all 2s ease-in-out;
 	}
 
 @media (max-width: 998px) {

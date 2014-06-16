@@ -1,18 +1,18 @@
 .full-height(ng-controller='Cover')
 	include dropdown
 	.cover
-		h4.title.text-center Hi, I am a full stack developer from Silicon Valley
-			asdasdasdsa asdasdasd adasdasd asdasdasd asdasdasdasd
-	.container
-	//
-		.row
-			.col-md-4.col-xs-4.col-sm-4
-				.cover-item.background-sunFlower.img-circle
-					h2.text-center(ng-click='click1(0)') Skills
-			.col-md-4.col-xs-4.col-sm-4
-				.cover-item.background-emerald.img-circle
-					h2.text-center(ng-click='click1(1)') Projects
-			.col-md-4.col-xs-4.col-sm-4
-				.cover-item.background-orange.img-circle
-					h2.text-center(ng-click='click1(2)') About me
+		.col-md-12.col-xs-12.col-sm-12
+			.col-md-4.col-xs-4.col-sm-4.col-md-offset-4.col-xs-offset-4.col-sm-offset-4
+				.featurette-divider3
+					img.img-responsive.height-250.img-thumbnail.img-circle(style="display:block" src='/portfolio/images/profile-2014.jpg')
+		.col-md-12.col-xs-12.col-sm-12
+			.col-md-10.col-xs-10.col-sm-10.col-md-offset-1.col-xs-offset-1.col-sm-offset-1
+				h4.title.text-center Hi, I am a full stack developer from Silicon Valley
+					asdasdasdsa asdasdasd adasdasd asdasdasd asdasdasdasd
 
+	.container
+		.row
+			.col-md-10.col-xs-10.col-sm-10.col-md-offset-1.col-xs-offset-1.col-sm-offset-1
+				.featurette-divider
+					h4.text-center scroll for more
+					img.highlighted.img-responsive.height-100(src='/portfolio/images/downarrow.png' ng-click='navClick(1)').pointer

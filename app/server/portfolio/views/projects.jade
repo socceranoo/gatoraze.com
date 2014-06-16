@@ -1,22 +1,22 @@
 .full-height.projects(ng-controller='Projects')
 	.dropdown
-		a#tblcontents.btn.btn-danger.img-circle(ng-click='moveRight();' href='javascript:void(0);')
+		a.btn.btn-primary.img-circle.background-midnightBlue(ng-click='moveRight();' href='javascript:void(0);')
 			span.glyphicon.glyphicon-list
-	.left-pane.background-metroJade.menu-panel.text-center
+	.left-pane.background-midnightBlue.text-center.color-concrete
 		h1 PROJECTS
 		hr
-		ul#menu-toc.menu-toc.list-unstyled
+		ul.list-unstyled
 			- each project in projects
-				li.menu-toc-current
+				li(style="cursor:pointer")
 					h3
-						a.big(href='javacript:void(0);' ng-click='projectClick()')= project.name
+						span(ng-click='projectClick()')= project.name
 
 	.pt-triggers
-		a.btn.btn-danger(ng-click='nextPt()') next project
+		a.btn.btn-primary(ng-click='nextPt()') next project
 	#pt-main.pt-perspective
-		.pt-page.pt-page-1.background-metroNavy
+		.pt-page.pt-page-1
 			.container.text-center
 				include lorem
-		.pt-page.pt-page-2.background-metroPurple
+		.pt-page.pt-page-2
 			.container.text-center
 				include lorem

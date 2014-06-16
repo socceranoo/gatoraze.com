@@ -1,6 +1,7 @@
-var PageTransitions = function() {
+var PageTransitions = function(bgArray) {
 
 	var $main = $('#pt-main'),
+		curBg = 0;
 		$pages = $main.children('.pt-page'),
 		priAnim = 0,
 		secAnim = 0,
@@ -25,7 +26,7 @@ var PageTransitions = function() {
 			var $page = $(this);
 			$page.data('originalClassList', $page.attr('class'));
 		});
-		$pages.eq(current).addClass('pt-page-current');
+		$pages.eq(current).addClass('pt-page-current '+bgArray[0]);
 	}
 
 	function clickButton() {
@@ -39,6 +40,7 @@ var PageTransitions = function() {
 		} else {
 			current = 0;
 		}
+
 		var $nextPage = $pages.eq(current).addClass('pt-page-current');
 		var ret = getNextAnimation(true);
 
@@ -49,7 +51,8 @@ var PageTransitions = function() {
 				onEndAnimation( $currPage, $nextPage );
 			}
 		});
-
+		curBg = (curBg + 1)%bgArray.length;
+		$nextPage.addClass(bgArray[curBg]);
 		$nextPage.addClass(ret[1]).on( animEndEventName, function() {
 			$nextPage.off( animEndEventName );
 			endNextPage = true;
@@ -76,6 +79,7 @@ var PageTransitions = function() {
 	function resetPage($outpage, $inpage) {
 		$outpage.attr('class', $outpage.data('originalClassList'));
 		$inpage.attr('class', $inpage.data('originalClassList') + ' pt-page-current' );
+		$inpage.addClass(bgArray[curBg]);
 	}
 
 	function getNextAnimation (next) {

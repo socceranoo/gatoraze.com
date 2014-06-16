@@ -7,7 +7,7 @@ EM.server = require("emailjs/email").server.connect({
 	host		: ES.host,
 	user		: ES.user,
 	password    : ES.password,
-	ssl		: true
+	ssl			: true
 
 });
 
@@ -38,7 +38,7 @@ EM.composeEmail = function(o)
 EM.sendHi = function (details, callback)
 {
 	var html = "<html><body>";
-	html += "Hi from "+details.sender+", <br>";
+	html += "Hi  from "+details.sender+", <br>";
 	html += "<p>"+details.message+"</p><br>";
 	html += "</body></html>";
 	EM.server.send({

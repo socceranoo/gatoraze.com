@@ -1,4 +1,5 @@
 .full-height.skillSet(ng-controller='SkillSet')
+	//include dropdown
 	.overlay
 		.container
 			h3.rb-close-top.glyphicon.glyphicon-remove-circle(ng-click='skillClose()')
@@ -6,7 +7,7 @@
 				img.img-responsive.img-circle(ng-src='/portfolio/images/skills/{{currentSkill.image}}.jpg')
 			.col-md-12.col-sm-12
 				.col-md-6.col-sm-6.col-md-offset-3.col-sm-offset-3.clearfix
-					.wel.featurette-divider3
+					.well.featurette-divider3(style="color:#000")
 						h1.text-center(ng-bind='currentSkill.name')
 						ul
 							li(ng-repeat='stuff in currentSkill.points track by $index')
@@ -14,6 +15,6 @@
 	.container
 		.row
 			h1.text-center.featurette-divider Skills
-			ul#rb-grid.rb-grid.clearfix.col-md-12.col-sm-12.col-xs-12.background-opacity.list-unstyled
+			ul#rb-grid.rb-grid.clearfix.col-md-12.col-sm-12.col-xs-12.background-opacity.list-unstyled.img-rounded.overflow-div
 					li.col-md-3.col-xs-3.col-sm-3(ng-repeat='skill in skillSet' ng-attr-title='{{skill.name}}')
-						img.img-responsive.img-skill.img-circle(ng-src='/portfolio/images/skills/{{skill.image}}.jpg' ng-click='skillClick($event, skill)')
+						img.img-responsive.img-skill.img-rounded.img-circle(ng-src='/portfolio/images/skills/{{skill.image}}.jpg' ng-click='skillClick($event, skill)')

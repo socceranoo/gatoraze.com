@@ -7,7 +7,7 @@ module.exports = function (app, module_obj) {
 		{bg:"#f0db4f", invert:true,		name:"JavaScript",	image:"javascript",	points:["", "", ""]	},
 		{bg:"#85CD2B", invert:true,		name:"Node JS",		image:"node",		points:["", "", ""]	},
 //		{bg:"#f1db52", invert:true,		name:"express",		image:"expressjs",	points:["", "", ""]	},
-		{bg:"#E52C3C", invert:false,	name:"Angular JS",	image:"angular",	points:["", "", ""]	},
+		{bg:"#E52C3C", invert:true,		name:"Angular JS",	image:"angular",	points:["", "", ""]	},
 		{bg:"#ECF0F1", invert:true,		name:"Python",		image:"python",		points:["", "", ""]	},
 		{bg:"#6182b8", invert:true,		name:"Php",			image:"php",		points:["", "", ""]	},
 //		{bg:"#aad959", invert:true,		name:"SocketIO",	image:"socketio",	points:["", "", ""]	},
@@ -44,7 +44,7 @@ module.exports = function (app, module_obj) {
 	];
 
 	app.get('/portfolio', function(req, res){
-		res.render('portfolio/views/home', {title: 'Manjunath', projects:projects, skillSet:skills, total: 5, interests:interests});
+		res.render('portfolio/views/home', {title: 'Manjunath', projects:projects, skillSet:skills, total: 4, interests:interests});
 	});
 	app.post('/portfolio', function(req, res){
 		res.send({data:""}, 200);

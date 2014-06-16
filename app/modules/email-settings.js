@@ -1,4 +1,3 @@
-
 module.exports = {
 	host		: 'smtp.gmail.com',
 	user		: 'gatoraze@gmail.com',
