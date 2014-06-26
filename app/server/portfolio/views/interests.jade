@@ -1,24 +1,29 @@
-.full-height.interests(g-controller='Projects')
-	//
-		.left-pane.background-sunFlower
-			h2.text-center title
-			h2.text-center title
-			h2.text-center title
-		.dropdown
-			a.btn.btn-danger.img-circle(href='javascript:void(0);')
-				span.glyphicon.glyphicon-list()
+.full-height.interests(ng-controller='Interests')
 	.container
-		.row
-			h1.text-center My Interests
-			ul.grid.cs-style-3.clearfix.interests-metro.list-unstyled.col-md-12.col-sm-12.col-xs-12.background-opacity
-				- each item in interests
-					li(class='col-md-'+item.col+' col-sm-'+item.col+' col-xs-'+item.col)
-						.metro-container
-							.metro(class='img-rounded background-'+item.bg)
-								img.img-responsive.img-item(src='/portfolio/images/about-me/'+item.image+'.png')
-							ul.metro-details.list-unstyled
-								h3.text-center= item.name
-								ul
-									- each stuff in item.points
-										li
-											span= stuff
+		.row.text-center
+			h1.color-clouds My Interests
+			.col.md-12.col-sm-12
+
+			.col-md-12.col-sm-12.col-xs-12
+				.col-md-8.col-sm-8.col-md-offset-2.col-sm-offset-2
+					ul.grid.cs-style-4.interests-metro.list-unstyled
+						.pointer(ng-repeat='item in interests[0] track by $index', ng-click='interestClick(0, item)')
+							li.pointer.col-md-8.col.md-offset-2.item-class(ng-mouseenter='mouseEnter(0, item)', ng-mouseleave='mouseLeave(0, item)', class='grid-class-{{item.index}}').metro-container.img-rounded
+								.metro(ng-class='{"img-front":item.index==0}')
+									img.img-responsive.img-item(ng-src='/portfolio/images/about-me/{{item.image}}.png')
+									h3.text-center {{item.name}}
+									//ul
+									//	li(ng-repeat='stuff in item.points track by $index')
+									//		span Stuff{{stuff}}
+								.height-100
+								ul.metro-details(class='background-{{item.bg}}' ng-class='{"color-clouds":item.invert == false}')
+									h3.text-center {{item.name}}
+									li(ng-repeat='stuff in item.points track by $index')
+										span {{stuff}}
+				.col-md-2.col-sm-2
+					h1.text-center
+						a.btn.btn-info(ng-click='nextInterest(0)') Next
+
+	script.
+		var interests1 = !{JSON.stringify(interests)};
+		var interests2 = !{JSON.stringify(interests)};

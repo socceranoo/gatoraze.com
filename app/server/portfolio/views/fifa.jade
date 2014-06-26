@@ -1,0 +1,7 @@
+extends layout
+
+block content
+	include fifa-groups
+	script.
+		var groupData= !{JSON.stringify(groups)};
+	include ../../common-scripts

@@ -16,6 +16,12 @@
   font-weight: 100;
   src: local('Josefin Sans Thin'), local('JosefinSans-Thin'), url(http://themes.googleusercontent.com/static/fonts/josefinsans/v4/q9w3H4aeBxj0hZ8Osfi3dy1dfeF-hbOdKKuBDEXxqhQ.woff) format('woff');
 }
+@font-face {
+  font-family: 'proxima-nova';
+  font-style: normal;
+  font-weight: 100;
+  src: local('proxima-nova-light'), local('proxima-nova'), url(../fonts/proxima-nova-light.otf) format('otf');
+}
 /*
 	src: local('Lato Light'), local('Lato-Light'), url('../fonts/lato.woff') format('woff');
 	src: local('Lato Light Italic'), local('Lato-LightItalic'), url('../fonts/lato-italic.woff') format('woff');
@@ -38,6 +44,7 @@ html {
 body {
   font-family: "Trebuchet MS", sans-serif;
   font-size: 16px;
+  overflow-x: hidden;
 }
 body.modal-open {
   overflow: auto;
@@ -53,6 +60,13 @@ body.modal-open {
 }
 .half-height {
   height: 50%;
+}
+.full-height,
+.half-height {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  overflow: auto;
 }
 h1,
 h2,
@@ -128,12 +142,15 @@ table.gradient-style tr {
   height: 200px;
   max-height: 200px;
 }
+.height-500 {
+  height: 500px;
+  max-height: 500px;
+}
 .height-300 {
   height: 300px;
   max-height: 300px;
 }
 .height-250 {
-  height: 250px;
   max-height: 250px;
 }
 .height-150 {
@@ -179,6 +196,12 @@ table.gradient-style tr {
 }
 .color-black {
   color: #000 !important;
+}
+.background-limeGreen {
+  background: #63ea41 !important;
+}
+.background-darkGreen {
+  background: #006940 !important;
 }
 body.lobby {
   background: #f5f5f5;

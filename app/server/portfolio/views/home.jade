@@ -5,7 +5,9 @@ block content
 	include skillset
 	include projects
 	include interests
-	include contact
+	.full-height
+		include awards
+		include contact
 	script.
 		var skillSet= !{JSON.stringify(skillSet)};
 	include ../../common-scripts

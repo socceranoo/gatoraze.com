@@ -1,18 +1,18 @@
 .half-height.contact(ng-controller='Contact')
-	.container.color-metroYellow
+	.container.color-clouds
 		.row.text-center
-			p.lead.font-50.text-underline Like my work ?
+			p.lead.font-50 Like my work ?
 			//hr
 			p i am just a
 			em
-				p.font-40.contact-method.color-clouds
+				p.font-40.contact-method.color-metroYellow
 					span(ng-show='index == 0') mail
 					span(ng-show='index == 1') message
 					span(ng-show='index == 2') post
 					span(ng-show='index == 3') tweet
 					span(ng-show='index == 4') call
 			p away
-			.col-md-12.font-30
+			.col-md-12.social-icons
 				.col-md-2.col-sm-2.col-xs-2.featurette-divider2(ng-repeat='icon in arr')
 					a.pointer.color-metroYellow(target='_blank' ng-href='{{icon.href}}')
 						i.fa.fa-2x(ng-class='icon.class')
@@ -22,6 +22,6 @@
 					span &copy;&nbsp;Anoop Manjunath 2014
 					span &nbsp;
 				h3.small.pull-right
-					a(href='/portfolio/images/UIResume.pdf' target='_blank')
+					a.color-concrete(href='/portfolio/images/UIResume.pdf' target='_blank')
 						i.fa.fa-file-text
 						span &nbsp; Resume

@@ -51,11 +51,14 @@ function Projects($scope) {
 	};
 	$scope.moveRight = function (callback) {
 		$container = $(".projects");
+		$ptmain = $("#pt-main");
 		var opened = $container.data('opened');
 		if (! opened) {
 			$container.addClass("slideRight").data('opened', true);
+			//$ptmain.addClass("width85");
 		} else {
 			$container.removeClass("slideRight").data('opened', false);
+			//$ptmain.removeClass("width85");
 		}
 
 	};
@@ -81,6 +84,56 @@ function Contact($scope){
 		{name:"Pinterest", class:"fa-pinterest color-etroNavy", href:"https://pinterest.com/socceranoo"}
 	];
 
+}
+function Interests($scope) {
+	$scope.interests=[interests1, interests2];
+	$scope.active = [false, false];
+	$scope.current = [interests1[0], interests2[0]];
+	$scope.nextInterest = function (option) {
+
+		var i = 0;
+		var obj = $scope.interests[option];
+		for (i=0; i<obj.length; i++) {
+			obj[i].index =  (obj.length + obj[i].index  - 1)%obj.length;
+			if (obj[i].index == 0) {
+				$scope.current[option] = obj[i];
+			}
+		}
+	};
+	$scope.interestClick = function(option, item){
+		if($scope.current == item)
+			return;
+		var obj = $scope.interests[option];
+		$scope.current[option].index = item.index;
+		item.index = 0;
+		$scope.current[option] = item;
+	};
+	setInterval(function() {
+		//$scope.index = ($scope.index + 1)%$scope.total;
+		if ($scope.active[0] === true || navObj.getVal() !== 3)
+			return;
+		$scope.$apply(function () {
+			//$scope.nextInterest(0);
+		})
+	}, 5000);
+	$scope.mouseEnter = function(option, item) {
+		if (item == $scope.current[option])
+			$scope.active[option] = true;
+	}
+	$scope.mouseLeave = function(option, item) {
+		if (item == $scope.current[option])
+			$scope.active[option] = false;
+	}
+}
+
+function Awards($scope) {
+	$scope.index = 0;
+}
+
+
+function Groups($scope) {
+	$scope.groups = groupData;
+	$scope.currentGroup = "A";
 }
 
 function waypoint_init () {
@@ -132,6 +185,9 @@ function waypoint_init () {
 		$(".item-selector li:eq("+val+")").addClass("active");
 		current = val;
 	}
+	function getCurrent () {
+		return current;
+	}
 
-	return {move:move, active:setActive};
+	return {move:move, active:setActive, getVal:getCurrent};
 }

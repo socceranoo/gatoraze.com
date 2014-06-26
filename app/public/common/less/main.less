@@ -2,10 +2,12 @@
 @import "variables";
 	html {
 		height:100%;
+		//overflow-x: hidden;
 	}
 	body {
 		font-family: "Trebuchet MS", sans-serif;
 		font-size:16px;
+		overflow-x: hidden;
 	}
 	body.modal-open {
 		overflow:auto;
@@ -24,7 +26,15 @@
 		height:50%;
 	}
 
-	h1, h2, h3, h4, h5 {
+	.full-height, .half-height {
+		position:relative;
+		top:0px;
+		left:0px;
+		overflow: auto;
+	}
+
+
+h1, h2, h3, h4, h5 {
 		font-family: "Trebuchet MS", sans-serif;
 	}
 
@@ -93,12 +103,16 @@
 		height:200px;
 		max-height:200px;
 	}
+	.height-500 {
+		height:500px;
+		max-height:500px;
+	}
 	.height-300 {
 		height:300px;
 		max-height:300px;
 	}
 	.height-250 {
-		height:250px;
+		//height:250px;
 		max-height:250px;
 	}
 	.height-150 {
@@ -149,3 +163,25 @@
 	.color-black {
 		color: #000 !important;
 	}
+	.scale-mixin(@scale:1.2) {
+		transform:scale(@scale);
+		-ms-transform:scale(@scale);
+		-webkit-transform:scale(@scale);
+		transition: all .3s linear;
+		-webkit-transition: -webkit-transform .3s linear;
+	}
+	.background-limeGreen {
+		background : #63ea41 !important;
+	}
+	.background-darkGreen {
+		background : #006940 !important;
+	}
+
+	.setFullBg(@img) {
+		background:url(@img) no-repeat center center;
+		background-size: cover;
+		-webkit-transition: all 0.3s ease-in-out;
+		-o-transition: all 0.3s ease-in-out;
+		transition: all 0.3s ease-in-out;
+	}
+

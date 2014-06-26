@@ -2,6 +2,41 @@ module.exports = function (app, module_obj) {
 	var CT = module_obj.CT;
 	var AM = module_obj.AM;
 	var EM = module_obj.EM;
+	var unirest = require('unirest');
+	var fifaToISO = {
+		BRA:"br",
+		NED:"nl",
+		AUS:"au",
+		ESP:"es",
+		CHI:"cl",
+		CRO:"hr",
+		CMR:"cm",
+		COL:"co",
+		MEX:"mx",
+		CIV:"ci",
+		ENG:"gb",
+		URU:"uy",
+		GRE:"gr",
+		JPN:"jp",
+		ITA:"it",
+		CRC:"cr",
+		FRA:"fr",
+		SUI:"ch",
+		ECU:"ec",
+		HON:"hn",
+		IRN:"iran",
+		ARG:"ar",
+		GER:"de",
+		GHA:"gh",
+		NGA:"ne",
+		BIH:"ba",
+		BEL:"be",
+		RUS:"ru",
+		POR:"pt",
+		USA:"us",
+		ALG:"dz",
+		KOR:"kr"
+	};
 
 	var skills = [
 		{bg:"#f0db4f", invert:true,		name:"JavaScript",	image:"javascript",	points:["", "", ""]	},
@@ -24,14 +59,14 @@ module.exports = function (app, module_obj) {
 	];
 
 	var interests = [
-		{name:"Symantec", image:"symantec", col:4, bg:"metroRed", points:["", "", ""]},
-		{name:"A Gator", image:"gator", col:4, bg:"metroYellow", points:["", "", ""]},
-		{name:"Soccer", image:"soccer", col:4, bg:"metroNavy", points:["", "", ""]},
-		{name:"I love tech", image:"workout", col:6, bg:"metroPurple", points:["", "", ""]},
-		{name:"Ninja !!!", image:"ninja", col:6, bg:"metroJade", points:["", "", ""]},
-		{name:"Real Madrid", image:"madrid", col:4, bg:"metroOrange", points:["", "", ""]},
-		{name:"FIFA", image:"fifa2", col:4, bg:"metroCyan", points:["", "", ""]},
-		{name:"Music", image:"music", col:4, bg:"metroMagenta", points:["", "", ""]}
+		{invert:true,	name:"I love tech", index:0, image:"tech", col:6, bg:"belizeHole", points:["", "", ""]},
+		{invert:false,	name:"A Gator", index:1, image:"gator3", col:4, bg:"metroGreen", points:["", "", ""]},
+		{invert:true,	name:"Symantec", index:2, image:"symantec", col:4, bg:"metroYellow", points:["", "", ""]},
+		{invert:true,	name:"Ninja !!!", index:3, image:"kawasaki", col:6, bg:"limeGreen	", points:["", "", ""]},
+		{invert:true,	name:"Soccer", index:4, image:"soccer2", col:4, bg:"peterRiver", points:["", "", ""]},
+		{invert:true,	name:"Real Madrid", index:5, image:"madrid", col:4, bg:"sunFlower", points:["", "", ""]},
+		{invert:false,	name:"FIFA", image:"fifa2", index:6, col:4, bg:"alizarin", points:["", "", ""]},
+		{invert:true,	name:"Music", image:"music", index:7, col:4, bg:"orange", points:["", "", ""]}
 	];
 
 	var projects = [
@@ -42,11 +77,25 @@ module.exports = function (app, module_obj) {
 		{name:"bug-spies"},
 		{name:"raze-tube"}
 	];
+	var groupIdtoLetter = ["", "A", "B", "C", "D", "E", "F", "G", "H"];
+	var groups = { A:[], B:[], C:[], D:[], E:[], F:[], G:[], H:[] };
+	//.headers({ 'Accept': 'application/json' })
+	unirest.get('http://worldcup.sfg.io/teams/').send().end(function (response) {
+		var teams = response.body;
+		for (var x in teams) {
+			teams[x].country_code = fifaToISO[teams[x].fifa_code];
+			groups[groupIdtoLetter[teams[x].group_id]].push(teams[x]);
+		}
+		//console.log(groups);
+	});
 
 	app.get('/portfolio', function(req, res){
-		res.render('portfolio/views/home', {title: 'Manjunath', projects:projects, skillSet:skills, total: 4, interests:interests});
+		res.render('portfolio/views/home', {title: 'Manjunath', projects:projects, skillSet:skills, total: 5, interests:interests});
 	});
 	app.post('/portfolio', function(req, res){
 		res.send({data:""}, 200);
+	});
+	app.get('/worldcup', function(req, res){
+		res.render('portfolio/views/fifa', {title: 'FIFA WC', groups:groups});
 	});
 };
