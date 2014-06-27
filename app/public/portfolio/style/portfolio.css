@@ -334,7 +334,7 @@ body.portfolio {
   cursor: default;
 }
 .slideRight {
-  left: 15%;
+  left: 15% !important;
 }
 .left-pane {
   width: 15%;
