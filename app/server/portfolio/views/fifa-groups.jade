@@ -1,0 +1,20 @@
+.full-height.groups(ng-controller='Groups')
+	.container
+		.row
+			ul.list-unstyled.list-inline.text-center
+				h2.text-center Groups
+				- each group,key in groups
+					li.pointer.background-sunFlower
+						h2(ng-click='currentGroup =\''+key+'\'')
+							span &nbsp;&nbsp;
+							span= key
+							span &nbsp;&nbsp;
+
+			.col-md-8.col-sm-8.col-md-offset-2.col-sm-offset-2.background-opacity
+				div(ng-repeat='team in groups[currentGroup] track by $index')
+					.col-md-2
+						img.img-flag.img-responsive(ng-src='/github.com/country-flags/png250px/{{team.country_code}}.png')
+					.col-md-10
+						h3 {{team.country}}
+
+

@@ -1,20 +1,36 @@
 .full-height.skillSet(ng-controller='SkillSet')
 	//include dropdown
-	.overlay
+	.overlay#super-skill-overlay
 		.container
-			h3.rb-close-top.glyphicon.glyphicon-remove-circle(ng-click='skillClose()')
-			.col-md-12.col-sm-12
-				img.img-responsive.img-circle(ng-src='/portfolio/images/skills/{{currentSkill.image}}.jpg')
-			.col-md-12.col-sm-12
-				.col-md-6.col-sm-6.col-md-offset-3.col-sm-offset-3.clearfix
-					.well.featurette-divider3(style="color:#000")
-						h1.text-center(ng-bind='currentSkill.name')
-						ul
-							li(ng-repeat='stuff in currentSkill.points track by $index')
-								span(ng-bind='{{stuff}}')
+			h2.text-center
+				span(ng-bind='currentSuperSkill.name')
+				span.muted.rb-close-top.glyphicon.glyphicon-remove-circle.pull-right(ng-click='superSkillClose()')
+			hr.featurette-divider3
+			.row
+				.col-md-12.col-sm-12.col-xs-12
+					ul.rb-grid.list-unstyled.list-inline.text-center.background-opacity.img-rounded
+						li.item-skill(ng-repeat='skill in currentSuperSkill.skills' ng-attr-title='{{skill.name}}')
+							img.img-responsive.img-skill.block.img-rounded.img-circle(ng-src='/portfolio/images/skills/{{skill.image}}.jpg' ng-click='skillClick($event, skill)')
+
+	.overlay#skill-overlay
+		.container
+			h2.text-center
+				span(ng-bind='currentSkill.name')
+				span.muted.rb-close-top.glyphicon.glyphicon-remove-circle.pull-right(ng-click='skillClose()')
+			.row
+				.col-md-12.col-sm-12
+					img.img-responsive.img-circle(ng-src='/portfolio/images/skills/{{currentSkill.image}}.jpg')
+					.col-md-6.col-sm-6.col-md-offset-3.col-sm-offset-3.clearfix
+						.well.featurette-divider3(style="color:#000")
+							ul
+								li(ng-repeat='stuff in currentSkill.points track by $index')
+									span(ng-bind='{{stuff}}')
 	.container
 		.row
-			h1.text-center.featurette-divider Skills
-			ul#rb-grid.rb-grid.clearfix.col-md-12.col-sm-12.col-xs-12.background-opacity.list-unstyled.img-rounded
-					li.col-md-3.col-xs-3.col-sm-3(ng-repeat='skill in skillSet' ng-attr-title='{{skill.name}}')
-						img.img-responsive.img-skill.img-rounded.img-circle(ng-src='/portfolio/images/skills/{{skill.image}}.jpg' ng-click='skillClick($event, skill)')
+			h1.text-center Skills
+			hr.featurette-divider3
+			ul#rb-grid.rb-grid.clearfix.col-md-12.col-sm-12.col-xs-12.list-unstyled
+				li.col-md-4.col-xs-4.col-sm-4.item-skill(ng-repeat='superSkill in superSet' ng-attr-title='{{superSkill.name}}')
+					h3.text-center {{superSkill.name}}
+					.background-opacity.well.col-md-8.col-xs-8.col-sm-8.col-md-offset-2.col-xs-offset-2.col-sm-offset-2.img-rounded
+						img.img-responsive.block.img-skill.img-rounded(ng-src='/portfolio/images/skills/{{superSkill.image}}.png' ng-click='superSkillClick($event, superSkill)')

@@ -1,0 +1,53 @@
+.opacity-0 {
+  opacity: 0.1;
+}
+.page-elem {
+  height: 100%;
+  position: absolute;
+  -moz-box-shadow: 3px 3px 10px 10px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 3px 3px 10px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 3px 3px 10px 10px rgba(0, 0, 0, 0.2);
+  -webkit-transition: -webkit-transform linear 1.5s;
+  /* For Safari 3.1 to 6.0 */
+  -moz-transition: -moz-transform linear 1.5s;
+  /* For Safari 3.1 to 6.0 */
+  transition: transform linear 1.5s;
+  /* For Safari 3.1 to 6.0 */
+  -webkit-transform-origin: 0%;
+  -moz-transform-origin: 0%;
+  border-left: 1px solid black;
+}
+.page-cover-front {
+  background: url('../images/front-cover3.png');
+  background-size: 100% 100%;
+}
+.page-cover-back {
+  background: url('../images/back-cover.png');
+  background-size: 100% 100%;
+  opacity: 0.7;
+}
+.page-left {
+  top: 0%;
+  left: 0%;
+}
+.page-right {
+  top: 0%;
+  left: 50%;
+}
+.turn-page {
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -o-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-transform-origin: 0%;
+  -moz-transform-origin: 0%;
+  -webkit-transform: perspective(500px) rotateY(-180deg);
+  -moz-transform: perspective(500px) rotateY(-180deg);
+  transform: perspective(500px) rotateY(-180deg);
+  -webkit-transition: -webkit-transform linear 1.5s;
+  /* For Safari 3.1 to 6.0 */
+  -moz-transition: -moz-transform linear 1.5s;
+  /* For Safari 3.1 to 6.0 */
+  transition: transform linear 1.5s;
+  z-index: 300;
+}

@@ -1,19 +1,33 @@
-.half-height.awards(ng-controller='Awards')
+.full-height.awards(ng-controller='Awards')
 	.container
 		.row.text-center.featurette-divider3
-			h1 Awards
+			h1.text-center
+				em Awards
 			hr.featurette-divider3
-			.col-md-12.col-sm-12.lead.well.background-metroJade
+			.col-md-12.col-sm-12.featurette-divider
+				.col-md-2.col-sm-2
+				.col-md-8.col-sm-8.height-500.whole-page
+					.col-md-6.col-sm-6.pointer.page-right.page-elem.background-metroYellow(style="z-index:10", ng-click='pageTurn(0)')
+						.content(ng-class="{'opacity-0':page+1 < 0}")
+							h2.text-center
+								span Awards
+							hr.featurette-divider3
+							img.img-responsive.block(ng-src='/portfolio/images/awards.png')
+					.col-md-6.col-sm-6.pointer.page-right.page-elem.background-opacity(style="z-index:{{9-$index}}", ng-repeat='award in awards track by $index', ng-click='pageTurn($index+1)')
+						.content(ng-class="{'opacity-0':page+1 != $index+1}")
+							img.img-responsive.block(ng-src='/portfolio/images/{{award.img}}')
+							h3.text-center
+								span(ng-bind='award.result')
+							hr.featurette-divider4
+							h2.text-center
+								em(ng-bind='award.name')
+							hr.featurette-divider4
+							p.lead(ng-bind='award.data')
+					.col-md-6.col-sm-6.page-right.page-elem.page-cover-back(style="z-index:{{9 - awards.length}}")
+						.content(ng-class="{'opacity-0':page+1 < awards.length+1}")
+					.col-md-6.col-sm-6.page-left.page-elem.page-cover-front(style="z-index:9")
+				.col-md-2.col-sm-2
+			.col-md-12.col-sm-12
 				.col-md-4.col-sm-4
-					p
-						em Standing Ovation Award
-						| &nbsp;from Symantec Marketing team for action in the making of Symantec’s Disaster recovery solutions videos (1 min and 10 min versions).
-				.col-md-4.col-sm-4
-					p
-						em Standing Ovation Award
-						| &nbsp;from Symantec Engineering team for action in customer escalations and contribution towards product release.
-				.col-md-4.col-sm-4
-					p
-						em Winner
-						| &nbsp;of the hackathon event at Symantec Engineering team for developing the tool bugspies.
-				//hr.featurette-divider3
+					h4.text-center
+						a.btn.btn-danger(ng-show='page == awards.length+1', href='javascript:void(0);', ng-click='reset()') Reset

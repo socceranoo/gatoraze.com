@@ -62,14 +62,14 @@ var BoxGrid = function() {
 		$basecc = "#000",
 		$inversecc = "#fff";
 
-	function open ($item, background, invert) {
+	function open ($item, background, invert, $overlayElem) {
 		var cc = (invert)?$basecc:$inversecc;
+		$overlay = $overlayElem;
 		// save current item's index
 		current = $item;
 		var layoutProp = getItemLayoutProp( $item ),
 			clipPropFirst = 'rect(' + layoutProp.top + 'px ' + ( layoutProp.left + layoutProp.width ) + 'px ' + ( layoutProp.top + layoutProp.height ) + 'px ' + layoutProp.left + 'px)',
 			clipPropLast = 'rect(0px ' + winsize.width + 'px ' + (winsize.height) + 'px 0px)';
-
 		$overlay.css( {
 			clip : supportTransitions ? clipPropFirst : clipPropLast,
 			opacity : 1,
@@ -77,43 +77,38 @@ var BoxGrid = function() {
 			pointerEvents : 'auto',
 			background : background,
 			color : cc
-		} );
-
+		});
 		if( supportTransitions ) {
 			$overlay.on( transEndEventName, function() {
-
 				$overlay.off( transEndEventName );
-
 				setTimeout( function() {
 					$overlay.css( 'clip', clipPropLast ).on( transEndEventName, function() {
 						$overlay.off( transEndEventName );
-						$body.css( 'overflow-y', 'hidden' );
+						//$body.css( 'overflow-y', 'hidden' );
 					} );
 				}, 25 );
-
 			} );
+		} else {
+			//$body.css( 'overflow-y', 'hidden' );
 		}
-		else {
-			$body.css( 'overflow-y', 'hidden' );
-		}
-
 	}
 
-	function close($item) {
-		$body.css( 'overflow-y', 'auto' );
+	function close($item, $overlayElem, $current) {
+		$overlay = $overlayElem;
+		current = $current;
+		if (current === null) {
+			//$body.css( 'overflow-y', 'auto' );
+		}
 		var layoutProp = getItemLayoutProp( $item ),
 			clipPropFirst = 'rect(' + layoutProp.top + 'px ' + ( layoutProp.left + layoutProp.width ) + 'px ' + ( layoutProp.top + layoutProp.height ) + 'px ' + layoutProp.left + 'px)',
 		clipPropLast = 'auto';
-		current = null;
 		$overlay.css( {
 			clip : supportTransitions ? clipPropFirst : clipPropLast,
 			opacity : supportTransitions ? 1 : 0,
 			pointerEvents : 'none'
-		} );
-
+		});
 		if( supportTransitions ) {
 			$overlay.on( transEndEventName, function() {
-
 				$overlay.off( transEndEventName );
 				setTimeout( function() {
 					$overlay.css( 'opacity', 0 ).on( transEndEventName, function() {
@@ -122,13 +117,10 @@ var BoxGrid = function() {
 						$overlay.css('color', $basecc);
 					} );
 				}, 25 );
-
 			} );
-		}
-		else {
+		} else {
 			$overlay.css( 'z-index', -1 );
 		}
-
 		return false;
 	}
 
@@ -156,10 +148,10 @@ var BoxGrid = function() {
 	}
 
 	function getWindowSize() {
-		$body.css( 'overflow-y', 'hidden' );
+		//$body.css( 'overflow-y', 'hidden' );
 		var w = $window.width(), h =  $window.height();
 		if( current === null ) {
-			$body.css( 'overflow-y', 'auto' );
+			//$body.css( 'overflow-y', 'auto' );
 		}
 		return { width : w, height : h };
 	}
