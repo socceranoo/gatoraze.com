@@ -1,4 +1,16 @@
 
+var bgArray = [
+	"background-orange",
+	"background-peterRiver",
+	"background-metroRed",
+	"background-metroCyan",
+	"background-metroJade",
+	"background-metroTeal",
+	"background-metroPurple",
+	"background-turquoise"
+];
+var ptObj = PageTransitions(bgArray);
+
 function waypoint_init () {
 	var inprogress = false;
 	var current = 0;
@@ -67,8 +79,6 @@ function waypoint_init () {
 	return {move:move, active:setActive, getVal:getCurrent, register:register};
 }
 
-var navObj = waypoint_init();
-
 $(document).ready(function() {
 	//Page.init();
 });
@@ -79,7 +89,7 @@ angular.element(document).ready( function () {
 function Cover($scope) {
 	$scope.position = 0;
 	$scope.navClick = function (index) {
-		navObj.move(index);
+		ptObj.click(index);
 	};
 }
 
@@ -115,24 +125,9 @@ function SkillSet($scope) {
 	};
 }
 
-function Projects($scope) {
-	var bgArray = [
-		"background-orange",
-		"background-peterRiver",
-		"background-metroRed",
-		"background-metroCyan",
-		"background-metroJade",
-		"background-metroTeal",
-		"background-metroPurple",
-		"background-turquoise"
-	];
-	var ptObj = PageTransitions(bgArray);
+function Main($scope) {
 	$scope.current = 0;
 	$scope.position = 0;
-	$scope.projectClick = function() {
-		$scope.moveRight();
-		$scope.nextPt("");
-	};
 	$scope.moveRight = function (callback) {
 		$container = $(".projects");
 		$ptmain = $("#pt-main");
@@ -147,9 +142,31 @@ function Projects($scope) {
 
 	};
 	$scope.nextPt = function (arg) {
-		$scope.current = ptObj.click();
+		$scope.current = ptObj.click(arg);
 	};
 }
+
+function Projects($scope) {
+	$scope.current = 0;
+	$scope.position = 0;
+	$scope.projectClick = function() {
+		$scope.moveRight();
+	};
+	$scope.moveRight = function (callback) {
+		$container = $(".projects");
+		$ptmain = $("#pt-main");
+		var opened = $container.data('opened');
+		if (! opened) {
+			$container.addClass("slideRight").data('opened', true);
+			//$ptmain.addClass("width85");
+		} else {
+			$container.removeClass("slideRight").data('opened', false);
+			//$ptmain.removeClass("width85");
+		}
+
+	};
+}
+
 function Interests($scope) {
 	$scope.interests=[interests1, interests2];
 	$scope.active = [false, false];
@@ -198,8 +215,8 @@ function Interests($scope) {
 		if (item == $scope.current[option])
 			$scope.active[option] = false;
 	};
-	navObj.register(null, "enter", 3, $scope.startInterestSlide);
-	navObj.register(null, "leave", 3, $scope.stopInterestSlide);
+	ptObj.register(null, "enter", 3, $scope.startInterestSlide);
+	ptObj.register(null, "leave", 3, $scope.stopInterestSlide);
 }
 
 
@@ -266,8 +283,8 @@ function Contact($scope){
 		$scope.elem.css('background-position', pos_str);
 		window.clearInterval(messageTimer);
 	};
-	navObj.register(null, "enter", 5, wp_func_enter);
-	navObj.register(null, "leave", 5, wp_func_leave);
+	ptObj.register(null, "enter", 5, wp_func_enter);
+	ptObj.register(null, "leave", 5, wp_func_leave);
 }
 
 function Awards($scope) {
@@ -294,7 +311,7 @@ function Awards($scope) {
 			elem.css('z-index', ++$scope.zcounter);
 			$scope.page++;
 		}
-		$scope.$digest();
+		//$scope.$digest();
 	};
 	$scope.reset = function () {
 		$scope.page = -1;
@@ -312,8 +329,8 @@ function Awards($scope) {
 		elem.css('z-index', ++$scope.zcounter);
 		$scope.$digest();
 	};
-	//navObj.register(null, "enter", 4, wp_func_enter);
-	navObj.register(null, "leave", 4, $scope.reset);
+	//ptObj.register(null, "enter", 4, wp_func_enter);
+	ptObj.register(null, "leave", 4, $scope.reset);
 }
 
 function Groups($scope) {

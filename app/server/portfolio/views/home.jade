@@ -1,14 +1,8 @@
 extends layout
 
 block content
-	//
-		include testing
-	include cover
-	include skillset
-	include projects
-	include interests
-	include awards
-	include contact
+	//include item-selector
+	include main
 	script.
 		var superSet= !{JSON.stringify(superSet)};
 	include ../../common-scripts

@@ -1,5 +1,6 @@
 var PageTransitions = function(bgArray) {
 
+	var fnHash = {up:{enter:[], leave:[]}, down:{enter:[], leave:[]}};
 	var $main = $('#pt-main'),
 		curBg = 0;
 		$pages = $main.children('.pt-page'),
@@ -7,6 +8,7 @@ var PageTransitions = function(bgArray) {
 		secAnim = 0,
 		pagesCount = $pages.length,
 		current = 0,
+		previous = 0,
 		isAnimating = false,
 		endCurrPage = false,
 		endNextPage = false,
@@ -29,17 +31,21 @@ var PageTransitions = function(bgArray) {
 		$pages.eq(current).addClass('pt-page-current '+bgArray[0]);
 	}
 
-	function clickButton() {
-		if( isAnimating ) {
+	function clickButton(index) {
+		if( isAnimating || current == index) {
 			return false;
 		}
 		isAnimating = true;
 		var $currPage = $pages.eq(current);
+		/*
 		if( current < pagesCount - 1 ) {
-			++current;
+			//++current;
 		} else {
 			current = 0;
 		}
+		*/
+		previous = current;
+		current = index;
 
 		var $nextPage = $pages.eq(current).addClass('pt-page-current');
 		var ret = getNextAnimation(true);
@@ -66,7 +72,11 @@ var PageTransitions = function(bgArray) {
 		}
 
 		return current;
+	}
 
+	function register (direction, mode, index, fn) {
+		fnHash.up[mode][index] = fn;
+		fnHash.down[mode][index] = fn;
 	}
 
 	function onEndAnimation($outpage, $inpage) {
@@ -74,6 +84,12 @@ var PageTransitions = function(bgArray) {
 		endNextPage = false;
 		resetPage($outpage, $inpage);
 		isAnimating = false;
+		if (fnHash.up.enter[current]) {
+			fnHash.up.enter[current]("up");
+		}
+		if (fnHash.up.leave[previous]) {
+			fnHash.up.leave[previous]("up");
+		}
 	}
 
 	function resetPage($outpage, $inpage) {
@@ -197,5 +213,5 @@ var PageTransitions = function(bgArray) {
 		return ret;
 	}
 	init();
-	return {init : init , click: clickButton};
+	return {init : init , click: clickButton, register:register};
 };
