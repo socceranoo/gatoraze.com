@@ -5,3 +5,11 @@ ul.item-selector.list-unstyled(data-current='0')
 		else
 			li.img-circle
 	- }
+//
+	-each page,i in pages
+		- if (i == 0)
+			li.pointer.active
+				span.glyphicon(class="glyphicon-"+page.icon)
+		else
+			li.pointer
+				span.glyphicon(class="glyphicon-"+page.icon)

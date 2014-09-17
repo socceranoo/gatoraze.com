@@ -70,7 +70,7 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: "Trebuchet MS", sans-serif;
+  font-family: inherit;
 }
 legend {
   border-bottom: 0px;
@@ -165,6 +165,12 @@ table.gradient-style tr {
 .img-responsive {
   margin: 0px auto;
 }
+.block0 {
+  margin: 0px auto;
+  width: auto;
+  height: 200px;
+  line-height: 200px;
+}
 .block {
   margin: 0px auto;
   width: auto;
@@ -226,25 +232,13 @@ body.portfolio {
   position: relative;
   font-weight: 100;
   font-family: 'Lato', sans-serif;
-  font-weight: 300;
   overflow: -moz-scrollbars-none;
 }
 .cover {
-  background: url('../images/BG/bg3.jpg') no-repeat center center;
-  background: url('../images/BG/blueback.jpg') no-repeat center center;
-  -webkit-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
   border-bottom: 10px solid #e5e5e5;
-  height: 70%;
+  height: 80%;
+  background: #444;
   background-size: cover;
-}
-.skillSet {
-  background: url('../images/minimal.jpg') no-repeat center center;
-  background-size: cover;
-  -webkit-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
 }
 .projects {
   background: url('../images/minimal.jpg') no-repeat center center;
@@ -256,19 +250,8 @@ body.portfolio {
   overflow: visible !important;
 }
 .contact {
-  background: url('../images/dark-2.jpg') no-repeat center center;
-  background-size: cover;
-  -webkit-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
+  background: #333;
   font-family: 'Lato', sans-serif !important;
-}
-.interests {
-  background: url('../../account/images/ggbridge-blur.jpg') no-repeat center center;
-  background-size: cover;
-  -webkit-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
 }
 .awards {
   background: url('../images/gaussian-blur.jpg') no-repeat center center;
@@ -276,25 +259,23 @@ body.portfolio {
   -webkit-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
-  font-family: 'proxima-nova' sans-serif;
-  font-family: 'Lato', sans-serif !important;
-}
-.cover-item {
-  max-width: 200px;
-  margin: 40px auto;
-  height: 200px;
-  max-height: 200px;
-}
-.cover-item h2 {
-  padding-top: 80px;
-  font-size: 40px;
 }
 .cover .title {
-  font-size: 45px;
-  margin: 0px auto;
-  font-family: 'Lato', sans-serif;
+  font-size: 35px;
   font-weight: 300;
-  font-style: italic;
+}
+.item-nav {
+  font-size: 45px;
+}
+.item-nav:hover {
+  -webkit-animation-name: color2;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: 10;
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-delay: 0s;
+}
+.ul-nav li {
+  margin: 30px;
 }
 .dropdown {
   position: absolute;
@@ -355,12 +336,13 @@ body.portfolio {
   height: 8px;
   float: none;
   margin: 15px auto;
-  background: #2c3e50;
+  background: #777;
 }
 .item-selector li.active {
   width: 16px;
   height: 16px;
   background: #f1c40f;
+  color: #f1c40f;
 }
 .overlay {
   opacity: 0;
@@ -503,19 +485,19 @@ body.portfolio {
 }
 @-webkit-keyframes color2 {
   0% {
-    opacity: 0;
+    opacity: 1;
   }
   25% {
     opacity: 0.5;
   }
   50% {
-    opacity: 1;
+    opacity: 0;
   }
   75% {
     opacity: 0.5;
   }
   100% {
-    opacity: 0;
+    opacity: 1;
   }
 }
 .contact-method {
@@ -588,6 +570,10 @@ body.portfolio {
   }
   /* Interation call and operation */
   .cover .title {
+    font-size: 30px;
+  }
+  .item-nav {
+    margin: 15px;
     font-size: 30px;
   }
   .grid li {
@@ -669,6 +655,10 @@ body.portfolio {
   }
   .metro {
     max-height: 176px;
+  }
+  .item-nav {
+    margin: 5px;
+    font-size: 20px;
   }
 }
 @media (max-width: 501px) {

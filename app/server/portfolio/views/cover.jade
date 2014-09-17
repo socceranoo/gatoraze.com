@@ -1,18 +1,20 @@
-.full-height(ng-controller='Cover')
+.full-height.background-turquoise(ng-controller='Cover')
 	include dropdown
 	.cover
-		.col-md-12.col-xs-12.col-sm-12
-			.col-md-4.col-xs-4.col-sm-4.col-md-offset-4.col-xs-offset-4.col-sm-offset-4
-				.featurette-divider3
+		.col-md-12.col-xs-12.col-sm-12.color-clouds
+				//
+					h2.title.text-center
+						| Manjunath &nbsp;"
+						em Anoop
+						|" &nbsp;Mageswaran
+				.featurette-divider2
 					img.img-responsive.height-250.img-thumbnail.img-circle(style="display:block" src='/portfolio/images/profile-2014.jpg')
-		.col-md-12.col-xs-12.col-sm-12
-			.col-md-10.col-xs-10.col-sm-10.col-md-offset-1.col-xs-offset-1.col-sm-offset-1.ell.background-opacity0.color-clouds
-				h4.title.text-center Hi, I am a full stack developer from Silicon Valley
-					asdasdasdsa asdasdasd adasdasd asdasdasd asdasdasdasd
-
-	.container
-		.row
-			.col-md-10.col-xs-10.col-sm-10.col-md-offset-1.col-xs-offset-1.col-sm-offset-1
+				h2.title.text-center
+					em hi, i am a software developer from silicon valley, interested in full stack development.
+					//em -- full stack software developer
 				.featurette-divider
-					h4.text-center scroll for more
-					img.highlighted.img-responsive.height-100(src='/portfolio/images/downarrow.png' ng-click='navClick(1)').pointer
+					ul.text-center.list-unstyled.list-inline.ul-nav.ackground-opacity
+						-each page,index in pages
+							li.pointer(ng-click='navClick('+index+')')
+								h1.item-nav.ighlighted.glyphicon(class="glyphicon-"+page.icon+" color-"+page.bg)
+								h4= page.name

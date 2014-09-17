@@ -33,8 +33,8 @@
 	}
 
 
-h1, h2, h3, h4, h5 {
-		font-family: "Trebuchet MS", sans-serif;
+	h1, h2, h3, h4, h5 {
+		font-family: inherit;
 	}
 
 	legend {
@@ -129,19 +129,22 @@ h1, h2, h3, h4, h5 {
 	.img-responsive {
 		margin : 0px auto;
 	}
-
-	.block {
+	.block-mixin (@size) {
 		margin:0px auto;
 		width:auto;
-		height:150px;
-		line-height:150px;
+		height:@size;
+		line-height:@size;
+	}
+	.block0 {
+		.block-mixin(200px);
+	}
+
+	.block {
+		.block-mixin(150px);
 	}
 
 	.block2 {
-		margin:0px auto;
-		width:auto;
-		height:100px;
-		line-height:100px;
+		.block-mixin(100px);
 	}
 
 	.pointer {
