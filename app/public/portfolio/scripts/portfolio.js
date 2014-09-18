@@ -1,16 +1,39 @@
 
-var bgArray = [
-	"background-orange",
-	"background-peterRiver",
-	"background-metroRed",
-	"background-metroCyan",
-	"background-metroJade",
-	"background-metroTeal",
-	"background-metroPurple",
-	"background-turquoise"
-];
-var ptObj = PageTransitions(bgArray);
+var bgArray = {
+	arr: [
+		"background-orange",
+		"background-peterRiver",
+		"background-alizarin",
+		"background-metroCyan",
+		"background-metroJade",
+		"background-metroTeal",
+		"background-metroPurple",
+		"background-turquoise"
+	],
+	cur:[0, 0, 0, 0, 0, 0],
+	valid:[false, true, false, true, false, false]
+};
+var ptObj = PageTransitions(bgArray.arr);
+var mainFunc = null;
 
+function delayedIterator ($scope, arrObj, key, value, delay) {
+	var timer = null;
+	var obj = arrObj;
+	var iter = 0;
+	var start = function () {
+		timer = setInterval(function() {
+			if (iter < obj.length) {
+				obj[iter++][key] = value;
+			} else {
+				window.clearInterval(timer);
+				iter = 0;
+			}
+			$scope.$apply();
+		}, delay);
+	};
+	setTimeout(start, 200);
+}
+/*
 function waypoint_init () {
 	var inprogress = false;
 	var current = 0;
@@ -78,6 +101,7 @@ function waypoint_init () {
 	}
 	return {move:move, active:setActive, getVal:getCurrent, register:register};
 }
+*/
 
 $(document).ready(function() {
 	//Page.init();
@@ -89,7 +113,7 @@ angular.element(document).ready( function () {
 function Cover($scope) {
 	$scope.position = 0;
 	$scope.navClick = function (index) {
-		ptObj.click(index);
+		mainFunc(index);
 	};
 }
 
@@ -122,48 +146,49 @@ function SkillSet($scope) {
 		$scope.currentSuperSkill = superSkill;
 		bg = superSkill.bg;
 		boxObj.open($scope.currentSuperElem, bg, superSkill.invert, $scope.superSkillOverlay);
+		//delayedIterator($scope, $scope.currentSuperSkill.skills, "valid", true, 200);
 	};
+
+	$scope.reset = function (obj) {
+		var i = 0;
+		var j = 0;
+		for (i=0; i<obj.length; i++) {
+			obj[i].valid = false;
+		}
+	};
+	$scope.exit = function () {
+		$scope.reset($scope.superSet);
+		$scope.$apply();
+	};
+	$scope.entry = function () {
+		delayedIterator($scope, $scope.superSet, "valid", true, 200);
+	};
+	$scope.reset($scope.superSet);
+	ptObj.register(null, "enter", 1, $scope.entry);
+	ptObj.register(null, "leave", 1, $scope.exit);
 }
 
 function Main($scope) {
 	$scope.current = 0;
 	$scope.position = 0;
-	$scope.moveRight = function (callback) {
-		$container = $(".projects");
-		$ptmain = $("#pt-main");
-		var opened = $container.data('opened');
-		if (! opened) {
-			$container.addClass("slideRight").data('opened', true);
-			//$ptmain.addClass("width85");
-		} else {
-			$container.removeClass("slideRight").data('opened', false);
-			//$ptmain.removeClass("width85");
-		}
-
-	};
 	$scope.nextPt = function (arg) {
 		$scope.current = ptObj.click(arg);
 	};
+	mainFunc = $scope.nextPt;
 }
 
 function Projects($scope) {
-	$scope.current = 0;
-	$scope.position = 0;
+	$scope.cur = 6;
 	$scope.projectClick = function() {
 		$scope.moveRight();
 	};
 	$scope.moveRight = function (callback) {
 		$container = $(".projects");
-		$ptmain = $("#pt-main");
-		var opened = $container.data('opened');
-		if (! opened) {
-			$container.addClass("slideRight").data('opened', true);
-			//$ptmain.addClass("width85");
-		} else {
-			$container.removeClass("slideRight").data('opened', false);
-			//$ptmain.removeClass("width85");
-		}
-
+		$container.toggleClass("slideRight");
+	};
+	$scope.nextScreen = function () {
+		ptObj.click($scope.cur, true);
+		$scope.cur = ($scope.cur == 6) ? 7 : 6;
 	};
 }
 
@@ -195,9 +220,10 @@ function Interests($scope) {
 	$scope.startInterestSlide = function () {
 		timer = setInterval(function() {
 			//$scope.index = ($scope.index + 1)%$scope.total;
-			if ($scope.active[0] === true)
+			if ($scope.active[0] === true) {
 				return;
-			$scope.$digest(function () {
+			}
+			$scope.$apply(function () {
 				$scope.nextInterest(0);
 			});
 		}, 5000);

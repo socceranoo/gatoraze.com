@@ -32,7 +32,7 @@
   z-index: 999;
 }
 /* Text Styles, Colors, Backgrounds */
-.pt-page h1 {
+.pt-page h1.heading {
   font-size: 70px;
   line-height: 1;
   letter-spacing: 6px;

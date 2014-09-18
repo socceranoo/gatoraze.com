@@ -60,9 +60,14 @@ var BoxGrid = function() {
 		$close = $('.rb-close'),
 		$overlay = $('.overlay'),
 		$basecc = "#000",
+		isAnimating = false,
 		$inversecc = "#fff";
 
 	function open ($item, background, invert, $overlayElem) {
+		if( isAnimating) {
+			return;
+		}
+		isAnimating = true;
 		var cc = (invert)?$basecc:$inversecc;
 		$overlay = $overlayElem;
 		// save current item's index
@@ -84,16 +89,22 @@ var BoxGrid = function() {
 				setTimeout( function() {
 					$overlay.css( 'clip', clipPropLast ).on( transEndEventName, function() {
 						$overlay.off( transEndEventName );
+						isAnimating = false;
 						//$body.css( 'overflow-y', 'hidden' );
 					} );
 				}, 25 );
 			} );
 		} else {
+			isAnimating = false;
 			//$body.css( 'overflow-y', 'hidden' );
 		}
 	}
 
 	function close($item, $overlayElem, $current) {
+		if( isAnimating) {
+			return;
+		}
+		isAnimating = true;
 		$overlay = $overlayElem;
 		current = $current;
 		if (current === null) {
@@ -115,11 +126,13 @@ var BoxGrid = function() {
 						$overlay.off( transEndEventName ).css( { clip : clipPropLast, zIndex: -1 } );
 						$overlay.css('background', 'transparent');
 						$overlay.css('color', $basecc);
+						isAnimating = false;
 					} );
 				}, 25 );
 			} );
 		} else {
 			$overlay.css( 'z-index', -1 );
+			isAnimating = false;
 		}
 		return false;
 	}

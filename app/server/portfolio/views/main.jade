@@ -1,33 +1,29 @@
 .full-height(ng-controller='Main')
-	.dropdown
-		a.dropdown-toggle.color-clouds(data-toggle="dropdown", href='javascript:void(0);')
-			i.fa.fa-list-ul.fa-2x
-		ul.dropdown-menu
-			-each page,index in pages
-				li.pointer(ng-click='nextPt('+index+')')
-					h1.glyphicon(class="glyphicon-"+page.icon+" color-"+page.bg)
-					//h4= page.name
 	//
 		.dropdown
-			a.btn.btn-primary.img-circle.background-midnightBlue(ng-click='moveRight();' href='javascript:void(0);')
-				span.glyphicon.glyphicon-list
-		.left-pane.background-black
-			ul.list-unstyled
-				-each page,index in pages
-					li.pointer(ng-click='nextPt('+index+')')
-						h1.item-nav.ighlighted.glyphicon(class="glyphicon-"+page.icon+" color-"+page.bg)
-						//h4= page.name
-
+			a.dropdown-toggle.color-clouds(data-toggle="dropdown", href='javascript:void(0);')
+				i.fa.fa-list-ul.fa-2x
+	ul.dropdown.list-unstyled(ng-hide='current == 0')
+		-each page,index in pages
+			li.pointer(ng-click='nextPt('+index+')')
+				h1.glyphicon(class="glyphicon-"+page.icon+" color-"+page.bg)
+				//h4= page.name
 	#pt-main.pt-perspective
 		.pt-page.pt-page-1
 			include cover
 		.pt-page.pt-page-2
 			include skillset
-		.pt-page.pt-page-2
+		.pt-page.pt-page-3
 			include work
-		.pt-page.pt-page-2
+		.pt-page.pt-page-4
 			include interests
-		.pt-page.pt-page-2
+		.pt-page.pt-page-5
 			include awards
-		.pt-page.pt-page-2
+		.pt-page.pt-page-6
 			include contact
+		.pt-page.pt-page-7
+			.container.text-center
+				include lorem
+		.pt-page.pt-page-8
+			.container.text-center
+				include lorem

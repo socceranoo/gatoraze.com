@@ -1,5 +1,16 @@
-h1
-	strong my
-	| &nbsp; works
-.background-opacity
-	p lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut posuere nunc dapibus mauris tempus venenatis. Vestibulum eu molestie purus, ut feugiat arcu. Sed facilisis iaculis purus eget lobortis. Nam ornare eu odio sit amet convallis. Donec id ipsum consectetur, congue urna porttitor, scelerisque sem. Ut erat tortor, sagittis eu varius vitae, condimentum quis nisi. Nam vestibulum egestas vehicula. Nam eu tellus dapibus, bibendum risus at, accumsan augue. Donec id tellus convallis, rutrum ipsum vel, consequat tellus. Aliquam quis volutpat ligula, nec pellentesque odio. Vestibulum mattis ante vitae tincidunt lobortis. Integer volutpat vitae mi eget ultrices.Fusce a risus est. Donec ut volutpat quam. Fusce ultricies orci sed eros congue.
+.full-height.projects(ng-controller='Projects')
+	a.btn.btn-primary.pull-left.img-circle.background-midnightBlue(ng-click='moveRight();' href='javascript:void(0);')
+		span.glyphicon.glyphicon-list
+	a.btn.btn-primary.pull-right.img-circle.background-sunFlower(ng-click='nextScreen();' href='javascript:void(0);')
+		span.glyphicon.glyphicon-tasks
+	.left-pane.background-midnightBlue.text-center.color-concrete
+		h1 PROJECTS
+		hr
+		ul.list-unstyled
+			- each project in projects
+				li(style="cursor:pointer")
+					h3
+						span(ng-click='projectClick()')= project.name
+
+	.container.text-center
+		include lorem

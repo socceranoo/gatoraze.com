@@ -91,6 +91,9 @@ table.gradient-style tr {
   margin: 5px 0px 5px 0px;
   /* Space out the Bootstrap <hr> more */
 }
+.opacity-none {
+  opacity: 0;
+}
 .background-opacity {
   background: rgba(254, 254, 254, 0.2);
 }

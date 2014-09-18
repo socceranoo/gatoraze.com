@@ -91,6 +91,9 @@ table.gradient-style tr {
   margin: 5px 0px 5px 0px;
   /* Space out the Bootstrap <hr> more */
 }
+.opacity-none {
+  opacity: 0;
+}
 .background-opacity {
   background: rgba(254, 254, 254, 0.2);
 }
@@ -253,13 +256,6 @@ body.portfolio {
   background: #333;
   font-family: 'Lato', sans-serif !important;
 }
-.awards {
-  background: url('../images/gaussian-blur.jpg') no-repeat center center;
-  background-size: cover;
-  -webkit-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
-}
 .cover .title {
   font-size: 35px;
   font-weight: 300;
@@ -280,8 +276,8 @@ body.portfolio {
 .dropdown {
   position: absolute;
   top: 2%;
-  left: 2%;
-  z-index: 100;
+  right: 2%;
+  z-index: 10;
   border-radius: 50%;
 }
 .dropdown-menu {
@@ -294,6 +290,9 @@ body.portfolio {
   margin: 20px 0px;
 }
 .item-skill {
+  -webkit-transition: all 1s ease-in-out;
+  -o-transition: all 1s ease-in-out;
+  transition: all 1s ease-in-out;
   margin: 5px 0px 5px 0px;
 }
 .img-skill {
