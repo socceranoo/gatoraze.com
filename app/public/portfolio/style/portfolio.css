@@ -186,6 +186,12 @@ table.gradient-style tr {
   height: 100px;
   line-height: 100px;
 }
+.block3 {
+  margin: 0px auto;
+  width: auto;
+  height: 50px;
+  line-height: 50px;
+}
 .pointer {
   cursor: pointer !important;
 }
@@ -216,6 +222,9 @@ table.gradient-style tr {
 .font-80 {
   font-size: 80px !important;
 }
+.background-white {
+  background: #FFF !important;
+}
 .background-black {
   background: #000 !important;
 }
@@ -236,6 +245,7 @@ body.portfolio {
   font-weight: 100;
   font-family: 'Lato', sans-serif;
   overflow: -moz-scrollbars-none;
+  color: #efefef;
 }
 .cover {
   border-bottom: 10px solid #e5e5e5;
@@ -243,18 +253,26 @@ body.portfolio {
   background: #444;
   background-size: cover;
 }
-.projects {
+.main {
   background: url('../images/minimal.jpg') no-repeat center center;
   background-size: cover;
   -webkit-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
-  color: #efefef;
+  overflow: visible !important;
+}
+.projects {
   overflow: visible !important;
 }
 .contact {
   background: #333;
   font-family: 'Lato', sans-serif !important;
+}
+.interests {
+  color: #333;
+}
+.awards {
+  color: #333;
 }
 .cover .title {
   font-size: 35px;
@@ -264,21 +282,34 @@ body.portfolio {
   font-size: 45px;
 }
 .item-nav:hover {
-  -webkit-animation-name: color2;
-  -webkit-animation-duration: 2s;
-  -webkit-animation-iteration-count: 10;
-  -webkit-animation-timing-function: linear;
-  -webkit-animation-delay: 0s;
+  transform: scale(2);
+  -ms-transform: scale(2);
+  -webkit-transform: scale(2);
+  transition: all .3s linear;
+  -webkit-transition: -webkit-transform 0.3s linear;
 }
 .ul-nav li {
-  margin: 30px;
+  margin: 10px 30px;
+}
+.ul-nav li h1:hover {
+  transform: scale(2);
+  -ms-transform: scale(2);
+  -webkit-transform: scale(2);
+  transition: all .3s linear;
+  -webkit-transition: -webkit-transform 0.3s linear;
+}
+.menu-icon {
+  position: absolute;
+  top: 2%;
+  left: 2%;
+  z-index: 10;
 }
 .dropdown {
   position: absolute;
-  top: 2%;
+  top: 10%;
   right: 2%;
   z-index: 10;
-  border-radius: 50%;
+  padding: 5px;
 }
 .dropdown-menu {
   background: transparent;

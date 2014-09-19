@@ -38,9 +38,6 @@
 	src: local('Lato Italic'), local('Lato-Italic'), url(http://themes.googleusercontent.com/static/fonts/lato/v7/RYyZNoeFgb0l7W3Vu1aSWOvvDin1pK8aKteLpeZ5c0A.woff) format('woff');
 }
 */
-html {
-  height: 100%;
-}
 body {
   font-family: "Trebuchet MS", sans-serif;
   font-size: 16px;
@@ -53,13 +50,13 @@ body.modal-open {
   width: 100%;
 }
 .full-height {
-  height: 100%;
+  height: 100vh;
 }
 .half-width {
   width: 50%;
 }
 .half-height {
-  height: 50%;
+  height: 50vh;
 }
 .full-height,
 .half-height {
@@ -73,7 +70,7 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: "Trebuchet MS", sans-serif;
+  font-family: inherit;
 }
 legend {
   border-bottom: 0px;
@@ -93,6 +90,9 @@ table.gradient-style td.text-left {
 table.gradient-style tr {
   margin: 5px 0px 5px 0px;
   /* Space out the Bootstrap <hr> more */
+}
+.opacity-none {
+  opacity: 0;
 }
 .background-opacity {
   background: rgba(254, 254, 254, 0.2);
@@ -142,6 +142,10 @@ table.gradient-style tr {
   height: 200px;
   max-height: 200px;
 }
+.height-400 {
+  height: 400px;
+  max-height: 400px;
+}
 .height-500 {
   height: 500px;
   max-height: 500px;
@@ -164,8 +168,35 @@ table.gradient-style tr {
 .img-responsive {
   margin: 0px auto;
 }
+.block0 {
+  margin: 0px auto;
+  width: auto;
+  height: 200px;
+  line-height: 200px;
+}
+.block {
+  margin: 0px auto;
+  width: auto;
+  height: 150px;
+  line-height: 150px;
+}
+.block2 {
+  margin: 0px auto;
+  width: auto;
+  height: 100px;
+  line-height: 100px;
+}
+.block3 {
+  margin: 0px auto;
+  width: auto;
+  height: 50px;
+  line-height: 50px;
+}
 .pointer {
   cursor: pointer !important;
+}
+.no-pointer {
+  cursor: auto !important;
 }
 .font-15 {
   font-size: 15px !important;
@@ -190,6 +221,9 @@ table.gradient-style tr {
 }
 .font-80 {
   font-size: 80px !important;
+}
+.background-white {
+  background: #FFF !important;
 }
 .background-black {
   background: #000 !important;

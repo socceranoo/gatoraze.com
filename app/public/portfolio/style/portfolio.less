@@ -8,6 +8,7 @@
 		font-weight: 100;
 		font-family: 'Lato', sans-serif;
 		overflow: -moz-scrollbars-none;
+		color:#efefef;
 	}
 
 	.cover {
@@ -24,9 +25,12 @@
 		//.setFullBg('../images/minimal.jpg');
 	}
 
-	.projects {
+	.main {
 		.setFullBg('../images/minimal.jpg');
-		color:#efefef;
+		overflow: visible !important;
+	}
+	.projects {
+		//.setFullBg('../images/minimal.jpg');
 		overflow: visible !important;
 	}
 
@@ -42,9 +46,11 @@
 		//.setFullBg('../../account/images/ggbridge-blur.jpg');
 		//.setFullBg('../images/minimal.jpg');
 		//.setFullBg('../../account/images/rm.jpg');
+		color:#333;
 	}
 	.awards {
 		//.setFullBg('../images/gaussian-blur.jpg');
+		color:#333;
 	}
 	.cover .title {
 		font-size:35px;
@@ -54,22 +60,26 @@
 		font-size:45px;
 	}
 	.item-nav:hover {
-		-webkit-animation-name: color2;
-		-webkit-animation-duration: 2s;
-		-webkit-animation-iteration-count: 10;
-		-webkit-animation-timing-function: linear;
-		-webkit-animation-delay: 0s;
+		.scale-mixin(2);
 	}
 	.ul-nav li {
-		margin:30px;
+		margin:10px 30px;
 	}
-
-	.dropdown {
+	.ul-nav li h1:hover {
+		.scale-mixin(2);
+	}
+	.menu-icon {
 		position:absolute;
 		top:2%;
+		left:2%;
+		z-index:10;
+	}
+	.dropdown {
+		position:absolute;
+		top:10%;
 		right:2%;
 		z-index:10;
-		border-radius:50%;
+		padding:5px;
 	}
 
 	.dropdown-menu {

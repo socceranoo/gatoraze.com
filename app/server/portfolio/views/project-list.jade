@@ -1,0 +1,8 @@
+ul.list-unstyled(ng-show='current == 2')
+	h1 Projects
+	hr
+	- each project,index in projects
+		li.pointer(ng-click='projectClick('+(20+index)+')')
+			img.img-responsive.img-item.block3.pull-left(src='/portfolio/images/projects/'+project.img)
+			h3.block3= project.name
+			hr

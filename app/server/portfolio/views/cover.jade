@@ -15,5 +15,6 @@
 					ul.text-center.list-unstyled.list-inline.ul-nav.ackground-opacity
 						-each page,index in pages
 							li.pointer(ng-click='navClick('+index+')')
-								h1.item-nav.ighlighted.glyphicon(class="glyphicon-"+page.icon+" color-"+page.bg)
+								//h1.item-nav.ighlighted.glyphicon(class="glyphicon-"+page.icon+" color-"+page.bg)
+								h1.fa.fa-3x(class="fa-"+page.fa+" color-"+page.bg)
 								h4= page.name

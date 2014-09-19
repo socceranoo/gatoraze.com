@@ -1,0 +1,7 @@
+ul.list-unstyled(ng-show='current == 3')
+	h1 Interests
+	hr
+	- each interest in interests
+		li.pointer
+			h3
+				span= interest.name

@@ -32,7 +32,10 @@ var PageTransitions = function(bgArray) {
 	}
 
 	function clickButton(index, sec) {
-		if( isAnimating || current == index) {
+		if( isAnimating ) {
+			return current;
+		}
+		if(current == index) {
 			return current;
 		}
 		isAnimating = true;

@@ -8,11 +8,11 @@
 				.col-md-2.col-sm-2
 				.col-md-8.col-sm-8.height-500.whole-page
 					.col-md-6.col-sm-6.pointer.page-right.page-elem.background-metroYellow(style="z-index:10", ng-click='pageTurn(0)')
-						.content(ng-class="{'opacity-0':page+1 < 0}")
-							h2.text-center
-								span Awards
+						.content(ng-class="{'opacity-0':page >= 0}").featurette-divider
+							h3.text-center My Awards book
 							hr.featurette-divider3
 							img.img-responsive.block(ng-src='/portfolio/images/awards.png')
+							//i.highlighted.fa.fa-3x.fa-angle-double-right
 					.col-md-6.col-sm-6.pointer.page-right.page-elem.background-opacity(style="z-index:{{9-$index}}", ng-repeat='award in awards track by $index', ng-click='pageTurn($index+1)')
 						.content(ng-class="{'opacity-0':page+1 != $index+1}")
 							img.img-responsive.block(ng-src='/portfolio/images/{{award.img}}')
@@ -24,10 +24,10 @@
 							hr.featurette-divider4
 							p.lead(ng-bind='award.data')
 					.col-md-6.col-sm-6.page-right.page-elem.page-cover-back(style="z-index:{{9 - awards.length}}")
-						.content(ng-class="{'opacity-0':page+1 < awards.length+1}")
+						.content(ng-class="{'opacity-0':page+1 < awards.length+1}").featurette-divider
+							h4.text-center
+								a.btn.btn-danger(href='javascript:void(0);', ng-click='reset()') Reset
 					.col-md-6.col-sm-6.page-left.page-elem.page-cover-front(style="z-index:9")
 				.col-md-2.col-sm-2
 			.col-md-12.col-sm-12
 				.col-md-4.col-sm-4
-					h4.text-center
-						a.btn.btn-danger(ng-show='page == awards.length+1', href='javascript:void(0);', ng-click='reset()') Reset

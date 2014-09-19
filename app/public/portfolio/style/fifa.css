@@ -186,6 +186,12 @@ table.gradient-style tr {
   height: 100px;
   line-height: 100px;
 }
+.block3 {
+  margin: 0px auto;
+  width: auto;
+  height: 50px;
+  line-height: 50px;
+}
 .pointer {
   cursor: pointer !important;
 }
@@ -215,6 +221,9 @@ table.gradient-style tr {
 }
 .font-80 {
   font-size: 80px !important;
+}
+.background-white {
+  background: #FFF !important;
 }
 .background-black {
   background: #000 !important;

@@ -1,27 +1,9 @@
 
-var bgArray = {
-	arr: [
-		"background-orange",
-		"background-peterRiver",
-		"background-alizarin",
-		"background-metroCyan",
-		"background-metroJade",
-		"background-metroTeal",
-		"background-metroPurple",
-		"background-turquoise"
-	],
-	cur:[0, 0, 0, 0, 0, 0],
-	valid:[false, true, false, true, false, false]
-};
-var ptObj = PageTransitions(bgArray.arr);
-var mainFunc = null;
-
-function delayedIterator ($scope, arrObj, key, value, delay) {
-	var timer = null;
-	var obj = arrObj;
-	var iter = 0;
-	var start = function () {
-		timer = setInterval(function() {
+function delayInit () {
+	function iterator ($scope, obj, key, value, delay) {
+		var timer = null;
+		var iter = 0;
+		var execute = function () {
 			if (iter < obj.length) {
 				obj[iter++][key] = value;
 			} else {
@@ -29,10 +11,19 @@ function delayedIterator ($scope, arrObj, key, value, delay) {
 				iter = 0;
 			}
 			$scope.$apply();
-		}, delay);
-	};
-	setTimeout(start, 200);
+		};
+		var start = function () {
+			timer = setInterval(execute, delay);
+		};
+
+		if (obj.length) {
+			//obj[iter++][key] = true;
+			setTimeout(start, 5);
+		}
+	}
+	return {iterator:iterator};
 }
+
 /*
 function waypoint_init () {
 	var inprogress = false;
@@ -110,16 +101,18 @@ $(document).ready(function() {
 angular.element(document).ready( function () {
 });
 
+
 function Cover($scope) {
 	$scope.position = 0;
 	$scope.navClick = function (index) {
-		mainFunc(index);
+		$scope.$parent.nextPt(index);
 	};
 }
 
 function SkillSet($scope) {
 	var boxObj = BoxGrid();
 	var background = "#996699";
+	var delayObj = $scope.$parent.delayObj;
 	$scope.superSet = superSet;
 	$scope.currentSuperSkill = $scope.superSet[0];
 	$scope.currentSkill = $scope.currentSuperSkill.skills[0];
@@ -129,9 +122,11 @@ function SkillSet($scope) {
 	$scope.currentSuperElem = null;
 	$scope.superSkillClose = function () {
 		boxObj.close($scope.currentSuperElem, $scope.superSkillOverlay, null);
+		$scope.currentSuperElem = null;
 	};
 	$scope.skillClose = function () {
 		boxObj.close($scope.currentElem, $scope.skillOverlay, $scope.currentSuperElem);
+		$scope.currentElem = null;
 	};
 	$scope.skillClick = function ($event, skill) {
 		if (skill.click === false)
@@ -146,50 +141,88 @@ function SkillSet($scope) {
 		$scope.currentSuperSkill = superSkill;
 		bg = superSkill.bg;
 		boxObj.open($scope.currentSuperElem, bg, superSkill.invert, $scope.superSkillOverlay);
-		//delayedIterator($scope, $scope.currentSuperSkill.skills, "valid", true, 200);
 	};
 
-	$scope.reset = function (obj) {
-		var i = 0;
-		var j = 0;
-		for (i=0; i<obj.length; i++) {
-			obj[i].valid = false;
-		}
-	};
 	$scope.exit = function () {
-		$scope.reset($scope.superSet);
-		$scope.$apply();
+		delayObj.iterator($scope, $scope.superSet, "valid", false, 10);
+		if ($scope.currentElem)
+			$scope.skillClose();
 	};
 	$scope.entry = function () {
-		delayedIterator($scope, $scope.superSet, "valid", true, 200);
+		if ($scope.currentSuperElem)
+			$scope.superSkillClose();
+		delayObj.iterator($scope, $scope.superSet, "valid", true, 200);
 	};
-	$scope.reset($scope.superSet);
-	ptObj.register(null, "enter", 1, $scope.entry);
-	ptObj.register(null, "leave", 1, $scope.exit);
+	$scope.exit();
+	$scope.$parent.ptObj.register(null, "enter", 1, $scope.entry);
+	$scope.$parent.ptObj.register(null, "leave", 1, $scope.exit);
 }
 
 function Main($scope) {
+	var bgArray = [
+		"background-metroJade",
+		"background-peterRiver",
+		"background-pumpkin",
+		"background-metroCyan",
+		"background-metroJade",
+		"background-metroYellow",
+		"background-metroOrange",
+		"background-metroPurple",
+		"background-turquoise"
+	];
+	$scope.delayObj = delayInit();
+	$scope.ptObj = PageTransitions(bgArray);
 	$scope.current = 0;
-	$scope.position = 0;
+	$scope.curScreen = 0;
+	$scope.prevScreen = 0;
+	$scope.curSubScreen = -1;
+	$scope.prevSubScreen = -1;
+	$container = $(".main");
+
 	$scope.nextPt = function (arg) {
-		$scope.current = ptObj.click(arg);
+		$scope.current = $scope.ptObj.click(arg);
 	};
-	mainFunc = $scope.nextPt;
+
+	$scope.nextScreen = function () {
+		$scope.prevScreen = $scope.curScreen;
+		$scope.curScreen = $scope.ptObj.click(($scope.curScreen == 6) ? 7 : 6);
+	};
+
+	$scope.projectClick = function(index) {
+		if ($scope.curSubScreen == index) {
+			return;
+		}
+		$scope.selectSubScreen(index);
+	};
+	$scope.selectSubScreen = function (index) {
+		if ($container.hasClass("slideRight"))
+			$scope.moveRight();
+		$scope.nextScreen();
+		$scope.prevSubScreen = $scope.curSubScreen;
+		$scope.curSubScreen = index;
+	};
+	$scope.moveRight = function (callback) {
+		$container.toggleClass("slideRight");
+	};
 }
 
 function Projects($scope) {
-	$scope.cur = 6;
-	$scope.projectClick = function() {
-		$scope.moveRight();
+	var delayObj = $scope.$parent.delayObj;
+	$scope.projects = projects;
+	$scope.selectProject = function(index) {
+		$scope.$parent.selectSubScreen(index);
 	};
-	$scope.moveRight = function (callback) {
-		$container = $(".projects");
-		$container.toggleClass("slideRight");
+	$scope.exit = function () {
+		delayObj.iterator($scope, $scope.projects, "valid", false, 0);
 	};
-	$scope.nextScreen = function () {
-		ptObj.click($scope.cur, true);
-		$scope.cur = ($scope.cur == 6) ? 7 : 6;
+	$scope.entry = function () {
+		delayObj.iterator($scope, $scope.projects, "valid", true, 100);
 	};
+
+	$scope.exit();
+
+	$scope.$parent.ptObj.register(null, "enter", 2, $scope.entry);
+	$scope.$parent.ptObj.register(null, "leave", 2, $scope.exit);
 }
 
 function Interests($scope) {
@@ -241,8 +274,8 @@ function Interests($scope) {
 		if (item == $scope.current[option])
 			$scope.active[option] = false;
 	};
-	ptObj.register(null, "enter", 3, $scope.startInterestSlide);
-	ptObj.register(null, "leave", 3, $scope.stopInterestSlide);
+	$scope.$parent.ptObj.register(null, "enter", 3, $scope.startInterestSlide);
+	$scope.$parent.ptObj.register(null, "leave", 3, $scope.stopInterestSlide);
 }
 
 
@@ -309,8 +342,8 @@ function Contact($scope){
 		$scope.elem.css('background-position', pos_str);
 		window.clearInterval(messageTimer);
 	};
-	ptObj.register(null, "enter", 5, wp_func_enter);
-	ptObj.register(null, "leave", 5, wp_func_leave);
+	$scope.$parent.ptObj.register(null, "enter", 5, wp_func_enter);
+	$scope.$parent.ptObj.register(null, "leave", 5, wp_func_leave);
 }
 
 function Awards($scope) {
@@ -319,6 +352,7 @@ function Awards($scope) {
 		{result:"Won", name:"Standing Ovation Award", img:"about-me/symantec.png", data:"Symantec Engineering team for action in customer escalations and contribution towards product release."},
 		{result:"Won", name:"First place", img:"about-me/symantec.png", data:"Hackathon event at Symantec Engineering team for developing the tool bugspies."},
 		{result:"Nominated", name:"Achievers Award", img:"about-me/symantec.png", data:"Symantec Engineering team."},
+		{result:"Won", name:"Applause Award", img:"about-me/symantec.png", data:"Symantec Engineering team for action in developing a prototype for proof of concept in quick time."},
 		{result:"Won", name:"Achievement Award", img:"about-me/gator.png", data:"New Engineering Graduate Students, University of Florida."},
 	];
 	var classLeft = "turn-page";
@@ -355,8 +389,8 @@ function Awards($scope) {
 		elem.css('z-index', ++$scope.zcounter);
 		$scope.$digest();
 	};
-	//ptObj.register(null, "enter", 4, wp_func_enter);
-	ptObj.register(null, "leave", 4, $scope.reset);
+	//$scope.$parent.ptObj.register(null, "enter", 4, wp_func_enter);
+	$scope.$parent.ptObj.register(null, "leave", 4, $scope.reset);
 }
 
 function Groups($scope) {

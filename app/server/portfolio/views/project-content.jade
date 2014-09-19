@@ -1,0 +1,4 @@
+- each project,index in projects
+	.half-height(ng-show='(curSubScreen == '+(20+index)+' && curScreen == '+screen+') || (prevSubScreen == '+(20+index)+' && prevScreen == '+screen+')')
+		h1.heading= project.name
+		include lorem1

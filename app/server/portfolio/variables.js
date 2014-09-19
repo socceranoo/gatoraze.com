@@ -33,12 +33,12 @@ module.exports = function () {
 	};
 	var exportVariable = {
 		pages: [
-			{bg:"clouds", name:"home", icon:"home"},
-			{bg:"emerald", name:"skills", icon:"star"},
-			{bg:"peterRiver", name:"work", icon:"tasks"},
-			{bg:"metroCyan", name:"info", icon:"info-sign"},
-			{bg:"metroOrange", name:"awards", icon:"certificate"},
-			{bg:"sunFlower", name:"contact", icon:"earphone"},
+			{bg:"clouds", name:"home", fa:"home", icon:"home"},
+			{bg:"emerald", name:"skills", fa:"star", icon:"star"},
+			{bg:"peterRiver", name:"work", fa:"th-list", icon:"tasks"},
+			{bg:"metroCyan", name:"about", fa:"user", icon:"info-sign"},
+			{bg:"metroOrange", name:"awards", fa:"trophy", icon:"certificate"},
+			{bg:"sunFlower", name:"contact", fa:"phone", icon:"earphone"},
 		],
 		superSet : [
 			{bg:"#91A6A1", invert:fals_var, skills:[ skill.cpp, skill.njs, skill.ejs, skill.pyt, skill.fsk, skill.apc, skill.php, skill.sio ], image:"server-side", name:"Back-End"},
@@ -59,12 +59,12 @@ module.exports = function () {
 		],
 
 		projects : [
-			{name:"game-room"},
-			{name:"cool-git-stats"},
-			{name:"gatoraze-dot-com"},
-			{name:"dollaraze"},
-			{name:"bug-spies"},
-			{name:"raze-tube"}
+			{img:'gameroom.png', name:"game-room"},
+			{img:'gitstats.png', name:"cool-git-stats"},
+			{img:'emblem.png', name:"gatoraze-dot-com"},
+			{img:'dollaraze.png', name:"dollaraze"},
+			{img:'bugspies.png', name:"bug-spies"},
+			{img:'razetube.png', name:"raze-tube"}
 		]
 	};
 	return exportVariable;
