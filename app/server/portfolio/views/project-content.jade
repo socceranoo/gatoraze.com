@@ -1,4 +1,12 @@
 - each project,index in projects
-	.half-height(ng-show='(curSubScreen == '+(20+index)+' && curScreen == '+screen+') || (prevSubScreen == '+(20+index)+' && prevScreen == '+screen+')')
-		h1.heading= project.name
-		include lorem1
+	.half-height.project-item
+		- for (var i = 0; i < project.screens; i++) {
+			.screen-item
+				h1.heading= project.name+"-"+i
+				include lorem1
+				ul.list-inline.list-unstyled
+					- for (var j = 0; j < project.screens; j++) {
+						li.pointer
+							img.img-responsive.img-item.block2(ng-click='selectSubScreen(2, '+index+', '+j+')', src='/portfolio/images/projects/emblem.png')
+					- }
+		- }

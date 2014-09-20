@@ -107,13 +107,19 @@
 		opacity:0.3;
 	}
 
+	.list-image {
+		float:left;
+		padding-left:10px;
+	}
 	.snowkick-wrapper {
 		height:1px;
 		margin: -20px auto;
 	}
 	.snowkick-img {
 		height: 540px;
-		width: 720px;
+		max-height: 540px;
+		width: 100%;
+		max-width: 720px;
 		background:url('../images/snowkick.jpg');
 		background-position:0px 0px;
 		opacity: 0.3;
@@ -161,7 +167,7 @@
 		pointer-events: none;
 		cursor: default;
 	}
-	@leftSlide : 15%;
+	@leftSlide : 25%;
 	.slideRight {
 		left: @leftSlide !important;
 	}
@@ -196,6 +202,7 @@
 		box-shadow:         3px 3px 10px 10px rgba(0, 0, 0, 0.2);
 		background:rgba(254, 254, 254, .2);
 		//border-radius: 50%;
+		width:80%;
 	}
 	.grid li.item-class .metro{
 		opacity: 0.0;
@@ -253,8 +260,8 @@
 	.width85{
 		width: 85% !important;
 	}
-	.social-icons {
-		font-size:30px;
+	.social-icons li {
+		margin:20px;
 	}
 	@-webkit-keyframes color2 {
 		0% {
@@ -289,13 +296,19 @@
 		font-size:30px;
 	}
 	.grid li {
-		margin:10px 0px;
+		margin:20px 0px;
 	}
 	.metro {
 		max-height:200px;
 	}
 	.social-icons {
 		font-size: 17px;
+	}
+	.list-image {
+		float:none;
+	}
+	.list-item {
+		display:none;
 	}
 }
 @media (max-width:767px) {
@@ -312,7 +325,7 @@
 	}
 }
 @media (max-width:501px) {
-	.loop(@from, 10px, 10px);
+	.loop(@from, 15px, 15px);
 	.metro {
 		max-height:106px;
 	}

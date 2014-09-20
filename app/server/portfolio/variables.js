@@ -59,12 +59,12 @@ module.exports = function () {
 		],
 
 		projects : [
-			{img:'gameroom.png', name:"game-room"},
-			{img:'gitstats.png', name:"cool-git-stats"},
-			{img:'emblem.png', name:"gatoraze-dot-com"},
-			{img:'dollaraze.png', name:"dollaraze"},
-			{img:'bugspies.png', name:"bug-spies"},
-			{img:'razetube.png', name:"raze-tube"}
+			{img:'gameroom.png', name:"game-room", screens:6},
+			{img:'gitstats.png', name:"git-stats", screens:6},
+			{img:'emblem.png', name:"gatoraze.com", screens:6},
+			{img:'dollaraze.png', name:"dollaraze", screens:6},
+			{img:'bugspies.png', name:"bug-spies", screens:6},
+			{img:'razetube.png', name:"raze-tube", screens:6}
 		]
 	};
 	return exportVariable;

@@ -186,11 +186,23 @@ table.gradient-style tr {
   height: 100px;
   line-height: 100px;
 }
+.block2a {
+  margin: 0px auto;
+  width: auto;
+  height: 75px;
+  line-height: 75px;
+}
 .block3 {
   margin: 0px auto;
   width: auto;
   height: 50px;
   line-height: 50px;
+}
+.block4 {
+  margin: 0px auto;
+  width: auto;
+  height: 25px;
+  line-height: 25px;
 }
 .pointer {
   cursor: pointer !important;

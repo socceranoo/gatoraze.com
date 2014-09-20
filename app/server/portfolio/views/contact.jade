@@ -3,30 +3,29 @@
 		.row.text-center
 			h1 Like my work ?
 			hr.featurette-divider2
-			.snowkick-wrapper.col-md-12.col-sm-12.col-xs-12.featurette-divider2
-				.col-md-8.col-sm-8.col-xs-8.col-md-offset-2.col-sm-offset-2.col-xs-offset-2
-					.snowkick-img.img-thumbnail.pointer(ng-click='restartSnowkick(temp)')
-			.col-md-12.col-sm-12.col-xs-12
-				.col-md-8.col-sm-8.col-xs-8.col-md-offset-2.col-sm-offset-2.col-xs-offset-2
-					p i am just a
-					em
-						p.font-40.contact-method.color-metroYellow
-							span(ng-show='index == 0') mail
-							span(ng-show='index == 1') message
-							span(ng-show='index == 2') post
-							span(ng-show='index == 3') tweet
-							span(ng-show='index == 4') call
-					p away
-					.col-md-12.social-icons
-						.col-md-2.col-sm-2.col-xs-2.featurette-divider2(ng-repeat='icon in arr')
-							a.pointer.color-sunFlower(target='_blank' ng-href='{{icon.href}}')
-								i.fa.fa-2x(ng-class='icon.class')
+			.snowkick-wrapper.col-md-12.col-sm-12.featurette-divider2
+				//.col-md-8.col-sm-8.col-md-offset-2.col-sm-offset-2
+				.snowkick-img.img-thumbnail.pointer(ng-click='restartSnowkick(temp)')
+			.col-md-12.col-sm-12
+				p i am just a
+				em
+					p.font-40.contact-method.color-metroYellow
+						span(ng-show='index == 0') mail
+						span(ng-show='index == 1') message
+						span(ng-show='index == 2') post
+						span(ng-show='index == 3') tweet
+						span(ng-show='index == 4') call
+				p away
+				ul.social-icons.list-unstyled.list-inline.text-center.featurette-divider2
+					li(ng-repeat='icon in arr')
+						a.pointer.color-sunFlower(target='_blank' ng-href='{{icon.href}}')
+							i.fa.fa-3x(ng-class='icon.class')
 
-					h3.small.text-center.color-clouds
-						span &copy;&nbsp;Anoop Manjunath 2014
-						span &nbsp;
-					//
-						h3.small.pull-right
-							a.color-clouds(href='/portfolio/images/UIResume.pdf' target='_blank')
-								i.fa.fa-file-text
-								span &nbsp; Resume
+				h3.small.text-center.color-clouds
+					span &copy;&nbsp;Anoop Manjunath 2014
+					span &nbsp;
+				//
+					h3.small.pull-right
+						a.color-clouds(href='/portfolio/images/UIResume.pdf' target='_blank')
+							i.fa.fa-file-text
+							span &nbsp; Resume

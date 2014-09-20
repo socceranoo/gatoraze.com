@@ -1,20 +1,19 @@
-.full-height.background-turquoise(ng-controller='Cover')
-	.cover
-		.col-md-12.col-xs-12.col-sm-12.color-clouds
-				//
-					h2.title.text-center
-						| Manjunath &nbsp;"
-						em Anoop
-						|" &nbsp;Mageswaran
-				.featurette-divider2
-					img.img-responsive.height-250.img-thumbnail.img-circle(style="display:block" src='/portfolio/images/profile-2014.jpg')
-				h2.title.text-center
-					em hi, i am a software developer from silicon valley, interested in full stack development.
-					//em -- full stack software developer
-				.featurette-divider
-					ul.text-center.list-unstyled.list-inline.ul-nav.ackground-opacity
-						-each page,index in pages
-							li.pointer(ng-click='navClick('+index+')')
-								//h1.item-nav.ighlighted.glyphicon(class="glyphicon-"+page.icon+" color-"+page.bg)
-								h1.fa.fa-3x(class="fa-"+page.fa+" color-"+page.bg)
-								h4= page.name
+.full-height.ackground-turquoise(ng-controller='Cover')
+	.cover.color-clouds
+		.height-100
+		//
+			h2.title.text-center
+				| Manjunath &nbsp;"
+				em Anoop
+				|" &nbsp;Mageswaran
+		img.img-responsive.height-200.img-circle(src='/portfolio/images/profile-2014.jpg')
+		h2.title.text-center
+			em hi, i am a software developer from silicon valley, interested in full stack development.
+			//em -- full stack software developer
+		.featurette-divider
+			ul.text-center.list-unstyled.list-inline.ul-nav.ackground-opacity
+				-each page,index in pages
+					li.pointer(ng-click='navClick('+index+')')
+						//h1.item-nav.ighlighted.glyphicon(class="glyphicon-"+page.icon+" color-"+page.bg)
+						h1.fa.fa-3x(class="fa-"+page.fa+" color-"+page.bg)
+						h4= page.name

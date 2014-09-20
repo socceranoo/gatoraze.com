@@ -186,11 +186,23 @@ table.gradient-style tr {
   height: 100px;
   line-height: 100px;
 }
+.block2a {
+  margin: 0px auto;
+  width: auto;
+  height: 75px;
+  line-height: 75px;
+}
 .block3 {
   margin: 0px auto;
   width: auto;
   height: 50px;
   line-height: 50px;
+}
+.block4 {
+  margin: 0px auto;
+  width: auto;
+  height: 25px;
+  line-height: 25px;
 }
 .pointer {
   cursor: pointer !important;
@@ -334,13 +346,19 @@ body.portfolio {
 .img-skill:hover {
   opacity: 0.3;
 }
+.list-image {
+  float: left;
+  padding-left: 10px;
+}
 .snowkick-wrapper {
   height: 1px;
   margin: -20px auto;
 }
 .snowkick-img {
   height: 540px;
-  width: 720px;
+  max-height: 540px;
+  width: 100%;
+  max-width: 720px;
   background: url('../images/snowkick.jpg');
   background-position: 0px 0px;
   opacity: 0.3;
@@ -389,13 +407,13 @@ body.portfolio {
   cursor: default;
 }
 .slideRight {
-  left: 15% !important;
+  left: 25% !important;
 }
 .left-pane {
-  width: 15%;
+  width: 25%;
   height: 100%;
   position: absolute;
-  left: -15%;
+  left: -25%;
   z-index: 10;
 }
 .grid {
@@ -413,6 +431,7 @@ body.portfolio {
   -webkit-box-shadow: 3px 3px 10px 10px rgba(0, 0, 0, 0.2);
   box-shadow: 3px 3px 10px 10px rgba(0, 0, 0, 0.2);
   background: rgba(254, 254, 254, 0.2);
+  width: 80%;
 }
 .grid li.item-class .metro {
   opacity: 0.0;
@@ -510,8 +529,8 @@ body.portfolio {
 .width85 {
   width: 85% !important;
 }
-.social-icons {
-  font-size: 30px;
+.social-icons li {
+  margin: 20px;
 }
 @-webkit-keyframes color2 {
   0% {
@@ -607,13 +626,19 @@ body.portfolio {
     font-size: 30px;
   }
   .grid li {
-    margin: 10px 0px;
+    margin: 20px 0px;
   }
   .metro {
     max-height: 200px;
   }
   .social-icons {
     font-size: 17px;
+  }
+  .list-image {
+    float: none;
+  }
+  .list-item {
+    display: none;
   }
 }
 @media (max-width: 767px) {
@@ -694,64 +719,64 @@ body.portfolio {
 @media (max-width: 501px) {
   /* As the mixin is called CSS is outputted */
   .grid-class-0 {
-    top: 80px;
+    top: 120px;
     left: 0px;
     z-index: 108;
   }
   /* Interation call and operation */
   /* As the mixin is called CSS is outputted */
   .grid-class-1 {
-    top: 70px;
-    left: 10px;
+    top: 105px;
+    left: 15px;
     z-index: 107;
   }
   /* Interation call and operation */
   /* As the mixin is called CSS is outputted */
   .grid-class-2 {
-    top: 60px;
-    left: 20px;
+    top: 90px;
+    left: 30px;
     z-index: 106;
   }
   /* Interation call and operation */
   /* As the mixin is called CSS is outputted */
   .grid-class-3 {
-    top: 50px;
-    left: 30px;
+    top: 75px;
+    left: 45px;
     z-index: 105;
   }
   /* Interation call and operation */
   /* As the mixin is called CSS is outputted */
   .grid-class-4 {
-    top: 40px;
-    left: 40px;
+    top: 60px;
+    left: 60px;
     z-index: 104;
   }
   /* Interation call and operation */
   /* As the mixin is called CSS is outputted */
   .grid-class-5 {
-    top: 30px;
-    left: 50px;
+    top: 45px;
+    left: 75px;
     z-index: 103;
   }
   /* Interation call and operation */
   /* As the mixin is called CSS is outputted */
   .grid-class-6 {
-    top: 20px;
-    left: 60px;
+    top: 30px;
+    left: 90px;
     z-index: 102;
   }
   /* Interation call and operation */
   /* As the mixin is called CSS is outputted */
   .grid-class-7 {
-    top: 10px;
-    left: 70px;
+    top: 15px;
+    left: 105px;
     z-index: 101;
   }
   /* Interation call and operation */
   /* As the mixin is called CSS is outputted */
   .grid-class-8 {
     top: 0px;
-    left: 80px;
+    left: 120px;
     z-index: 100;
   }
   /* Interation call and operation */

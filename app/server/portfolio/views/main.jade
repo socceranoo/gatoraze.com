@@ -3,17 +3,12 @@
 		.dropdown
 			a.dropdown-toggle.color-clouds(data-toggle="dropdown", href='javascript:void(0);')
 				i.fa.fa-list-ul.fa-2x
-	a.btn.btn-primary.menu-icon.background-midnightBlue(ng-show='current == 2', ng-click='moveRight();' href='javascript:void(0);')
-		span.glyphicon.glyphicon-list
-	.left-pane.background-white.text-center.color-black
+	a.menu-icon.btn.background-cloud(ng-click='moveRight();' href='javascript:void(0);')
+		img.img-responsive.img-item.block3(src='/portfolio/images/projects/emblem.png')
+	.left-pane.background-white.text-center
+		include page-list
 		include project-list
 		//include interest-list
-	ul.color-black.dropdown.list-unstyled.background-opacity(ng-hide='current == 0')
-		-each page,index in pages
-			li.pointer(ng-click='nextPt('+index+')')
-				//h1.glyphicon(class="glyphicon-"+page.icon)
-				h1.fa.fa-2x(class="fa-"+page.fa)
-				//h4= page.name
 	#pt-main.pt-perspective
 		.pt-page.pt-page-1
 			include cover
@@ -27,11 +22,10 @@
 			include awards
 		.pt-page.pt-page-6
 			include contact
-		- var screen= 6
 		.pt-page.pt-page-7
-			.container.text-center
-				include project-content
-		- screen= 7
+			.container.screen-container.text-center
 		.pt-page.pt-page-8
-			.container.text-center
-				include project-content
+			.container.screen-container.text-center
+		.pt-page.pt-page-9
+			include project-content
+			//include interest-content

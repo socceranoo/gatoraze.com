@@ -160,45 +160,61 @@ function SkillSet($scope) {
 
 function Main($scope) {
 	var bgArray = [
-		"background-metroJade",
-		"background-peterRiver",
-		"background-pumpkin",
-		"background-metroCyan",
-		"background-metroJade",
-		"background-metroYellow",
-		"background-metroOrange",
-		"background-metroPurple",
-		"background-turquoise"
+		"metroJade",
+		"peterRiver",
+		"pumpkin",
+		"metroCyan",
+		"metroJade",
+		"metroYellow",
+		"metroOrange",
+		"metroPurple",
+		"turquoise"
 	];
 	$scope.delayObj = delayInit();
 	$scope.ptObj = PageTransitions(bgArray);
 	$scope.current = 0;
-	$scope.curScreen = 0;
-	$scope.prevScreen = 0;
 	$scope.curSubScreen = -1;
-	$scope.prevSubScreen = -1;
+	$scope.curItem = null;
 	$container = $(".main");
+	$item_divs = [null, null, $(".project-item"), $(".interest-item"), null, null];
 
-	$scope.nextPt = function (arg) {
-		$scope.current = $scope.ptObj.click(arg);
+	$scope.nextPt = function (page) {
+		if ($container.hasClass("slideRight"))
+			$scope.moveRight();
+		var html = $scope.restoreSubScreen();
+		$scope.curSubScreen = -1;
+		$scope.current = $scope.ptObj.click(page, false, null, html);
 	};
 
-	$scope.nextScreen = function () {
-		$scope.prevScreen = $scope.curScreen;
-		$scope.curScreen = $scope.ptObj.click(($scope.curScreen == 6) ? 7 : 6);
+	$scope.restoreSubScreen = function () {
+		if ($scope.curSubScreen == -1)
+			return null;
+		//alert($scope.curSubScreen);
+		var category = parseInt($scope.curSubScreen/100, 10);
+		var item = parseInt(($scope.curSubScreen%100)/10, 10);
+		var screen = $scope.curSubScreen%10;
+		var parentDiv = $item_divs[category].eq(item);
+		if (parentDiv.children('.screen-item').length === 0) {
+			parentDiv.append($scope.curItem);
+			return;
+		}
+		if (screen === 0)
+			$item_divs[category].eq(item).children('.screen-item').eq(screen).before($scope.curItem);
+		else
+			$item_divs[category].eq(item).children('.screen-item').eq(screen-1).after($scope.curItem);
+		return ($scope.curItem)? $scope.curItem.html() : null;
 	};
-
-	$scope.projectClick = function(index) {
+	$scope.selectSubScreen = function (category, item, screen) {
+		if ($container.hasClass("slideRight"))
+			$scope.moveRight();
+		var index = category*100 + 10*item + screen;
 		if ($scope.curSubScreen == index) {
 			return;
 		}
-		$scope.selectSubScreen(index);
-	};
-	$scope.selectSubScreen = function (index) {
-		if ($container.hasClass("slideRight"))
-			$scope.moveRight();
-		$scope.nextScreen();
-		$scope.prevSubScreen = $scope.curSubScreen;
+		var html = $scope.restoreSubScreen();
+		$scope.curItem = $item_divs[category].eq(item).children('.screen-item').eq(screen);
+		var nextPage = ($scope.current == 6) ? 7 : 6;
+		$scope.current = $scope.ptObj.click(nextPage, true, $scope.curItem, html);
 		$scope.curSubScreen = index;
 	};
 	$scope.moveRight = function (callback) {
@@ -210,7 +226,7 @@ function Projects($scope) {
 	var delayObj = $scope.$parent.delayObj;
 	$scope.projects = projects;
 	$scope.selectProject = function(index) {
-		$scope.$parent.selectSubScreen(index);
+		$scope.$parent.selectSubScreen(2, index, 0);
 	};
 	$scope.exit = function () {
 		delayObj.iterator($scope, $scope.projects, "valid", false, 0);

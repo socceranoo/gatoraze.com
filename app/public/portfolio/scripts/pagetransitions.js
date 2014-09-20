@@ -4,6 +4,7 @@ var PageTransitions = function(bgArray) {
 	var $main = $('#pt-main'),
 		curBg = 0;
 		$pages = $main.children('.pt-page'),
+		$leftpane = $('.main').children('.left-pane').eq(0),
 		priAnim = 0,
 		secAnim = 0,
 		pagesCount = $pages.length,
@@ -28,10 +29,12 @@ var PageTransitions = function(bgArray) {
 			var $page = $(this);
 			$page.data('originalClassList', $page.attr('class'));
 		});
-		$pages.eq(current).addClass('pt-page-current '+bgArray[0]);
+		$pages.eq(current).addClass('pt-page-current background-'+bgArray[0]);
+		$leftpane.data('originalClassList', $leftpane.attr('class'));
+		$leftpane.addClass('color-'+bgArray[0]);
 	}
 
-	function clickButton(index, sec) {
+	function clickButton(index, sec, newdiv, oldhtml) {
 		if( isAnimating ) {
 			return current;
 		}
@@ -52,6 +55,13 @@ var PageTransitions = function(bgArray) {
 
 		var $nextPage = $pages.eq(current).addClass('pt-page-current');
 		var ret = getNextAnimation(sec);
+		if (newdiv !== null) {
+			$nextPage.children('.screen-container').empty();
+			$nextPage.children('.screen-container').append(newdiv);
+		}
+		if (oldhtml !== null) {
+			$currPage.children('.screen-container').html(oldhtml);
+		}
 
 		$currPage.addClass(ret[0]).on( animEndEventName, function() {
 			$currPage.off( animEndEventName );
@@ -61,7 +71,7 @@ var PageTransitions = function(bgArray) {
 			}
 		});
 		curBg = (curBg + 1)%bgArray.length;
-		$nextPage.addClass(bgArray[curBg]);
+		$nextPage.addClass("background-"+bgArray[curBg]);
 		$nextPage.addClass(ret[1]).on( animEndEventName, function() {
 			$nextPage.off( animEndEventName );
 			endNextPage = true;
@@ -98,7 +108,9 @@ var PageTransitions = function(bgArray) {
 	function resetPage($outpage, $inpage) {
 		$outpage.attr('class', $outpage.data('originalClassList'));
 		$inpage.attr('class', $inpage.data('originalClassList') + ' pt-page-current' );
-		$inpage.addClass(bgArray[curBg]);
+		$inpage.addClass("background-"+bgArray[curBg]);
+		$leftpane.attr('class', $leftpane.data('originalClassList'));
+		$leftpane.addClass('color-'+bgArray[curBg]);
 	}
 
 	function getNextAnimation (next) {
