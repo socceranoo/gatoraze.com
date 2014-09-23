@@ -2,14 +2,17 @@ module.exports = function () {
 	var true_var = true;
 	var fals_var = false;
 	var skill = {
-		cpp : {click:true_var,	bg:"#333333", invert:fals_var,	name:"C/C++",		image:"c++",		points:["", "", ""]	},
+		ccc : {click:true_var,	bg:"#333333", invert:fals_var,	name:"C",			image:"c",			points:["", "", ""]	},
+		cpp : {click:true_var,	bg:"#333333", invert:fals_var,	name:"C++",			image:"c++",		points:["", "", ""]	},
+		jav : {click:true_var,	bg:"#F0F56E", invert:true_var,	name:"Java",		image:"java",		points:["", "", ""]	},
 		jvs : {click:true_var,	bg:"#F0DB4F", invert:true_var,	name:"JavaScript",	image:"javascript",	points:["", "", ""]	},
+		pyt : {click:true_var,	bg:"#ECF0F1", invert:true_var,	name:"Python",		image:"python",		points:["", "", ""]	},
+		prl : {click:true_var,	bg:"#2082B3", invert:true_var,	name:"PERL",		image:"perl",		points:["", "", ""]	},
+		php : {click:true_var,	bg:"#6182B8", invert:true_var,	name:"Php",			image:"php",		points:["", "", ""]	},
 		njs : {click:true_var,	bg:"#85CD2B", invert:true_var,	name:"Node JS",		image:"node",		points:["", "", ""]	},
 		ajs : {click:true_var,	bg:"#E52C3C", invert:fals_var,	name:"Angular JS",	image:"angular",	points:["", "", ""]	},
 		bjs : {click:true_var,	bg:"#F5F5F5", invert:true_var,	name:"Backbone JS",	image:"backbone",	points:["", "", ""]	},
-		pyt : {click:true_var,	bg:"#ECF0F1", invert:true_var,	name:"Python",		image:"python",		points:["", "", ""]	},
 		fsk : {click:true_var,	bg:"#FFFFFF", invert:true_var,	name:"Flask",		image:"flask",		points:["", "", ""]	},
-		php : {click:true_var,	bg:"#6182B8", invert:true_var,	name:"Php",			image:"php",		points:["", "", ""]	},
 		apc : {click:true_var,	bg:"#FFFFFF", invert:true_var,	name:"Apache",		image:"apache",		points:["", "", ""]	},
 		sql : {click:true_var,	bg:"#EBEBEB", invert:true_var,	name:"SQLite",		image:"sqlite",		points:["", "", ""]	},
 		mql : {click:true_var,	bg:"#2C596E", invert:fals_var,	name:"MySQL",		image:"mysql",		points:["", "", ""]	},
@@ -25,11 +28,12 @@ module.exports = function () {
 		sio : {click:true_var,	bg:"#AAD959", invert:true_var,	name:"SocketIO",	image:"socketio",	points:["", "", ""]	},
 		jde : {click:true_var,	bg:"#67CC9A", invert:true_var,	name:"Jade",		image:"jade",		points:["", "", ""]	},
 		jin : {click:true_var,	bg:"#FFFFFF", invert:true_var,	name:"Jinja",		image:"jinja",		points:["", "", ""]	},
-		vim : {click:fals_var,	bg:"#4E4E4E", invert:true_var,	name:"Vim",			image:"vim",		points:["", "", ""]	},
 		ubu : {click:fals_var,	bg:"#C1392B", invert:fals_var,	name:"Linux",		image:"linux",		points:["", "", ""]	},
 		win : {click:fals_var,	bg:"#C1392B", invert:fals_var,	name:"Windows",		image:"windows",	points:["", "", ""]	},
 		mac : {click:fals_var,	bg:"#C1392B", invert:fals_var,	name:"MacOS",		image:"mac",		points:["", "", ""]	},
 		nix : {click:fals_var,	bg:"#C1392B", invert:fals_var,	name:"Unix",		image:"ubuntu",		points:["", "", ""]	},
+		vim : {click:fals_var,	bg:"#4E4E4E", invert:true_var,	name:"Vim",			image:"vim",		points:["", "", ""]	},
+		wbs : {click:fals_var,	bg:"#4E4E4E", invert:true_var,	name:"Webstorm",	image:"vim",		points:["", "", ""]	},
 	};
 	var exportVariable = {
 		pages: [
@@ -41,11 +45,13 @@ module.exports = function () {
 			{bg:"sunFlower", name:"contact", fa:"phone", icon:"earphone"},
 		],
 		superSet : [
-			{bg:"#91A6A1", invert:fals_var, skills:[ skill.cpp, skill.njs, skill.ejs, skill.pyt, skill.fsk, skill.apc, skill.php, skill.sio ], image:"server-side", name:"Back-End"},
-			{bg:"#7CB1E6", invert:true_var, skills:[ skill.jvs, skill.ajs, skill.bjs, skill.jde, skill.les, skill.jin, skill.jqy ], image:"front-end", name:"Front-End"},
+			{bg:"#EBEBEB", invert:true_var, skills:[ skill.ccc, skill.cpp, skill.jav, skill.jvs, skill.pyt, skill.prl, skill.php ], image:"coding", name:"Languages"},
+			{bg:"#91A6A1", invert:fals_var, skills:[ skill.njs, skill.ejs, skill.jde, skill.fsk, skill.jin, skill.apc, skill.sio ], image:"server-side", name:"Back-End"},
+			{bg:"#7CB1E6", invert:true_var, skills:[ skill.ajs, skill.bjs, skill.les, skill.jqy ], image:"front-end", name:"Front-End"},
 			{bg:"#2AB3BE", invert:true_var,	skills:[ skill.htm, skill.css, skill.psp, skill.btp ], image:"ux", name:"UI/UX"},
 			{bg:"#FF8C01", invert:true_var,	skills:[ skill.sql, skill.mql, skill.mdb, skill.csd ], image:"db", name:"Databases"},
-			{bg:"#FCD209", invert:true_var,	skills:[ skill.ubu, skill.win, skill.mac, skill.vim ], image:"general", name:"General"}
+			{bg:"#FCD209", invert:true_var,	skills:[ skill.ubu, skill.nix, skill.win, skill.mac ], image:"general", name:"OS"},
+			{bg:"#FCD209", invert:true_var,	skills:[ skill.wbs, skill.vim ], image:"general", name:"Tools"}
 		],
 		interests : [
 			{invert:fals_var,	name:"I love tech", index:0, image:"tech", col:6, bg:"belizeHole", points:["", "", ""]},
