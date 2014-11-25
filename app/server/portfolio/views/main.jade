@@ -3,7 +3,7 @@
 		.dropdown
 			a.dropdown-toggle.color-clouds(data-toggle="dropdown", href='javascript:void(0);')
 				i.fa.fa-list-ul.fa-2x
-	a.menu-icon.btn.background-cloud(ng-click='moveRight();' href='javascript:void(0);')
+	a.menu-icon.btn.background-cloud(ng-hide='current == 0', ng-click='moveRight();' href='javascript:void(0);')
 		img.img-responsive.img-item.block3(src='/portfolio/images/projects/emblem.png')
 	.left-pane.background-white.text-center
 		include page-list

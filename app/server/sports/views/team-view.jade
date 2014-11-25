@@ -1,0 +1,27 @@
+.container
+	.col-md-12.col-sm-12
+		h1
+			img.img-responsive.block3.pull-left(ng-src='/sports/images/stats/{{currentCategory}}.png')
+			span {{currentCategory}} &nbsp;
+			a.small.color-black.glyphicon.glyphicon-collapse-down(ng-click='moveDown();' href='javascript:void(0);')
+			//
+				span.small.color-black.glyphicon.glyphicon-forward
+				span &nbsp;{{select_val}}
+		//
+			select.my-select.form-control(ng-model='select_val', ng-change='sortTeams(select_val)')
+				option(ng-repeat='val in stat_categories[currentCategory] track by $index', ng-value='val', ng-bind='val')
+		h3.text-center
+			span.pointer.glyphicon.glyphicon-arrow-left.pull-left(ng-click='nextTeam()')
+			span.pointer.glyphicon.glyphicon-arrow-right.pull-right(ng-click='nextTeam()')
+			span.pointer.glyphicon.glyphicon-refresh(ng-click='sortTeams(select_val)')
+		hr.featurette-divider4
+		.col-md-8.col-sm-8
+			include team
+		.col-md-4.col-sm-4.background-opacity1-4.no-margin
+			table.table.table-bordered(ng-show'currentTeamLeader != null')
+				h3.text-center {{teamHash[currentTeamLeader.team].long}}
+				tbody
+					tr(ng-repeat='(item, value) in stat_categories[currentCategory]', ng-class='{"background-metroYellow":select_val == value}')
+						td.pointer(ng-click='sortTeams(value)') {{value}}
+						td {{currentTeamLeader[value]}}
+		.col-md-2.col-sm-2

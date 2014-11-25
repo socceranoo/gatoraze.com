@@ -2,10 +2,12 @@
 	.container.text-center
 		h1.text-center Projects
 		hr.featurette-divider3
-		.col-md-12.col-sm-12
-			.col-md-4.col-sm-4.item-skill(ng-class='{"opacity-none":project.valid == false}', ng-repeat='project in projects track by $index')
-				.background-opacity.well.pointer(ng-click='selectProject($index)')
-					h1(ng-bind='project.name')
-					img.img-responsive.img-item.block(ng-src='/portfolio/images/projects/{{project.img}}')
-					.content(style='position:relative;bottom:0px;' g-hide='true')
+		.col-md-12.col-sm-12.cs-style-3
+			.col-md-4.col-sm-4.item-class.item-skill(ng-class='{"opacity-none":project.valid == false}', ng-repeat='project in projects track by $index')
+				.pointer.background-opacity.well.grid-class-0.metro-container(ng-click='selectProject($index)')
+					.metro
+						h1
+							em(ng-bind='project.name')
+						img.img-responsive.img-item.block(ng-src='/portfolio/images/projects/{{project.img}}')
+					.metro-details.content.color-black
 						include lorem1

@@ -1,0 +1,15 @@
+#roster-modal.modal.fade.background-opacity0
+	.container.roster-container
+		.modal-dialog.half-height
+			//.modal-backdrop
+				img.img-responsive.subheader(ng-src='{{getImage("glossy_logo", currentTeam)}}')
+			.modal-content
+				img.img-responsive.subheader(ng-src='{{getImage("subheader", currentTeam)}}')
+				.modal-header.text-center
+					h3
+						a.menu-icon-top-right.glyphicon.glyphicon-remove.color-metroRed(data-dismiss='modal')
+				.modal-body.text-justify.container
+					ul.col-md-12.col-sm-12.background-opacity.text-center.list-inline.list-unstyled
+						li.pointer(ng-repeat='player in currentRoster track by $index', ng-click='showPlayer(player)')
+							img.img-responsive.block2(ng-src='http://static.nfl.com/static/content/public/static/img/fantasy/transparent/512x512/{{player.esb_id}}.png', fallback-src="http://static.nfl.com/static/content/public/image/fantasy/transparent/200x200/{{currentTeamAbbr}}.png")
+							h3.text-center {{player.name}}

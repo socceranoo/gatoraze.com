@@ -1,0 +1,5 @@
+.right-pane.background-white.text-center
+	.quarter-height(ng-repeat='division in div track by $index')
+		//h5.no-margin.text-center.NFC NFC {{division}}
+		.col-md-6.col-sm-6.o-padding.pointer.half-relative-height(ng-repeat='var in teams_per_div track by $index', ng-click='getRoster(teams[$index+4*$parent.$index+16])')
+			img.img-responsive.ubheader(ng-src='{{getImage("glossy_logo", teams[$index+4*$parent.$index+16])}}', class='team-logo team-logo-{{$index}}')

@@ -1,5 +1,5 @@
-.col-md-12(ng-cloak ng-show='tableData.round.length')
-	.table-layout.clearfix.col-md-6.col-md-offset-3.background-clous.ackground-opacity
+.col-md-12.col-sm-12.background-opacity0(ng-cloak ng-show='tableData.round.length')
+	.table-layout.clearfix.col-md-6.col-md-offset-3.background-clous
 		.card-holder(ng-class="{'current-turn': $index == shifter(token), 'team1': $index%2 == 0, 'team2': $index%2 == 1}" ng-repeat='card in tableData.round track by $index' class='pos'+total+'-{{$index}}')
 			.card(ng-class="{'round-starter': $index == shifter(starter)}" style='background-position:{{card.bgPos[0]}}px {{card.bgPos[1]}}px')
 				span.bid-data(ng-bind='tableData.bidData[$index]')

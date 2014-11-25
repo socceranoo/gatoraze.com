@@ -1,0 +1,12 @@
+ul.grid.cs-style-4.interests-metro.list-unstyled
+	.ointer(ng-repeat='player in leaders[category] | limitTo:32 track by $index', ng-hide='player.index >= limit', ng-click='leaderClick(category, player)')
+		//li.item-class.metro-container(class='grid-class-{{limit - Math.min(leaders[category].length, limit) + player.index}}', ng-class='{"active":player.index==0, "not-active":player.index!=0}')
+		li.item-class.metro-container(class='grid-class-{{player.index}}', ng-class='{"active":player.index==0, "not-active":player.index!=0}')
+			img.img-responsive.subheader(ng-src='{{getImage("subheader", teamHash[player.team])}}')
+			.metro(ng-class='{"img-front":player.index==0}')
+				img.pointer.img-responsive.height-200(ng-src='http://static.nfl.com/static/content/public/static/img/fantasy/transparent/512x512/{{player.player.esb_id}}.png', fallback-src="http://static.nfl.com/static/content/public/image/fantasy/transparent/200x200/{{player.team}}.png", ng-click='showPlayer(player.player)')
+				//h1.text-center &#35;{{$index+1}}
+				h1.no-margin.no-padding.text-center {{player.player.name}}
+			ul.metro-details
+				img.img-responsive.subheader(ng-src='{{getImage("helmet_left", teamHash[player.team])}}')
+				h1.no-margin.no-padding.text-center {{player[subcategory]}} {{categories[category][subcategory][1]}}

@@ -1,0 +1,94 @@
+@import "../../common/less/main";
+	body.sports {
+		position: relative;
+		font-weight: 100;
+		height: 100vh;
+		font-family: 'Lato', sans-serif;
+		font-weight:300;
+		top:0px;
+		bottom:0px;
+		left:0px;
+		right:0px;
+		overflow:hidden;
+	}
+	.modal.fade .roster-container .modal-dialog {
+		width:inherit !important;
+		overflow-x:hidden;
+	}
+	.modal-backdrop.fade.in {
+		opacity:1 !important;
+	}
+
+	.img-flag{
+		//width: 250px;
+		width:auto;
+		max-width: 75px;
+		height:50px;
+	}
+	.groups {
+		.setFullBg('../images/worldcup.jpg');
+	}
+	.nfl-home {
+		.setFullBg('../images/cover.jpg');
+	}
+	.ubheader {
+		height:80%;
+		width: 80%;
+	}
+	.subheader {
+		width:100%;
+	}
+	.logos {
+		z-index:10;
+	}
+	.AFC {
+		color: #D62027;
+	}
+	.NFC {
+		color: #013369;
+	}
+	.main {
+		.setFullBg('../images/cover.jpg');
+		overflow: visible !important;
+	}
+	.roster-container {
+		overflow: visible !important;
+	}
+	@spacing:2px;
+	@v_spacing:2px;
+	.team-logo {
+		position:absolute;
+	}
+	.team-logo-0 {
+		bottom:@v_spacing;
+		right:@spacing;
+	}
+	.team-logo-1 {
+		bottom:@v_spacing;
+		left:@spacing;
+	}
+	.team-logo-2 {
+		top:@v_spacing;
+		right:@spacing;
+	}
+	.team-logo-3 {
+		top:@v_spacing;
+		left:@spacing;
+	}
+	@leftSlide : 20%;
+	.setPanes(@leftSlide);
+	/* the mixin is called, css outputted and iterations called */
+	@stack-size:30px;
+	@top-visible-width:@stack-size;
+	@side-visible-width:10px;
+	.loop-left(@from, @side-visible-width, @top-visible-width);
+
+@media (max-width: 998px) {
+	.loop-left(@from, @side-visible-width, 25px);
+}
+@media (max-width:767px) {
+	.loop-left(@from, @side-visible-width, 20px);
+}
+@media (max-width:501px) {
+	.loop-left(@from, @side-visible-width, 15px);
+}

@@ -1,31 +1,52 @@
 .full-height.contact(ng-controller='Contact')
-	.container.color-clouds
-		.row.text-center
-			h1 Like my work ?
-			hr.featurette-divider2
-			.snowkick-wrapper.col-md-12.col-sm-12.featurette-divider2
+	.container.color-clouds.text-center
+		.pull-down-control
+			h1
+				| Like my work ?
+				br
+			h3.pointer
+				i.fa.fa-2x.fa-thumbs-up.color-metroGreen(ng-click='pull_down(true)')
+				span &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+				i.fa.fa-thumbs-down.color-metroRed.fa-2x(ng-click='pull_down(false)')
+		.pull-down-failure.clearfix(ng-click='pull_up()', style='display:none')
+			img.img-responsive.block0.pointer.pull-right(ng-src='/portfolio/images/pp5.png')
+			h3
+				em.color-metroYellow Leave me a message & help me improve
+		.pull-down-success.clearfix(ng-click='pull_up()', style='display:none')
+			h3.block0.pull-right
+				span am &nbsp; just &nbsp;
+				//span i am just &nbsp;
+				span(ng-bind="message[index][0]")
+				span &nbsp;
+				em.color-metroYellow
+					span(ng-bind="' '+message[index][1]+' '")
+				span &nbsp; away
+			img.img-responsive.block0.pointer(ng-src='/portfolio/images/pp3.png')
+		hr.img-responsive
+
+		.col-md-12.col-sm-12.pull-down-success(style='display:none')
+			ul.social-icons.list-unstyled.list-inline.text-center.featurette-divider2
+				li(ng-repeat='icon in arr')
+					a.pointer.color-sunFlower(target='_blank' ng-href='{{icon.href}}')
+						i.fa.fa-3x(ng-class='icon.class')
+			img.img-responsive.height-250(ng-src='/portfolio/images/us-map.png')
+
+		.col-md-12.col-sm-12.pull-down-failure(style='display:none')
+			ul.social-icons.list-unstyled.list-inline.text-center.featurette-divider2
+				li
+					a.pointer.color-sunFlower(target='_blank' ng-href='{{arr[1].href}}')
+						i.fa.fa-3x(ng-class='arr[1].class')
+		.col-md-12.col-sm-12
+			.snowkick-wrapper.featurette-divider2
 				//.col-md-8.col-sm-8.col-md-offset-2.col-sm-offset-2
 				.snowkick-img.img-thumbnail.pointer(ng-click='restartSnowkick(temp)')
-			.col-md-12.col-sm-12
-				p i am just a
-				em
-					p.font-40.contact-method.color-metroYellow
-						span(ng-show='index == 0') mail
-						span(ng-show='index == 1') message
-						span(ng-show='index == 2') post
-						span(ng-show='index == 3') tweet
-						span(ng-show='index == 4') call
-				p away
-				ul.social-icons.list-unstyled.list-inline.text-center.featurette-divider2
-					li(ng-repeat='icon in arr')
-						a.pointer.color-sunFlower(target='_blank' ng-href='{{icon.href}}')
-							i.fa.fa-3x(ng-class='icon.class')
 
-				h3.small.text-center.color-clouds
-					span &copy;&nbsp;Anoop Manjunath 2014
-					span &nbsp;
-				//
-					h3.small.pull-right
-						a.color-clouds(href='/portfolio/images/UIResume.pdf' target='_blank')
-							i.fa.fa-file-text
-							span &nbsp; Resume
+		.col-md-12.col-sm-12.copy-right
+			h3.small.text-center.color-clouds
+				span &copy;&nbsp;Anoop Manjunath 2014
+				span &nbsp;
+			//
+				h3.small.pull-right
+					a.color-clouds(href='/portfolio/images/UIResume.pdf' target='_blank')
+						i.fa.fa-file-text
+						span &nbsp; Resume

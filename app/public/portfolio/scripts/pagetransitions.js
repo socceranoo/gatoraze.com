@@ -29,11 +29,23 @@ var PageTransitions = function(bgArray) {
 			var $page = $(this);
 			$page.data('originalClassList', $page.attr('class'));
 		});
-		$pages.eq(current).addClass('pt-page-current background-'+bgArray[0]);
+		$pages.eq(current).addClass('pt-page-current '+bgArray[0]);
 		$leftpane.data('originalClassList', $leftpane.attr('class'));
-		$leftpane.addClass('color-'+bgArray[0]);
+		var colorClass = "color-"+bgArray[0].split("-")[1];
+		$leftpane.addClass(colorClass);
 	}
 
+	function changeleftpane(color) {
+		$leftpane.attr('class', $leftpane.data('originalClassList'));
+		$leftpane.css('color', 'auto');
+		if (color) {
+			$leftpane.css('color', color);
+		}
+		else {
+			var colorClass = "color-"+bgArray[curBg].split("-")[1];
+			$leftpane.addClass(colorClass);
+		}
+	}
 	function clickButton(index, sec, newdiv, oldhtml) {
 		if( isAnimating ) {
 			return current;
@@ -71,7 +83,7 @@ var PageTransitions = function(bgArray) {
 			}
 		});
 		curBg = (curBg + 1)%bgArray.length;
-		$nextPage.addClass("background-"+bgArray[curBg]);
+		$nextPage.addClass(bgArray[curBg]);
 		$nextPage.addClass(ret[1]).on( animEndEventName, function() {
 			$nextPage.off( animEndEventName );
 			endNextPage = true;
@@ -108,14 +120,12 @@ var PageTransitions = function(bgArray) {
 	function resetPage($outpage, $inpage) {
 		$outpage.attr('class', $outpage.data('originalClassList'));
 		$inpage.attr('class', $inpage.data('originalClassList') + ' pt-page-current' );
-		$inpage.addClass("background-"+bgArray[curBg]);
-		$leftpane.attr('class', $leftpane.data('originalClassList'));
-		$leftpane.addClass('color-'+bgArray[curBg]);
+		$inpage.addClass(bgArray[curBg]);
+		changeleftpane(null);
 	}
 
-	function getNextAnimation (next) {
-		var arr = [
-			/*
+	function getNextAnimation (sec) {
+		var sec_arr = [
 			[
 				['pt-page-moveToLeft', 'pt-page-moveFromRight'],
 				['pt-page-moveToRight', 'pt-page-moveFromLeft'],
@@ -145,8 +155,9 @@ var PageTransitions = function(bgArray) {
 				['pt-page-scaleDown', 'pt-page-moveFromLeft pt-page-ontop'],
 				['pt-page-scaleDown', 'pt-page-moveFromBottom pt-page-ontop'],
 				['pt-page-scaleDown', 'pt-page-moveFromTop pt-page-ontop']
-			],
-			*/
+			]
+		];
+		var arr = [
 			[
 				['pt-page-scaleDown', 'pt-page-scaleUpDown pt-page-delay300'],
 				['pt-page-scaleDownUp', 'pt-page-scaleUp pt-page-delay300'],
@@ -225,8 +236,11 @@ var PageTransitions = function(bgArray) {
 		];
 		var ret = arr[priAnim][secAnim];
 		priAnim = (priAnim + 1)%arr.length;
+		if (sec === true) {
+			ret = arr[0][0];
+		}
 		return ret;
 	}
 	init();
-	return {init : init , click: clickButton, register:register};
+	return {init : init , click: clickButton, register:register, changeleftpane:changeleftpane};
 };

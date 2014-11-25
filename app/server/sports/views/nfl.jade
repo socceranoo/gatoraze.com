@@ -1,0 +1,31 @@
+extends layout
+
+block content
+	.full-height.main.full-width(ng-controller='MainCtrl')
+		include roster-modal
+		include player-modal
+		a.menu-icon-left.btn.background-cloud(ng-click='moveRight();' href='javascript:void(0);')
+			img.block.img-responsive.img-item.block3(src='/sports/images/AFC.png')
+		a.menu-icon-right.btn.background-cloud(ng-click='moveLeft();' href='javascript:void(0);')
+			img.block.img-responsive.img-item.block3(src='/sports/images/NFC.png')
+		//a.menu-icon-top.btn.background-cloud(ng-click='moveDown();' href='javascript:void(0);')
+		//	img.block.img-responsive.img-item.block3(src='/sports/images/icon.png')
+		a.menu-icon-bottom.btn.background-cloud(ng-click='moveUp();' href='javascript:void(0);')
+			img.block.img-responsive.img-item.block3(src='/sports/images/icon.png')
+		include left-pane
+		include right-pane
+		include top-pane
+		include bottom-pane
+		#pt-main.pt-perspective
+			.pt-page.pt-page-1
+				.nfl-home.full-height
+			.pt-page.pt-page-1
+				include team-view
+			.pt-page.pt-page-2
+				include player-view
+			//include helmets
+	script.
+		var teamData= !{JSON.stringify(teams)};
+		var images= !{JSON.stringify(images)};
+		var categories= !{JSON.stringify(categories)};
+	include ../../common-scripts

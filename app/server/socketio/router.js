@@ -1,7 +1,7 @@
 module.exports = function(app, module_obj, io) {
 	var socketServer = require("./socket-server")(io);
 	var sleep = require('sleep');
-	var playsite = "razeConnect";
+	var playsite = "razePlay";
 	var lobbysite = "Lobby";
 	//Routes 
 	app.get('/', function(req, res){

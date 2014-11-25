@@ -1,0 +1,31 @@
+.container
+	.col-md-12.col-sm-12
+		//img.img-responsive.subheader(ng-src='{{getImage("subheader", currentTeam)}}')
+		a.btn.btn-primary(data-toggle='modal', href='#roster-modal') Roster;
+		//h3.text-center {{category}} Leaders
+		//h2.text-center {{categories[category][subcategory][0]}}
+		table.table.table-bordered.no-margin
+			thead
+				tr
+					th.pointer(ng-click='categoryClick(item)', ng-class="{'opacity-mild': category != item}", ng-repeat='(item, value) in categories')
+						img.block3.img-responsive.img-item.block3(ng-src='/sports/images/stats/{{item}}.png')
+		//
+			table.table.table-bordered.background-clouds
+				thead
+					tr
+						th.pointer(ng-repeat='(key,item) in categories[category] track by $index', ng-click='subcategoryClick(category, key)', ng-class="{'background-metroJade': subcategory == key}")
+							h5.text-center() {{item[0]}}
+	h3.text-center
+		span.pointer.glyphicon.glyphicon-arrow-left.pull-left(ng-click='nextLeader(category)')
+		span.pointer.glyphicon.glyphicon-arrow-right.pull-right(ng-click='nextLeader(category)')
+		span.pointer.glyphicon.glyphicon-refresh(ng-click='sortLeaders(category, subcategory)')
+	hr.featurette-divider4
+	.col-md-8.col-sm-8
+		include leaders
+	.col-md-4.col-sm-4.background-opacity1-4.no-margin
+		table.table.table-bordered(ng-show'currentLeader != null')
+			h3.text-center {{currentLeader.player.name}}
+			tbody
+				tr(ng-repeat='(item, value) in categories[category]', ng-click='subcategoryClick(category, item)', ng-class='{"background-metroYellow":subcategory == item}')
+					td.pointer {{value[0]}}
+					td {{currentLeader[item]}} {{value[1]}}

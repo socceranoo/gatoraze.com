@@ -16,7 +16,7 @@
 		//.setFullBg('../images/BG/blueback.jpg');
 		border-bottom:10px solid #e5e5e5;
 		//.setFullBg('../images/bg1-full.jpg');
-		height:80%;
+		height:70%;
 		background: #444;
 		background-size:cover;
 	}
@@ -56,6 +56,9 @@
 		font-size:35px;
 		font-weight:300;
 	}
+	.cover .profile-pic {
+		height:250px;
+	}
 	.item-nav {
 		font-size:45px;
 	}
@@ -70,8 +73,8 @@
 	}
 	.menu-icon {
 		position:absolute;
-		top:2%;
-		left:2%;
+		top:1%;
+		left:0.5%;
 		z-index:10;
 	}
 	.dropdown {
@@ -91,12 +94,18 @@
 		color:@clouds;
 		margin:20px 0px;
 	}
+	.copy-right {
+		position:absolute;
+		bottom:0%;
+		right:5%;
+		z-index:10;
+	}
 
 	.item-skill {
 		-webkit-transition: all 1s ease-in-out;
 		-o-transition: all 1s ease-in-out;
 		transition: all 1s ease-in-out;
-		margin: 5px 0px 5px 0px;
+		margin: 15px 0px 15px 0px;
 	}
 	.img-skill {
 		cursor:pointer;
@@ -104,22 +113,28 @@
 		max-height:200px;
 	}
 	.img-skill:hover {
-		opacity:0.3;
+		//opacity:0.3;
 	}
 
 	.list-image {
 		float:left;
 		padding-left:10px;
 	}
+	.project-content {
+		display:none;
+		overflow:auto;
+		position: absolute;
+		top:0px;
+	}
 	.snowkick-wrapper {
 		height:1px;
 		margin: -20px auto;
 	}
 	.snowkick-img {
-		height: 540px;
-		max-height: 540px;
+		height: 300px;
+		max-height: 300px;
 		width: 100%;
-		max-width: 720px;
+		max-width: 400px;
 		background:url('../images/snowkick.jpg');
 		background-position:0px 0px;
 		opacity: 0.3;
@@ -167,70 +182,14 @@
 		pointer-events: none;
 		cursor: default;
 	}
+
 	@leftSlide : 25%;
-	.slideRight {
-		left: @leftSlide !important;
-	}
-	.left-pane {
-		width:@leftSlide;
-		height:100%;
-		position:absolute;
-		left:-1 * @leftSlide;
-		z-index: 10;
-	}
+	.setPanes(@leftSlide);
+
+	/* the mixin is called, css outputted and iterations called */
 	@stack-size:30px;
 	@top-visible-width:@stack-size;
 	@side-visible-width:@stack-size;
-	@li-width:350px;
-	@li-height :500px;
-	.grid {
-		position: relative;
-		font-family: 'Lato', sans-serif;
-		font-weight:300;
-		font-style:italic;
-		//height: @li-height+(@visible-width*7);
-	}
-
-	.grid li.item-class {
-		position:absolute;
-		-webkit-transition: all 1s ease-in-out;
-		-o-transition: all 1s ease-in-out;
-		transition: all 1s ease-in-out;
-		//padding:@top-visible-width @side-visible-width 0px 0px;
-		-moz-box-shadow:    3px 3px 10px 10px rgba(0, 0, 0, 0.2);
-		-webkit-box-shadow: 3px 3px 10px 10px rgba(0, 0, 0, 0.2);
-		box-shadow:         3px 3px 10px 10px rgba(0, 0, 0, 0.2);
-		background:rgba(254, 254, 254, .2);
-		//border-radius: 50%;
-		width:80%;
-	}
-	.grid li.item-class .metro{
-		opacity: 0.0;
-	}
-	.img-front {
-		opacity: 1 !important;
-	}
-
-
-	@from : 0;
-	@to : 8;
-
-	/* Create a Parametric mixin and add a guard operation */
-	.loop(@index, @side, @top) when(@index =< @to) {
-
-		/* As the mixin is called CSS is outputted */
-		//.grid li:nth-child(@{index}) {
-		.grid-class-@{index} {
-			top: unit((@to - @index) * @top, px);
-			left:unit((@index)*(@side), px);
-			z-index : (100+(@to - @index));
-		}
-
-		/* Interation call and operation */
-		.loop(@index + 1, @side, @top);
-	}
-
-	/* the mixin is called, css outputted and iterations called */
 	.loop(@from, @side-visible-width, @top-visible-width);
 
 	.rb-close-top {
@@ -238,6 +197,7 @@
 		right:1%;
 		top:1%;
 		cursor: pointer;
+		z-index:100;
 	}
 	.rb-close-bottom {
 		position:absolute;
@@ -261,7 +221,7 @@
 		width: 85% !important;
 	}
 	.social-icons li {
-		margin:20px;
+		margin:10px 20px;
 	}
 	@-webkit-keyframes color2 {
 		0% {
@@ -295,12 +255,6 @@
 		margin:15px;
 		font-size:30px;
 	}
-	.grid li {
-		margin:20px 0px;
-	}
-	.metro {
-		max-height:200px;
-	}
 	.social-icons {
 		font-size: 17px;
 	}
@@ -310,14 +264,20 @@
 	.list-item {
 		display:none;
 	}
+	.ul-nav li {
+		margin:10px 20px;
+	}
 }
 @media (max-width:767px) {
 	.loop(@from, 20px, 20px);
-	.grid li {
-		margin:10px 0px;
+	.cover .title {
+		font-size:25px;
 	}
-	.metro {
-		max-height:176px;
+	.cover .profile-pic {
+		height:150px;
+	}
+	.ul-nav li {
+		margin:10px 20px;
 	}
 	.item-nav {
 		margin:5px;
@@ -326,7 +286,20 @@
 }
 @media (max-width:501px) {
 	.loop(@from, 15px, 15px);
-	.metro {
-		max-height:106px;
+	.snowkick-wrapper {
+		display:none;
+	}
+	.cover .title {
+		font-size:20px;
+	}
+	.cover .profile-pic {
+		height:150px;
+	}
+	.ul-nav li {
+		margin:10px 10px;
+	}
+	.social-icons li {
+		font-size: 15px;
+		margin:5px 10px;
 	}
 }

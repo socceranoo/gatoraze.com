@@ -10,7 +10,7 @@
 				.col-md-12.col-sm-12
 					ul.rb-grid.list-unstyled.list-inline.text-center.background-opacity.img-rounded
 						li.item-skill(ng-class='{"opacity-nne":skill.valid == false}', ng-repeat='skill in currentSuperSkill.skills' ng-attr-title='{{skill.name}}')
-							img.img-responsive.img-skill.block.img-rounded.img-circle(ng-src='/portfolio/images/skills/{{skill.image}}.jpg' ng-click='skillClick($event, skill)')
+							img.img-responsive.img-skill.block2.img-rounded.img-circle(ng-src='/portfolio/images/skills/{{skill.image}}.jpg' ng-click='skillClick($event, skill)')
 
 	.overlay#skill-overlay
 		.container
@@ -29,8 +29,8 @@
 		.row
 			h1.text-center Skills
 			hr.featurette-divider3
-			.col-md-12.col-sm-12.col-s-12
+			.col-md-12.col-sm-12.col-s-12.background-opacity.well
 				.col-md-4.col-sm-4.item-skill(ng-class='{"opacity-none":superSkill.valid == false}', ng-repeat='superSkill in superSet' ng-attr-title='{{superSkill.name}}')
-					.background-opacity.well.img-rounded
+					.img-rounded
 						h2.text-center {{superSkill.name}}
 						img.img-responsive.block.img-skill.img-rounded(ng-src='/portfolio/images/skills/{{superSkill.image}}.png' ng-click='superSkillClick($event, superSkill)')

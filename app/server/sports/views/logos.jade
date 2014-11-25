@@ -1,0 +1,19 @@
+.col-md-12.col-sm-12
+	.col-md-6.col-sm-6(ng-repeat='conference in conf track by $index')
+		//img.block.img-responsive.block4(ng-src='/sports/images/{{conference}}.png')
+		ul.col-md-3.col-sm-3.text-center.list-inline.list-unstyled.logos(ng-repeat='division in div track by $index')
+			h5.text-center(class='{{conference}}') {{division}}
+			.col-md-6.col-sm-6
+				li.pointer(ng-click='getRoster(teams[0+4*$index+16*$parent.$index])')
+					img.img-responsive.block4(ng-src='{{lg[0]+teams[0+4*$index+16*$parent.$index][lg[1]]+lg[2]}}')
+				li.pointer(ng-click='getRoster(teams[1+4*$index+16*$parent.$index])')
+					img.img-responsive.block4(ng-src='{{lg[0]+teams[1+4*$index+16*$parent.$index][lg[1]]+lg[2]}}')
+			.col-md-6.col-sm-6
+				li.pointer(ng-click='getRoster(teams[2+4*$index+16*$parent.$index])')
+					img.img-responsive.block4(ng-src='{{lg[0]+teams[2+4*$index+16*$parent.$index][lg[1]]+lg[2]}}')
+				li.pointer(ng-click='getRoster(teams[3+4*$index+16*$parent.$index])')
+					img.img-responsive.block4(ng-src='{{lg[0]+teams[3+4*$index+16*$parent.$index][lg[1]]+lg[2]}}')
+			//
+				li.pointer(ng-repeat='team in teams_per_div track by $index', ng-click='getRoster(teams[$index+4*$parent.$index+16*$parent.$parent.$index])')
+					img.img-responsive.block4(ng-src='{{lg[0]+teams[$index+4*$parent.$index+16*$parent.$parent.$index][lg[1]]+lg[2]}}')
+hr.featurette-divider4

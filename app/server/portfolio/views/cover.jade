@@ -1,19 +1,24 @@
 .full-height.ackground-turquoise(ng-controller='Cover')
 	.cover.color-clouds
-		.height-100
+		.height-50
 		//
 			h2.title.text-center
 				| Manjunath &nbsp;"
 				em Anoop
 				|" &nbsp;Mageswaran
-		img.img-responsive.height-200.img-circle(src='/portfolio/images/profile-2014.jpg')
+		img.img-responsive.img-circle.profile-pic(src='/portfolio/images/profile-2014.jpg')
+		//img.img-responsive.profile-pic(ng-src='/portfolio/images/pp3.png')
 		h2.title.text-center
 			em hi, i am a software developer from silicon valley, interested in full stack development.
 			//em -- full stack software developer
-		.featurette-divider
-			ul.text-center.list-unstyled.list-inline.ul-nav.ackground-opacity
-				-each page,index in pages
-					li.pointer(ng-click='navClick('+index+')')
-						//h1.item-nav.ighlighted.glyphicon(class="glyphicon-"+page.icon+" color-"+page.bg)
-						h1.fa.fa-3x(class="fa-"+page.fa+" color-"+page.bg)
-						h4= page.name
+	h1.text-center
+		a.btn.background-louds(ng-click='moveRight();' href='javascript:void(0);')
+			img.img-responsive.img-item.block2.pointer(src='/portfolio/images/projects/emblem.png')
+		//span.fa.fa-2x.color-black.fa-search-plus.pointer(ng-click='moveRight()')
+//
+	ul.text-center.list-unstyled.list-inline.ul-nav
+		-each page,index in pages
+			li.pointer(ng-click='navClick('+index+')')
+				//h1.item-nav.ighlighted.glyphicon(class="glyphicon-"+page.icon+" color-"+page.bg)
+				h1.fa(class="fa-"+page.fa+" color-"+page.bg)
+				h4= page.name

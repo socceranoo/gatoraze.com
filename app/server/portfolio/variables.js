@@ -10,6 +10,7 @@ module.exports = function () {
 		prl : {click:true_var,	bg:"#2082B3", invert:true_var,	name:"PERL",		image:"perl",		points:["", "", ""]	},
 		php : {click:true_var,	bg:"#6182B8", invert:true_var,	name:"Php",			image:"php",		points:["", "", ""]	},
 		njs : {click:true_var,	bg:"#85CD2B", invert:true_var,	name:"Node JS",		image:"node",		points:["", "", ""]	},
+		bsf : {click:true_var,	bg:"#C8F095", invert:true_var,	name:"BookShelf JS",image:"bookshelf",	points:["", "", ""]	},
 		ajs : {click:true_var,	bg:"#E52C3C", invert:fals_var,	name:"Angular JS",	image:"angular",	points:["", "", ""]	},
 		bjs : {click:true_var,	bg:"#F5F5F5", invert:true_var,	name:"Backbone JS",	image:"backbone",	points:["", "", ""]	},
 		fsk : {click:true_var,	bg:"#FFFFFF", invert:true_var,	name:"Flask",		image:"flask",		points:["", "", ""]	},
@@ -33,8 +34,10 @@ module.exports = function () {
 		mac : {click:fals_var,	bg:"#C1392B", invert:fals_var,	name:"MacOS",		image:"mac",		points:["", "", ""]	},
 		nix : {click:fals_var,	bg:"#C1392B", invert:fals_var,	name:"Unix",		image:"ubuntu",		points:["", "", ""]	},
 		vim : {click:fals_var,	bg:"#4E4E4E", invert:true_var,	name:"Vim",			image:"vim",		points:["", "", ""]	},
-		wbs : {click:fals_var,	bg:"#4E4E4E", invert:true_var,	name:"Webstorm",	image:"vim",		points:["", "", ""]	},
+		wbs : {click:fals_var,	bg:"#4E4E4E", invert:true_var,	name:"Webstorm",	image:"webstorm",	points:["", "", ""]	},
+		git : {click:fals_var,	bg:"#EB5436", invert:true_var,	name:"Git",			image:"git",		points:["", "", ""]	},
 	};
+	var project_content = require("./projects/data.json");
 	var exportVariable = {
 		pages: [
 			{bg:"clouds", name:"home", fa:"home", icon:"home"},
@@ -46,12 +49,12 @@ module.exports = function () {
 		],
 		superSet : [
 			{bg:"#EBEBEB", invert:true_var, skills:[ skill.ccc, skill.cpp, skill.jav, skill.jvs, skill.pyt, skill.prl, skill.php ], image:"coding", name:"Languages"},
-			{bg:"#91A6A1", invert:fals_var, skills:[ skill.njs, skill.ejs, skill.jde, skill.fsk, skill.jin, skill.apc, skill.sio ], image:"server-side", name:"Back-End"},
-			{bg:"#7CB1E6", invert:true_var, skills:[ skill.ajs, skill.bjs, skill.les, skill.jqy ], image:"front-end", name:"Front-End"},
-			{bg:"#2AB3BE", invert:true_var,	skills:[ skill.htm, skill.css, skill.psp, skill.btp ], image:"ux", name:"UI/UX"},
-			{bg:"#FF8C01", invert:true_var,	skills:[ skill.sql, skill.mql, skill.mdb, skill.csd ], image:"db", name:"Databases"},
-			{bg:"#FCD209", invert:true_var,	skills:[ skill.ubu, skill.nix, skill.win, skill.mac ], image:"general", name:"OS"},
-			{bg:"#FCD209", invert:true_var,	skills:[ skill.wbs, skill.vim ], image:"general", name:"Tools"}
+			{bg:"#91A6A1", invert:fals_var, skills:[ skill.njs, skill.ejs, skill.bsf, skill.jde, skill.fsk, skill.jin, skill.apc, skill.sio ], image:"server-side", name:"Back-End"},
+			{bg:"#7CB1E6", invert:true_var, skills:[ skill.htm, skill.ajs, skill.bjs, skill.jqy ], image:"front-end", name:"Front-End"},
+			{bg:"#FCD209", invert:true_var,	skills:[ skill.git, skill.vim, skill.wbs, skill.ubu, skill.win, skill.mac ], image:"tools", name:"General"},
+			{bg:"#666699", invert:true_var,	skills:[ skill.sql, skill.mql, skill.mdb, skill.csd ], image:"db", name:"Databases"},
+			{bg:"#FFB319", invert:true_var,	skills:[ skill.les, skill.css, skill.psp, skill.btp ], image:"ux2", name:"UI/UX"},
+			//{bg:"#3587D4", invert:true_var,	skills:[ skill.ubu, skill.nix, skill.win, skill.mac ], image:"general", name:"OS"},
 		],
 		interests : [
 			{invert:fals_var,	name:"I love tech", index:0, image:"tech", col:6, bg:"belizeHole", points:["", "", ""]},
@@ -64,14 +67,7 @@ module.exports = function () {
 			{invert:true_var,	name:"Music", image:"music", index:7, col:4, bg:"orange", points:["", "", ""]}
 		],
 
-		projects : [
-			{img:'gameroom.png', name:"game-room", screens:6},
-			{img:'gitstats.png', name:"git-stats", screens:6},
-			{img:'emblem.png', name:"gatoraze.com", screens:6},
-			{img:'dollaraze.png', name:"dollaraze", screens:6},
-			{img:'bugspies.png', name:"bug-spies", screens:6},
-			{img:'razetube.png', name:"raze-tube", screens:6}
-		]
+		projects : project_content
 	};
 	return exportVariable;
 };

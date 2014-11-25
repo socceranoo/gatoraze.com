@@ -1,0 +1,39 @@
+#player-modal.modal.fade.full-height.background-opacity0
+	.modal-dialog.modal-sm
+		.modal-content
+			img.img-responsive.subheader(ng-src='{{getImage("subheader", teamHash[currentPlayer.team])}}')
+			.modal-header.text-center
+				a.close(data-dismiss='modal') &times;
+				h1
+					span(ng-bind='currentPlayer.name')
+					span &nbsp;
+			.modal-body.text-justify
+				img.img-responsive.height-300(ng-src='http://static.nfl.com/static/content/public/static/img/fantasy/transparent/512x512/{{currentPlayer.esb_id}}.png', fallback-src="http://static.nfl.com/static/content/public/image/fantasy/transparent/200x200/{{currentPlayer.team}}.png")
+				table.table.table-bordered
+					tbody
+						tr.text-center
+							th.text-center College
+							td {{currentPlayer.college}}
+						tr.text-center
+							th.text-center D.O.B
+							td {{currentPlayer.birthdate}}
+						tr.text-center
+							th.text-center Position
+							td {{currentPlayer.position}}
+						tr.text-center
+							th.text-center #Number
+							td {{currentPlayer.number}}
+						tr.text-center
+							th.text-center Height
+							td {{(currentPlayer.height- currentPlayer.height%12)/12}}' {{currentPlayer.height%12}}"
+						tr.text-center
+							th.text-center Weight
+							td {{currentPlayer.weight}} lbs
+						tr.text-center
+							th.text-center Experience
+							td {{currentPlayer.years_pro}} yrs
+						tr.text-center
+							th.text-center Profile
+							td
+								a(href='{{currentPlayer.profile_url}}' target='_blank') {{currentPlayer.profile_url}}
+

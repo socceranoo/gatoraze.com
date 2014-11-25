@@ -1,32 +1,33 @@
 .full-height.awards(ng-controller='Awards')
-	.container
-		.row.text-center.featurette-divider3
-			h1.text-center
-				em Awards
-			hr.featurette-divider3
-			.col-md-12.col-sm-12.featurette-divider
-				.col-md-2.col-sm-2
-				.col-md-8.col-sm-8.height-500
-					.col-md-6.col-sm-6.pointer.page-right.page-elem.page-cover-front(style="z-index:10", ng-click='pageTurn(0)')
-						.content(ng-class="{'opacity-0':page >= 0}")
-							h3.text-center My Awards book
-							hr.featurette-divider3
-							img.img-responsive.block(ng-src='/portfolio/images/awards.png')
-							.height-100
-							i.ighlighted.fa.fa-3x.fa-angle-double-right
-					.col-md-6.col-sm-6.pointer.page-right.page-elem(style="z-index:{{9-$index}}", ng-repeat='award in awards track by $index', ng-click='pageTurn($index+1)')
-						.content(ng-class="{'opacity-0':page+1 != $index+1}")
+	.container.text-center
+		h1.text-center
+			em Awards
+		hr.featurette-divider3
+		.col-md-12.col-sm-12.featurette-divider3
+			.col-md-2.col-sm-2
+			.col-md-8.col-sm-8
+				.col-md-6.col-sm-6.pointer.page-right.page-elem.page-cover-front(style="z-index:10", ng-click='pageTurn(0)')
+					.content(ng-class="{'opacity-0':page >= 0}")
+						h3.text-center My Awards book
+						hr.featurette-divider3
+						img.img-responsive.block2(ng-src='/portfolio/images/awards.png')
+						//.height-100
+						//i.ighlighted.fa.fa-3x.fa-angle-double-right
+				.col-md-6.col-sm-6.pointer.page-right.page-elem(style="z-index:{{9-$index}}", ng-repeat='award in awards track by $index', ng-click='pageTurn($index+1)')
+					.content(ng-class="{'opacity-0':page+1 != $index+1}")
+						.content-heading
 							//img.img-responsive.img-item.block3.menu-icon(src='/portfolio/images/awards.png')
 							img.img-responsive.block2(ng-src='/portfolio/images/{{award.img}}')
 							h3.text-center.img-responsive(ng-bind='award.result')
-							h3.well.background-white.text-center
+							h3.ell.background-white.text-center
 								em(ng-bind='award.name')
+						.content-body
 							p(ng-bind='award.data')
-					.col-md-6.col-sm-6.page-right.page-elem.page-cover-back(style="z-index:{{9 - awards.length}}")
-						.content().featurette-divider
-							h4.text-center
-								a.btn.btn-danger(href='javascript:void(0);', ng-click='reset()') Reset
-					//.col-md-6.col-sm-6.page-left.page-elem(style="z-index:9")
-				.col-md-2.col-sm-2
-			.col-md-12.col-sm-12
-				.col-md-4.col-sm-4
+				.col-md-6.col-sm-6.page-right.page-elem.page-cover-back.pointer(style="z-index:{{9 - awards.length}}" ng-click='reset()')
+					//.content.featurette-divider
+					//	h4.text-center
+					//		a.btn.btn-danger(href='javascript:void(0);',) Reset
+				//.col-md-6.col-sm-6.page-left.page-elem(style="z-index:9")
+			.col-md-2.col-sm-2
+		.col-md-12.col-sm-12
+			.col-md-4.col-sm-4

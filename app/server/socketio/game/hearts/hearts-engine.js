@@ -96,6 +96,7 @@ exports.getPassCards = function (playerObj) {
 	return [0, 1, 2];
 };
 exports.pruneCardDeck = function (cardDeck, num) {
-	return cardDeck.splice(0, 16);
+	//return cardDeck.splice(0, 16);
+	return cardDeck;
 };
 

@@ -1,0 +1,21 @@
+doctype html
+html(ng-app='Sports')
+	head
+		title= title
+		include ../../common-css
+		//link(rel='icon', type='ico', href='/portfolio/images/emblemv.png')
+		link(rel='icon', type='ico', href='/sports/images/icon.png')
+		link(rel='STYLESHEET', type='text/css', href='/portfolio/style/component.css')
+		link(rel='STYLESHEET', type='text/css', href='/portfolio/style/pt-page.css')
+		link(rel='STYLESHEET', type='text/css', href='/portfolio/style/animations.css')
+		//link(rel='STYLESHEET', type='text/css', href='/portfolio/style/portfolio.css')
+		link(rel='STYLESHEET', type='text/css', href='/sports/style/fifa.css')
+		//link(rel='STYLESHEET', type='text/css', href='/sports/style/slider.css')
+
+	body.sports
+		block content
+		//script(src="/portfolio/scripts/boxgrid.js").
+		//script(src="/portfolio/scripts/toucheffects.js").
+		//script(src="/sports/scripts/radio-slider.js").
+		script(src="/portfolio/scripts/pagetransitions.js").
+		script(src="/sports/scripts/sports.js").

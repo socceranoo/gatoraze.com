@@ -1,0 +1,20 @@
+//
+	.pt-page.pt-page-3
+		.container
+			h2.text-center Helmet-Left
+			.col-md-12.col-sm-12.col-lg-12.background-opacity
+				.col-lg-3.col-md-3.col-sm-3(ng-repeat='team in teams track by $index')
+					h3.text-center {{team.long}}
+					img.block.img-responsive(ng-src='{{hl[0]+team[hl[1]]+hl[2]}}')
+	.pt-page.pt-page-4
+		.container
+			h2.text-center Helmets-Right
+			.col-md-12.col-sm-12.col-lg-12.background-opacity
+				.col-lg-3.col-md-3.col-sm-3(ng-repeat='team in teams track by $index')
+					h3.text-center {{team.long}}
+					img.block.img-responsive(ng-src='{{hr[0]+team[hr[1]]+hr[2]}}')
+	.pt-page.pt-page-5
+		.container
+			.col-md-12.col-sm-12.background-opacity(ng-repeat='team in teams track by $index')
+				h3.text-center {{team.long}}
+				img.img-responsive(ng-src='{{sh[0]+team[sh[1]]+sh[2]}}')

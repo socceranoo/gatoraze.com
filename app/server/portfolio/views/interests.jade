@@ -7,14 +7,14 @@
 					a.btn.btn-info(ng-click='nextInterest(0)') Next
 					a.btn.btn-info(ng-click='selectSubScreen(3, 0, 0)') test
 			.col-md-12.col-sm-12
-				.col-md-6.col-sm-6.col-md-offset-2.col-sm-offset-2
+				.col-md-8.col-sm-8.col-md-offset-2.col-sm-offset-2
 					ul.grid.cs-style-4.interests-metro.list-unstyled
 						.pointer(ng-repeat='item in interests[0] track by $index', ng-click='interestClick(0, item)')
 							li.item-class(ng-mouseenter='mouseEnter(0, item)', ng-mouseleave='mouseLeave(0, item)', class='grid-class-{{item.index}}').metro-container.img-rounded
 								.metro(ng-class='{"no-pointer img-front":item.index==0}')
 									img.img-responsive.img-item.block(ng-src='/portfolio/images/about-me/{{item.image}}.png')
 									h3.text-center {{item.name}}
-								.height-200
+								.height-150
 								ul.metro-details(class='background-{{item.bg}}' ng-class='{"color-clouds":item.invert == false}')
 									h3.text-center {{item.name}}
 									li(ng-repeat='stuff in item.points track by $index')

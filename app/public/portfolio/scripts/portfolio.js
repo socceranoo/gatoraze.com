@@ -24,6 +24,69 @@ function delayInit () {
 	return {iterator:iterator};
 }
 
+function Main($scope) {
+	var bgArray = [
+		"background-metroJade",
+		"background-peterRiver",
+		"background-pumpkin",
+		"background-metroCyan",
+		"background-metroJade",
+		"background-metroYellow",
+		"background-metroOrange",
+		"background-metroPurple",
+		"background-turquoise"
+	];
+	$scope.delayObj = delayInit();
+	$scope.ptObj = PageTransitions(bgArray);
+	$scope.current = 0;
+	$scope.curSubScreen = -1;
+	$scope.curItem = null;
+	$container = $(".main");
+	$item_divs = [null, null, $(".project-item"), $(".interest-item"), null, null];
+
+	$scope.nextPt = function (page) {
+		if ($container.hasClass("slideRight"))
+			$scope.moveRight();
+		var html = $scope.restoreSubScreen();
+		$scope.curSubScreen = -1;
+		$scope.current = $scope.ptObj.click(page, false, null, html);
+	};
+
+	$scope.restoreSubScreen = function () {
+		if ($scope.curSubScreen == -1)
+			return null;
+		//alert($scope.curSubScreen);
+		var category = parseInt($scope.curSubScreen/100, 10);
+		var item = parseInt(($scope.curSubScreen%100)/10, 10);
+		var screen = $scope.curSubScreen%10;
+		var parentDiv = $item_divs[category].eq(item);
+		if (parentDiv.children('.screen-item').length === 0) {
+			parentDiv.append($scope.curItem);
+			return;
+		}
+		if (screen === 0)
+			$item_divs[category].eq(item).children('.screen-item').eq(screen).before($scope.curItem);
+		else
+			$item_divs[category].eq(item).children('.screen-item').eq(screen-1).after($scope.curItem);
+		return ($scope.curItem)? $scope.curItem.html() : null;
+	};
+	$scope.selectSubScreen = function (category, item, screen) {
+		if ($container.hasClass("slideRight"))
+			$scope.moveRight();
+		var index = category*100 + 10*item + screen;
+		if ($scope.curSubScreen == index) {
+			return;
+		}
+		var html = $scope.restoreSubScreen();
+		$scope.curItem = $item_divs[category].eq(item).children('.screen-item').eq(screen);
+		var nextPage = ($scope.current == 6) ? 7 : 6;
+		$scope.current = $scope.ptObj.click(nextPage, true, $scope.curItem, html);
+		$scope.curSubScreen = index;
+	};
+	$scope.moveRight = function (callback) {
+		$container.toggleClass("slideRight");
+	};
+}
 /*
 function waypoint_init () {
 	var inprogress = false;
@@ -120,13 +183,13 @@ function SkillSet($scope) {
 	$scope.superSkillOverlay = $("#super-skill-overlay");
 	$scope.currentElem = null;
 	$scope.currentSuperElem = null;
-	$scope.superSkillClose = function () {
-		boxObj.close($scope.currentSuperElem, $scope.superSkillOverlay, null);
-		$scope.currentSuperElem = null;
+	$scope.changeLeftPaneColor = function (color) {
+		//$scope.$parent.ptObj.changeleftpane(color);
 	};
 	$scope.skillClose = function () {
 		boxObj.close($scope.currentElem, $scope.skillOverlay, $scope.currentSuperElem);
 		$scope.currentElem = null;
+		$scope.changeLeftPaneColor($scope.currentSuperSkill.bg);
 	};
 	$scope.skillClick = function ($event, skill) {
 		if (skill.click === false)
@@ -134,12 +197,18 @@ function SkillSet($scope) {
 		$scope.currentElem = $($event.target);
 		boxObj.open($scope.currentElem, skill.bg, skill.invert, $scope.skillOverlay);
 		$scope.currentSkill = skill;
+		$scope.changeLeftPaneColor(skill.bg);
 	};
-
+	$scope.superSkillClose = function () {
+		boxObj.close($scope.currentSuperElem, $scope.superSkillOverlay, null);
+		$scope.currentSuperElem = null;
+		$scope.changeLeftPaneColor(null);
+	};
 	$scope.superSkillClick = function ($event, superSkill) {
 		$scope.currentSuperElem = $($event.target);
 		$scope.currentSuperSkill = superSkill;
 		bg = superSkill.bg;
+		$scope.changeLeftPaneColor(bg);
 		boxObj.open($scope.currentSuperElem, bg, superSkill.invert, $scope.superSkillOverlay);
 	};
 
@@ -158,70 +227,6 @@ function SkillSet($scope) {
 	$scope.$parent.ptObj.register(null, "leave", 1, $scope.exit);
 }
 
-function Main($scope) {
-	var bgArray = [
-		"metroJade",
-		"peterRiver",
-		"pumpkin",
-		"metroCyan",
-		"metroJade",
-		"metroYellow",
-		"metroOrange",
-		"metroPurple",
-		"turquoise"
-	];
-	$scope.delayObj = delayInit();
-	$scope.ptObj = PageTransitions(bgArray);
-	$scope.current = 0;
-	$scope.curSubScreen = -1;
-	$scope.curItem = null;
-	$container = $(".main");
-	$item_divs = [null, null, $(".project-item"), $(".interest-item"), null, null];
-
-	$scope.nextPt = function (page) {
-		if ($container.hasClass("slideRight"))
-			$scope.moveRight();
-		var html = $scope.restoreSubScreen();
-		$scope.curSubScreen = -1;
-		$scope.current = $scope.ptObj.click(page, false, null, html);
-	};
-
-	$scope.restoreSubScreen = function () {
-		if ($scope.curSubScreen == -1)
-			return null;
-		//alert($scope.curSubScreen);
-		var category = parseInt($scope.curSubScreen/100, 10);
-		var item = parseInt(($scope.curSubScreen%100)/10, 10);
-		var screen = $scope.curSubScreen%10;
-		var parentDiv = $item_divs[category].eq(item);
-		if (parentDiv.children('.screen-item').length === 0) {
-			parentDiv.append($scope.curItem);
-			return;
-		}
-		if (screen === 0)
-			$item_divs[category].eq(item).children('.screen-item').eq(screen).before($scope.curItem);
-		else
-			$item_divs[category].eq(item).children('.screen-item').eq(screen-1).after($scope.curItem);
-		return ($scope.curItem)? $scope.curItem.html() : null;
-	};
-	$scope.selectSubScreen = function (category, item, screen) {
-		if ($container.hasClass("slideRight"))
-			$scope.moveRight();
-		var index = category*100 + 10*item + screen;
-		if ($scope.curSubScreen == index) {
-			return;
-		}
-		var html = $scope.restoreSubScreen();
-		$scope.curItem = $item_divs[category].eq(item).children('.screen-item').eq(screen);
-		var nextPage = ($scope.current == 6) ? 7 : 6;
-		$scope.current = $scope.ptObj.click(nextPage, true, $scope.curItem, html);
-		$scope.curSubScreen = index;
-	};
-	$scope.moveRight = function (callback) {
-		$container.toggleClass("slideRight");
-	};
-}
-
 function Projects($scope) {
 	var delayObj = $scope.$parent.delayObj;
 	$scope.projects = projects;
@@ -237,6 +242,15 @@ function Projects($scope) {
 
 	$scope.exit();
 
+	$scope.mouseEnter = function($event) {
+		var currentElem = $($event.target).parent();
+		currentElem.children('.content').slideDown();
+	};
+
+	$scope.mouseLeave = function($event) {
+		var currentElem = $($event.target).parent();
+		currentElem.children('.content').slideUp();
+	};
 	$scope.$parent.ptObj.register(null, "enter", 2, $scope.entry);
 	$scope.$parent.ptObj.register(null, "leave", 2, $scope.exit);
 }
@@ -298,13 +312,18 @@ function Interests($scope) {
 function Contact($scope){
 	var xPos = -1;
 	var total = 21;
-	var imgHeight = 720;
+	var imgHeight = 400;
 	var timer = null;
 	var messageTimer = null;
+	$scope.pull_value = 0;
+	$control_elem = $(".pull-down-control");
+	$succes_elem = $(".pull-down-success");
+	$failure_elem = $(".pull-down-failure");
+	$scope.message = [["a", "call"], ["an", "e-mail"], ["a", "message"], ["a", "post"], ["an", "inmail"], ["a", "tweet"]];
 	$scope.temp = 0;
 	$scope.elem = $(".snowkick-img");
 	$scope.index = 0;
-	$scope.total = 5;
+	$scope.total = $scope.message.length;
 	$scope.arr = [
 		{name:"Facebook", class:"fa-facebook color-merald", href:"https://facebook.com/socceranoo"},
 		{name:"Mail", class:"fa-envelope color-louds", href:"mailto:socceranoo@gmail.com"},
@@ -343,6 +362,24 @@ function Contact($scope){
 		} else {
 			$scope.startSnowkick(total-1, -1, -1, 100);
 		}
+	};
+	$scope.pull_down = function (bool) {
+		$control_elem.slideUp();
+		$scope.elem.slideUp();
+		if (bool === true) {
+			$succes_elem.slideDown();
+			$scope.pull_value = 1;
+		} else {
+			$failure_elem.slideDown();
+			$scope.pull_value = 2;
+		}
+	};
+	$scope.pull_up = function () {
+		$control_elem.slideDown();
+		$scope.elem.slideDown();
+		$succes_elem.slideUp();
+		$failure_elem.slideUp();
+		$scope.pull_value = 0;
 	};
 	var wp_func_enter = function (direction) {
 		xPos = -1;

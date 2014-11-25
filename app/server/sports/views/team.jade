@@ -1,0 +1,9 @@
+.col-md-12.col-sm-12
+	ul.grid.interests-metro.list-unstyled
+		.ointer(ng-repeat='team in team_stats | limitTo:32 track by $index', ng-hide='team.index >= limit')
+			//li.item-class.metro-container(class='grid-class-{{limit - Math.min(team_stats.length, limit) + team.index}}', ng-class='{"active":player.index==0, "not-active":player.index!=0}')
+			li.item-class.metro-container(class='grid-class-{{team.index}}', ng-class='{"active":team.index==0, "not-active":team.index!=0}')
+				img.img-responsive.subheader(ng-src='{{getImage("subheader", teamHash[team.team])}}')
+				.metro(ng-class='{"no-pointer img-front":team.index==0}')
+					img.img-responsive.subheader.height-300(ng-src='{{getImage("helmet_left", teamHash[team.team])}}')
+					h3.text-center {{team[select_val]}}

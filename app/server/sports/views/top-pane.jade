@@ -1,0 +1,5 @@
+.top-pane.background-metroOrange.text-center
+	ul.list-unstyled.list-inline
+		li.pointer(ng-repeat='(item, value) in stat_categories track by $index', ng-click='setCurrentCategory(item)', ng-class='{"opacity-mild":currentCategory != item}')
+			h4.text-center {{item}}
+			img.img-responsive.block2(ng-src='/sports/images/stats/{{item}}.png')

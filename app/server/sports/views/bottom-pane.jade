@@ -1,0 +1,16 @@
+.bottom-pane.background-metroYellow.text-center
+	.col.md-8.col-sm-8.full-relative-height
+		.col.md-3.col-sm-3.full-relative-height
+			img.img-responsive.block(src='/sports/images/AFC.png')
+		.col.md-3.col-sm-3.full-relative-height
+			img.img-responsive.block(src='/sports/images/NFC.png')
+		.col.md-3.col-sm-3.full-relative-height
+			img.img-responsive.block(src='/sports/images/icon.png')
+		.col.md-3.col-sm-3.full-relative-height
+			img.img-responsive.block(src='/sports/images/icon.png')
+	.col.md-4.col-sm-4.full-relative-height(ng-show='init_complete == true')
+		.col.md-6.col-sm-6.full-relative-height
+			img.img-responsive.block(src='/sports/images/team.png', ng-click='nextPt(1)')
+		.col.md-6.col-sm-6.full-relative-height
+			img.img-responsive.block(src='/sports/images/player.png', ng-click='nextPt(2)')
+			//img.img-responsive.block(ng-src="http://static.nfl.com/static/content/public/image/fantasy/transparent/200x200/SF.png")

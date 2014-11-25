@@ -1,3 +1,29 @@
+.grid {
+  position: relative;
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+  font-style: italic;
+}
+.grid li.item-class {
+  position: absolute;
+  -webkit-transition: all 1s ease-in-out;
+  -o-transition: all 1s ease-in-out;
+  transition: all 1s ease-in-out;
+  -moz-box-shadow: 3px 3px 10px 10px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 3px 3px 10px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 3px 3px 10px 10px rgba(0, 0, 0, 0.2);
+  background: rgba(254, 254, 254, 0.4);
+  width: 65%;
+}
+.grid li.item-class .metro {
+  opacity: 0.0;
+}
+.grid li.not-active {
+  opacity: 0.2;
+}
+.img-front {
+  opacity: 1 !important;
+}
 .metro-container {
   margin: 0;
   position: relative;
@@ -11,7 +37,8 @@
   position: absolute;
   top: 0;
   left: 0;
-  padding: 20px;
+  padding: 5px;
+  overflow: auto;
 }
 /* Caption Style 2 */
 .cs-style-2 .metro-container .metro {
@@ -52,15 +79,15 @@
 }
 .no-touch .cs-style-3 .grid-class-0:hover .metro,
 .cs-style-3 .grid-class-0.cs-hover .metro {
-  -webkit-transform: translateY(0px);
-  -moz-transform: translateY(0px);
-  -ms-transform: translateY(0px);
-  transform: translateY(0px);
+  -webkit-transform: translateY(100%);
+  -moz-transform: translateY(100%);
+  -ms-transform: translateY(100%);
+  transform: translateY(100%);
 }
 .cs-style-3 .metro-details {
   height: inherit;
   width: 100%;
-  top: auto;
+  top: 0;
   bottom: 0;
   opacity: 0;
   -webkit-transform: translateY(100%);
@@ -147,4 +174,25 @@
   position: absolute;
   bottom: 20px;
   right: 20px;
+}
+@media (max-width: 998px) {
+  .grid li {
+    margin: 20px 0px;
+  }
+  .grid .metro {
+    max-height: 200px;
+  }
+}
+@media (max-width: 767px) {
+  .grid li {
+    margin: 10px 0px;
+  }
+  .grid .metro {
+    max-height: 176px;
+  }
+}
+@media (max-width: 501px) {
+  .grid .metro {
+    max-height: 106px;
+  }
 }
