@@ -284,6 +284,14 @@ table.fixed-layout {
 .no-pointer {
   cursor: auto !important;
 }
+.font-uppercase {
+  text-transform: uppercase;
+}
+.font-heading {
+  line-height: 1;
+  letter-spacing: 6px;
+  word-spacing: -0.3em;
+}
 .font-15 {
   font-size: 15px !important;
 }

@@ -1,13 +1,21 @@
 .full-height.projects(ng-controller='Projects')
 	.container.text-center
-		h1.text-center Projects
+		h1.text-center
+			em Personal projects
 		hr.featurette-divider3
 		.col-md-12.col-sm-12.cs-style-3
 			.col-md-4.col-sm-4.item-class.item-skill(ng-class='{"opacity-none":project.valid == false}', ng-repeat='project in projects track by $index')
 				.pointer.background-opacity.well.grid-class-0.metro-container(ng-click='selectProject($index)')
 					.metro
-						h1
+						h3.title
 							em(ng-bind='project.name')
 						img.img-responsive.img-item.block(ng-src='/portfolio/images/projects/{{project.img}}')
 					.metro-details.content.color-black
-						include lorem1
+						h2.text-left
+							span.fa(class="fa-quote-left")
+						h2
+							span &nbsp;...&nbsp;
+							span {{project.desc}}
+							span &nbsp;...&nbsp;
+						h2.text-right
+							span.fa(class="fa-quote-right")

@@ -3,11 +3,13 @@
 		.dropdown
 			a.dropdown-toggle.color-clouds(data-toggle="dropdown", href='javascript:void(0);')
 				i.fa.fa-list-ul.fa-2x
-	a.menu-icon.btn.background-cloud(ng-hide='current == 0', ng-click='moveRight();' href='javascript:void(0);')
+	include screen-modal
+	a.menu-icon.btn.background-cloud(ng-hide='current == -1', ng-click='moveRight();' href='javascript:void(0);')
 		img.img-responsive.img-item.block3(src='/portfolio/images/projects/emblem.png')
 	.left-pane.background-white.text-center
 		include page-list
 		include project-list
+		include work-list
 		//include interest-list
 	#pt-main.pt-perspective
 		.pt-page.pt-page-1
@@ -23,9 +25,14 @@
 		.pt-page.pt-page-6
 			include contact
 		.pt-page.pt-page-7
-			.container.screen-container.text-center
+			include work-home
 		.pt-page.pt-page-8
-			.container.screen-container.text-center
+			include gallery
 		.pt-page.pt-page-9
+			.container.screen-container.text-center
+		.pt-page.pt-page-10
+			.container.screen-container.text-center
+		.pt-page.pt-page-11
 			include project-content
+			include work-content
 			//include interest-content

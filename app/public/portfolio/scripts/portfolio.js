@@ -1,4 +1,22 @@
 
+function simulateTyping (str, textArea, delay) {
+	var currentCharIndex = 0;
+	var timeout;
+	function typeChar(){
+		var char = str[currentCharIndex];
+		if (textArea.val().length == str.length) {
+			$('#emblem').fadeIn();
+			clearTimeout(timeout);
+			currentCharIndex = 0;
+			return;
+		}
+		textArea.val(textArea.val() + char);
+		currentCharIndex ++;
+		timeout = setTimeout(typeChar, delay);
+	}
+	typeChar();
+}
+
 function delayInit () {
 	function iterator ($scope, obj, key, value, delay) {
 		var timer = null;
@@ -25,15 +43,18 @@ function delayInit () {
 }
 
 function Main($scope) {
+	$scope.first_sub = 8;
+	var test = 1;
 	var bgArray = [
 		"background-metroJade",
-		"background-peterRiver",
+		"background-metroTeal",
 		"background-pumpkin",
 		"background-metroCyan",
-		"background-metroJade",
-		"background-metroYellow",
+		"background-emerald",
 		"background-metroOrange",
-		"background-metroPurple",
+		"background-peterRiver",
+		"background-asbestos",
+		"background-metroRed",
 		"background-turquoise"
 	];
 	$scope.delayObj = delayInit();
@@ -41,8 +62,9 @@ function Main($scope) {
 	$scope.current = 0;
 	$scope.curSubScreen = -1;
 	$scope.curItem = null;
+	$scope.curScreenImage = "";
 	$container = $(".main");
-	$item_divs = [null, null, $(".project-item"), $(".interest-item"), null, null];
+	$item_divs = [null, null, $(".project-item"), $(".interest-item"), null, null, $(".work-item")];
 
 	$scope.nextPt = function (page) {
 		if ($container.hasClass("slideRight"))
@@ -71,6 +93,8 @@ function Main($scope) {
 		return ($scope.curItem)? $scope.curItem.html() : null;
 	};
 	$scope.selectSubScreen = function (category, item, screen) {
+		var first_sub = $scope.first_sub;
+		var second_sub = $scope.first_sub + 1;
 		if ($container.hasClass("slideRight"))
 			$scope.moveRight();
 		var index = category*100 + 10*item + screen;
@@ -79,12 +103,21 @@ function Main($scope) {
 		}
 		var html = $scope.restoreSubScreen();
 		$scope.curItem = $item_divs[category].eq(item).children('.screen-item').eq(screen);
-		var nextPage = ($scope.current == 6) ? 7 : 6;
+		var nextPage = ($scope.current == first_sub) ? second_sub : first_sub;
 		$scope.current = $scope.ptObj.click(nextPage, true, $scope.curItem, html);
 		$scope.curSubScreen = index;
 	};
 	$scope.moveRight = function (callback) {
 		$container.toggleClass("slideRight");
+	};
+	$scope.nextPt(test);
+	$scope.selectScreenImage = function ($event) {
+		var elem = $event.target;
+		$scope.curScreenImage = $(elem).attr('src');
+		$("#screen-modal").modal();
+	};
+	$scope.closeScreenModal = function ($event) {
+		$("#screen-modal").modal('hide');
 	};
 }
 /*
@@ -166,10 +199,27 @@ angular.element(document).ready( function () {
 
 
 function Cover($scope) {
+	var actual = false;
 	$scope.position = 0;
 	$scope.navClick = function (index) {
 		$scope.$parent.nextPt(index);
 	};
+	var delay = 80;
+	var string = "\nhi,\ni am a software developer from silicon valley,\ninterested in full stack development.";
+	var textArea = $("#txt");
+	$scope.simulateTyping = simulateTyping;
+	$scope.exit = function () {
+		textArea.val('');
+	};
+	$scope.entry = function () {
+		if (actual === false) {
+			textArea.val(string);
+		}
+		$scope.simulateTyping(string, textArea, delay);
+	};
+	$scope.entry();
+	//$scope.$parent.ptObj.register(null, "enter", 0, $scope.entry);
+	//$scope.$parent.ptObj.register(null, "leave", 0, $scope.exit);
 }
 
 function SkillSet($scope) {
@@ -310,18 +360,12 @@ function Interests($scope) {
 
 
 function Contact($scope){
-	var xPos = -1;
-	var total = 21;
-	var imgHeight = 400;
-	var timer = null;
 	var messageTimer = null;
 	$scope.pull_value = 0;
 	$control_elem = $(".pull-down-control");
 	$succes_elem = $(".pull-down-success");
 	$failure_elem = $(".pull-down-failure");
 	$scope.message = [["a", "call"], ["an", "e-mail"], ["a", "message"], ["a", "post"], ["an", "inmail"], ["a", "tweet"]];
-	$scope.temp = 0;
-	$scope.elem = $(".snowkick-img");
 	$scope.index = 0;
 	$scope.total = $scope.message.length;
 	$scope.arr = [
@@ -334,6 +378,47 @@ function Contact($scope){
 		{name:"Resume", class:"fa-file-text color-etroNavy", href:"/portfolio/images/UIResume.pdf"}
 	];
 
+	$scope.pull_down = function (bool) {
+		$control_elem.slideUp();
+		if (bool === true) {
+			$succes_elem.slideDown();
+			$scope.pull_value = 1;
+		} else {
+			$failure_elem.slideDown();
+			$scope.pull_value = 2;
+		}
+	};
+	$scope.pull_up = function () {
+		$control_elem.slideDown();
+		$succes_elem.slideUp();
+		$failure_elem.slideUp();
+		$scope.pull_value = 0;
+	};
+	var wp_func_enter = function (direction) {
+		messageTimer = setInterval(function() {
+			$scope.index = ($scope.index + 1)%$scope.total;
+			$scope.$digest();
+		}, 3000);
+		$scope.pull_down(true);
+	};
+	var wp_func_leave = function (direction) {
+		window.clearInterval(messageTimer);
+		$scope.pull_up();
+	};
+	$scope.$parent.ptObj.register(null, "enter", 5, wp_func_enter);
+	$scope.$parent.ptObj.register(null, "leave", 5, wp_func_leave);
+}
+
+function Gallery($scope) {
+	$scope.elem = $(".snowkick-img");
+	var xPos = -1;
+	var total = 21;
+	var imgHeight = 720;
+	var timer = null;
+	$scope.temp = 0;
+	var delay = 125;
+	var string = "Coming soon ....";
+	var textArea = $("#coming-soon");
 	$scope.startSnowkick = function (startvalue, step, endvalue, delay) {
 		xPos = startvalue;
 		timer = setInterval(function() {
@@ -362,41 +447,49 @@ function Contact($scope){
 		} else {
 			$scope.startSnowkick(total-1, -1, -1, 100);
 		}
-	};
-	$scope.pull_down = function (bool) {
-		$control_elem.slideUp();
-		$scope.elem.slideUp();
-		if (bool === true) {
-			$succes_elem.slideDown();
-			$scope.pull_value = 1;
-		} else {
-			$failure_elem.slideDown();
-			$scope.pull_value = 2;
-		}
-	};
-	$scope.pull_up = function () {
-		$control_elem.slideDown();
-		$scope.elem.slideDown();
-		$succes_elem.slideUp();
-		$failure_elem.slideUp();
-		$scope.pull_value = 0;
+		textArea.val('');
+		simulateTyping(string, textArea, delay);
 	};
 	var wp_func_enter = function (direction) {
 		xPos = -1;
 		$scope.restartSnowkick(2);
-		messageTimer = setInterval(function() {
-			$scope.index = ($scope.index + 1)%$scope.total;
-			$scope.$digest();
-		}, 3000);
 	};
 	var wp_func_leave = function (direction) {
 		$scope.stopSnowkick();
+		textArea.val('');
 		var pos_str = "0px 0px";
 		$scope.elem.css('background-position', pos_str);
-		window.clearInterval(messageTimer);
 	};
-	$scope.$parent.ptObj.register(null, "enter", 5, wp_func_enter);
-	$scope.$parent.ptObj.register(null, "leave", 5, wp_func_leave);
+	$scope.$parent.ptObj.register(null, "enter", 7, wp_func_enter);
+	$scope.$parent.ptObj.register(null, "leave", 7, wp_func_leave);
+}
+
+function Work($scope) {
+	var delayObj = $scope.$parent.delayObj;
+	$scope.works = works;
+	$scope.selectWork = function(index) {
+		$scope.$parent.selectSubScreen(6, index, 0);
+	};
+	$scope.exit = function () {
+		delayObj.iterator($scope, $scope.works, "valid", false, 0);
+	};
+	$scope.entry = function () {
+		delayObj.iterator($scope, $scope.works, "valid", true, 100);
+	};
+
+	$scope.exit();
+
+	$scope.mouseEnter = function($event) {
+		var currentElem = $($event.target).parent();
+		currentElem.children('.content').slideDown();
+	};
+
+	$scope.mouseLeave = function($event) {
+		var currentElem = $($event.target).parent();
+		currentElem.children('.content').slideUp();
+	};
+	$scope.$parent.ptObj.register(null, "enter", 6, $scope.entry);
+	$scope.$parent.ptObj.register(null, "leave", 6, $scope.exit);
 }
 
 function Awards($scope) {
@@ -436,17 +529,15 @@ function Awards($scope) {
 	};
 
 	var wp_func_enter = function (direction) {
-		$scope.page++;
-		var elem = $(".page-elem:eq(0)");
-		elem.addClass(classLeft);
-		elem.css('z-index', ++$scope.zcounter);
+		$scope.pageTurn(0);
 		$scope.$digest();
+		return;
+		//$scope.page++;
+		//var elem = $(".page-elem:eq(0)");
+		//elem.addClass(classLeft);
+		//elem.css('z-index', ++$scope.zcounter);
+		//$scope.$digest();
 	};
-	//$scope.$parent.ptObj.register(null, "enter", 4, wp_func_enter);
+	$scope.$parent.ptObj.register(null, "enter", 4, wp_func_enter);
 	$scope.$parent.ptObj.register(null, "leave", 4, $scope.reset);
-}
-
-function Groups($scope) {
-	$scope.groups = groupData;
-	$scope.currentGroup = "A";
 }

@@ -254,6 +254,12 @@ table.fixed-layout {
   height: 150px;
   line-height: 150px;
 }
+.block1 {
+  margin: 0px auto;
+  width: auto;
+  height: 125px;
+  line-height: 125px;
+}
 .block2 {
   margin: 0px auto;
   width: auto;
@@ -284,6 +290,9 @@ table.fixed-layout {
 .no-pointer {
   cursor: auto !important;
 }
+.text-underline {
+  text-decoration: underline;
+}
 .font-uppercase {
   text-transform: uppercase;
 }
@@ -297,6 +306,9 @@ table.fixed-layout {
 }
 .font-20 {
   font-size: 20px !important;
+}
+.font-25 {
+  font-size: 25px !important;
 }
 .font-30 {
   font-size: 30px !important;

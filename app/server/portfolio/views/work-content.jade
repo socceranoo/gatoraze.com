@@ -1,0 +1,29 @@
+- each work,index in works
+	.full-height.work-item
+		- for (var i = 0; i < work.content.length; i++) {
+			.screen-item
+				.col-md-12.col-sm-12
+					.col-md-8.col-sm-8
+						h1.font-40.font-heading.font-uppercase.text-center= work.name
+						//span.text-left= work.name
+					.col-md-4.col-sm-4
+						ul.list-inline.list-unstyled
+							li
+								h1.font-40
+									a.fa.fa-link.color-clouds(target='_blank', href=work.link)
+							li
+								h1.font-40
+									a.fa.fa-github.color-clouds(target='_blank', href=work.link)
+				ul.list-inline.list-unstyled
+					- for (var j = 0; j < work.content.length; j++) {
+						li.pointer(ng-class="{'opacity-mild': curSubScreen != 600 + 10*"+index+"+ "+j+"}")
+							img.img-responsive.img-item.block4(ng-click='selectSubScreen(6, '+index+', '+j+')', src='/portfolio/images/projects/'+work.img)
+					- }
+				.col-md-12.col-sm-12
+					.col-md-6.col-sm-6
+						img.img-responsive.img-thumbnail.pointer(src='/portfolio/images/projects/'+work.folder+'/'+work.content[i].img, ng-click='selectScreenImage($event)')
+					.col-md-6.col-sm-6
+						h3.eading= work.content[i].sub
+						h3.text-center= work.content[i].desc
+						include lorem1
+		- }

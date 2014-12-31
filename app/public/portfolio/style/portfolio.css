@@ -254,6 +254,12 @@ table.fixed-layout {
   height: 150px;
   line-height: 150px;
 }
+.block1 {
+  margin: 0px auto;
+  width: auto;
+  height: 125px;
+  line-height: 125px;
+}
 .block2 {
   margin: 0px auto;
   width: auto;
@@ -284,6 +290,9 @@ table.fixed-layout {
 .no-pointer {
   cursor: auto !important;
 }
+.text-underline {
+  text-decoration: underline;
+}
 .font-uppercase {
   text-transform: uppercase;
 }
@@ -297,6 +306,9 @@ table.fixed-layout {
 }
 .font-20 {
   font-size: 20px !important;
+}
+.font-25 {
+  font-size: 25px !important;
 }
 .font-30 {
   font-size: 30px !important;
@@ -342,11 +354,25 @@ body.portfolio {
   overflow: -moz-scrollbars-none;
   color: #efefef;
 }
+.simulate-typing {
+  font-style: italic;
+  margin: auto;
+  width: 100%;
+  background: transparent;
+  color: #efefef;
+  border: 0px;
+  text-align: center;
+  resize: none;
+}
 .cover {
-  border-bottom: 10px solid #e5e5e5;
+  border-bottom: 10px solid #FFFFFF;
   height: 70%;
   background: #444;
   background-size: cover;
+}
+.skillSet {
+  background: #FFF;
+  color: #333;
 }
 .main {
   background: url('../images/minimal.jpg') no-repeat center center;
@@ -367,15 +393,21 @@ body.portfolio {
 .interests {
   color: #333;
 }
+.gallery {
+  background: url('../images/gaussian-blur.jpg') no-repeat center center;
+  background-size: cover;
+  -webkit-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  color: #333;
+}
 .awards {
   color: #333;
 }
-.cover .title {
+.title {
   font-size: 35px;
   font-weight: 300;
-}
-.cover .profile-pic {
-  height: 250px;
 }
 .item-nav {
   font-size: 45px;
@@ -447,26 +479,26 @@ body.portfolio {
   top: 0px;
 }
 .snowkick-wrapper {
-  height: 1px;
   margin: -20px auto;
 }
 .snowkick-img {
-  height: 300px;
-  max-height: 300px;
+  height: 540px;
+  max-height: 540px;
   width: 100%;
-  max-width: 400px;
-  background: url('../images/snowkick.jpg');
+  max-width: 720px;
+  background: url('../images/snowkick3.jpg');
   background-position: 0px 0px;
-  opacity: 0.3;
+  opacity: 0.9;
   transform: scale(1);
   -ms-transform: scale(1);
   -webkit-transform: scale(1);
   transition: all .3s linear;
   -webkit-transition: -webkit-transform 0.3s linear;
   z-index: 9999;
+  border: 8px solid #fff;
 }
 .snowkick-img:hover {
-  opacity: 0.3;
+  opacity: 0.8;
 }
 .item-selector {
   position: fixed;
@@ -638,7 +670,7 @@ body.portfolio {
 .highlighted {
   -webkit-animation-name: color2;
   -webkit-animation-duration: 2s;
-  -webkit-animation-iteration-count: 10;
+  -webkit-animation-iteration-count: infinite;
   -webkit-animation-timing-function: linear;
   -webkit-animation-delay: 0s;
 }
@@ -647,6 +679,9 @@ body.portfolio {
 }
 .social-icons li {
   margin: 10px 20px;
+}
+.social-icons li a {
+  color: inherit;
 }
 @-webkit-keyframes color2 {
   0% {
@@ -741,7 +776,7 @@ body.portfolio {
     z-index: 100;
   }
   /* Interation call and operation */
-  .cover .title {
+  .title {
     font-size: 30px;
   }
   .item-nav {
@@ -759,6 +794,13 @@ body.portfolio {
   }
   .ul-nav li {
     margin: 10px 20px;
+  }
+  .snowkick-img {
+    transform: scale(0.8);
+    -ms-transform: scale(0.8);
+    -webkit-transform: scale(0.8);
+    transition: all .3s linear;
+    -webkit-transition: -webkit-transform 0.3s linear;
   }
 }
 @media (max-width: 767px) {
@@ -832,7 +874,7 @@ body.portfolio {
     z-index: 100;
   }
   /* Interation call and operation */
-  .cover .title {
+  .title {
     font-size: 25px;
   }
   .cover .profile-pic {
@@ -844,6 +886,13 @@ body.portfolio {
   .item-nav {
     margin: 5px;
     font-size: 20px;
+  }
+  .snowkick-img {
+    transform: scale(0.6);
+    -ms-transform: scale(0.6);
+    -webkit-transform: scale(0.6);
+    transition: all .3s linear;
+    -webkit-transition: -webkit-transform 0.3s linear;
   }
 }
 @media (max-width: 501px) {
@@ -920,7 +969,7 @@ body.portfolio {
   .snowkick-wrapper {
     display: none;
   }
-  .cover .title {
+  .title {
     font-size: 20px;
   }
   .cover .profile-pic {
@@ -932,5 +981,12 @@ body.portfolio {
   .social-icons li {
     font-size: 15px;
     margin: 5px 10px;
+  }
+  .snowkick-img {
+    transform: scale(0.3);
+    -ms-transform: scale(0.3);
+    -webkit-transform: scale(0.3);
+    transition: all .3s linear;
+    -webkit-transition: -webkit-transform 0.3s linear;
   }
 }

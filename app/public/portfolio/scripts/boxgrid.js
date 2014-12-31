@@ -49,7 +49,8 @@ var BoxGrid = function() {
 		// transition end event name
 		transEndEventName = transEndEventNames[ Modernizr.prefixed( 'transition' ) ],
 		// window and body elements
-		$window = $( window ),
+		//$window = $( window ),
+		$window = $("#skill-container"),
 		$body = $('BODY'),
 		// transitions support
 		supportTransitions = Modernizr.csstransitions,
@@ -72,9 +73,11 @@ var BoxGrid = function() {
 		$overlay = $overlayElem;
 		// save current item's index
 		current = $item;
+		var offset = $window.offset();
 		var layoutProp = getItemLayoutProp( $item ),
 			clipPropFirst = 'rect(' + layoutProp.top + 'px ' + ( layoutProp.left + layoutProp.width ) + 'px ' + ( layoutProp.top + layoutProp.height ) + 'px ' + layoutProp.left + 'px)',
-			clipPropLast = 'rect(0px ' + winsize.width + 'px ' + (winsize.height) + 'px 0px)';
+			//clipPropLast = 'rect(0px ' + winsize.width + 'px ' + (winsize.height) + 'px 0px)';
+			clipPropLast = 'rect('+offset.top+'px ' + (offset.left + $window.outerWidth()) + 'px ' + (offset.top + $window.outerHeight()) + 'px '+offset.left+'px)';
 		$overlay.css( {
 			clip : supportTransitions ? clipPropFirst : clipPropLast,
 			opacity : 1,
@@ -162,7 +165,7 @@ var BoxGrid = function() {
 
 	function getWindowSize() {
 		//$body.css( 'overflow-y', 'hidden' );
-		var w = $window.width(), h =  $window.height();
+		var w = $window.width(), h =  $window.outerHeight();
 		if( current === null ) {
 			//$body.css( 'overflow-y', 'auto' );
 		}

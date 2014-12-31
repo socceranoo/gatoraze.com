@@ -1,0 +1,21 @@
+.full-height.projects(ng-controller='Work')
+	.container.text-center
+		h1.text-center
+			em Work
+		hr.featurette-divider3
+		.col-md-12.col-sm-12.cs-style-3
+			.col-md-4.col-sm-4.item-class.item-skill(ng-class='{"opacity-none":work.valid == false}', ng-repeat='work in works track by $index')
+				.pointer.background-opacity.well.grid-class-0.metro-container(ng-click='selectWork($index)')
+					.metro
+						h3.title
+							em(ng-bind='work.name')
+						img.img-responsive.img-item.block(ng-src='/portfolio/images/projects/{{work.img}}')
+					.metro-details.content.color-black
+						h2.text-left
+							span.fa(class="fa-quote-left")
+						h2
+							span &nbsp;...&nbsp;
+							span {{work.desc}}
+							span &nbsp;...&nbsp;
+						h2.text-right
+							span.fa(class="fa-quote-right")

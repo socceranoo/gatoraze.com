@@ -1,5 +1,5 @@
 [
-	{"img":"gameroom.png", "heading":"razePlay", "folder":"gameroom", "name":"game-room", "screens":6, "link":"",
+	{"img":"gameroom.png", "desc":"an online multiplayer card game site with AI", "heading":"razePlay", "folder":"gameroom", "name":"game-room", "screens":6, "link":"",
 		"content":[
 			{"sub":"", "img":"1.png", "desc":"This is gameroom1"},
 			{"sub":"", "img":"2.png", "desc":"This is gameroom2"},
@@ -10,7 +10,7 @@
 			{"sub":"", "img":"7.png", "desc":"This is gameroom7"}
 		]
 	},
-	{"img":"gitstats.png", "heading":"gitStats", "folder":"gitstats", "name":"cool-git-stats", "screens":6, "link":"",
+	{"img":"gitstats.png", "desc":"an intuitive statistics tool for your git projects", "heading":"gitStats", "folder":"gitstats", "name":"cool-git-stats", "screens":6, "link":"",
 		"content":[
 			{"sub":"", "img":"1.png", "desc":"This is gitstats1"},
 			{"sub":"", "img":"2.png", "desc":"This is gitstats2"},
@@ -21,27 +21,22 @@
 			{"sub":"", "img":"7.png", "desc":"This is gitstats7"}
 		]
 	},
-	{"img":"dollaraze.png", "heading":"dollaRaze", "folder":"dollaraze", "name":"dollaraze", "screens":6, "link":"",
+	{"img":"dollaraze.png", "desc":"an online expenses tracking and sharing service among your friends", "heading":"dollaRaze", "folder":"dollaraze", "name":"dollaraze", "screens":6, "link":"",
 		"content":[
 			{"sub":"", "img":"1.png", "desc":"This is "}
 		]
 	},
-	{"img":"bugspies.png", "heading":"bugSpies", "folder":"bugspies", "name":"bugspies", "screens":6, "link":"",
+	{"img":"razetube.png", "desc":"an online service to watch youtube videos together", "heading":"razeTube", "folder":"razetube", "name":"razetube", "screens":6, "link":"",
 		"content":[
 			{"sub":"", "img":"1.png", "desc":"This is "}
 		]
 	},
-	{"img":"razetube.png", "heading":"razeTube", "folder":"razetube", "name":"razetube", "screens":6, "link":"",
+	{"img":"nflstats.png", "desc":"an intuitive site to see season statistics of your favorite NFL teams and players", "heading":"nflStats", "folder":"nflstats", "name":"nflstats", "screens":6, "link":"",
 		"content":[
 			{"sub":"", "img":"1.png", "desc":"This is "}
 		]
 	},
-	{"img":"nflstats.png", "heading":"nflStats", "folder":"nflstats", "name":"nflstats", "screens":6, "link":"",
-		"content":[
-			{"sub":"", "img":"1.png", "desc":"This is "}
-		]
-	},
-	{"img":"emblem.png", "heading":"gatoRaze.com", "folder":"gatoraze", "name":"gatoraze.com", "screens":6, "link":"",
+	{"img":"emblem.png", "desc":"a fast and clean registration site using node js and mongo db", "heading":"gatoRaze.com", "folder":"gatoraze", "name":"raze.com", "screens":6, "link":"",
 		"content":[
 			{"sub":"", "img":"1.png", "desc":"This is "}
 		]

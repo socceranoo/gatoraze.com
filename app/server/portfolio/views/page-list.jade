@@ -1,7 +1,7 @@
-ul.page-list.list-unstyled.featurette-divider3(ng-show='current <= 5')
+ul.page-list.camouflage.list-unstyled.featurette-divider3(ng-show='current < first_sub')
 	-each page,index in pages
-		li.pointer(ng-click='nextPt('+index+')')
+		li.pointer(ng-click='nextPt('+page.page+')')
 			//h1.glyphicon(class="glyphicon-"+page.icon)
-			h3.fa.fa-2x(class="fa-"+page.fa)
+			h3.fa.fa-3x.title(class="fa-"+page.fa)
 			//span= page.name
 		hr.featurette-divider4

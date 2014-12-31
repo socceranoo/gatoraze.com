@@ -12,14 +12,18 @@
 						.pointer(ng-repeat='item in interests[0] track by $index', ng-click='interestClick(0, item)')
 							li.item-class(ng-mouseenter='mouseEnter(0, item)', ng-mouseleave='mouseLeave(0, item)', class='grid-class-{{item.index}}').metro-container.img-rounded
 								.metro(ng-class='{"no-pointer img-front":item.index==0}')
-									img.img-responsive.img-item.block(ng-src='/portfolio/images/about-me/{{item.image}}.png')
 									h3.text-center {{item.name}}
-								.height-150
+									img.img-responsive.img-item.block0.highlighted.pointer(ng-src='/portfolio/images/about-me/{{item.image}}.png')
+								.height-100
 								ul.metro-details(class='background-{{item.bg}}' ng-class='{"color-clouds":item.invert == false}')
-									h3.text-center {{item.name}}
-									li(ng-repeat='stuff in item.points track by $index')
-										span {{stuff}}
-
+									h2.text-left
+										span.fa(class="fa-quote-left")
+									p.font-25
+										span &nbsp;...&nbsp;
+										span {{item.desc}}
+										span &nbsp;...&nbsp;
+									h2.text-right
+										span.fa(class="fa-quote-right")
 	script.
 		var interests1 = !{JSON.stringify(interests)};
 		var interests2 = !{JSON.stringify(interests)};

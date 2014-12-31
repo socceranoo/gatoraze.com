@@ -235,7 +235,7 @@ myApp.controller("MainCtrl" , function ($scope) {
 	$scope.getRoster = function (team) {
 		$.post("/nfl-roster", {team:team.short}, function(data){
 			var myArr = data.roster;
-			alert(myArr[0].position);
+			//alert(myArr[0].position);
 			myArr.sort(function (a, b) {
 				return a.position - b.position;
 			});

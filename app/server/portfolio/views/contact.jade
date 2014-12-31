@@ -1,45 +1,49 @@
 .full-height.contact(ng-controller='Contact')
 	.container.color-clouds.text-center
-		.pull-down-control
-			h1
-				| Like my work ?
-				br
-			h3.pointer
-				i.fa.fa-2x.fa-thumbs-up.color-metroGreen(ng-click='pull_down(true)')
-				span &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-				i.fa.fa-thumbs-down.color-metroRed.fa-2x(ng-click='pull_down(false)')
-		.pull-down-failure.clearfix(ng-click='pull_up()', style='display:none')
-			img.img-responsive.block0.pointer.pull-right(ng-src='/portfolio/images/pp5.png')
-			h3
-				em.color-metroYellow Leave me a message & help me improve
-		.pull-down-success.clearfix(ng-click='pull_up()', style='display:none')
-			h3.block0.pull-right
+		h1
+			| Like my work ?
+			br
+		//
+			.pull-down-control
+				h3.pointer
+					i.fa.fa-2x.fa-thumbs-up.color-metroGreen(ng-click='pull_down(true)')
+					span &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+					i.fa.fa-thumbs-down.color-metroRed.fa-2x(ng-click='pull_down(false)')
+			.pull-down-failure.clearfix(ng-click='pull_up()', style='display:none')
+				img.img-responsive.block0.pointer.pull-right(ng-src='/portfolio/images/pp5.png')
+				h3
+					em.color-metroYellow Leave me a message & help me improve
+		.pull-down-success.clearfix(g-click='pull_up()', style='display:none')
+			h3.block0.pull-right.title
 				span am &nbsp; just &nbsp;
 				//span i am just &nbsp;
 				span(ng-bind="message[index][0]")
 				span &nbsp;
-				em.color-metroYellow
+				em.camouflage
 					span(ng-bind="' '+message[index][1]+' '")
 				span &nbsp; away
-			img.img-responsive.block0.pointer(ng-src='/portfolio/images/pp3.png')
+			img.pull-left.block0.pointer(ng-src='/portfolio/images/pp3.png')
 		hr.img-responsive
 
 		.col-md-12.col-sm-12.pull-down-success(style='display:none')
-			ul.social-icons.list-unstyled.list-inline.text-center.featurette-divider2
+			ul.social-icons.list-unstyled.list-inline.text-center.featurette-divider2.camouflage
 				li(ng-repeat='icon in arr')
-					a.pointer.color-sunFlower(target='_blank' ng-href='{{icon.href}}')
-						i.fa.fa-3x(ng-class='icon.class')
-			img.img-responsive.height-250(ng-src='/portfolio/images/us-map.png')
+					a.pointer.title(target='_blank' ng-href='{{icon.href}}')
+						i.fa.fa-2x(ng-class='icon.class')
+			.col-md-12.col-sm-12
+				.col-md-6.col-sm-6.col-md-offset-3.col-sm-offset-3
+					img.img-responsive(ng-src='/portfolio/images/us-map.png')
 
 		.col-md-12.col-sm-12.pull-down-failure(style='display:none')
 			ul.social-icons.list-unstyled.list-inline.text-center.featurette-divider2
 				li
 					a.pointer.color-sunFlower(target='_blank' ng-href='{{arr[1].href}}')
 						i.fa.fa-3x(ng-class='arr[1].class')
-		.col-md-12.col-sm-12
-			.snowkick-wrapper.featurette-divider2
-				//.col-md-8.col-sm-8.col-md-offset-2.col-sm-offset-2
-				.snowkick-img.img-thumbnail.pointer(ng-click='restartSnowkick(temp)')
+		//
+			.col-md-12.col-sm-12
+				.snowkick-wrapper.featurette-divider2
+					//.col-md-8.col-sm-8.col-md-offset-2.col-sm-offset-2
+					.snowkick-img.img-thumbnail.pointer(ng-click='restartSnowkick(temp)')
 
 		.col-md-12.col-sm-12.copy-right
 			h3.small.text-center.color-clouds

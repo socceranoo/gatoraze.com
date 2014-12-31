@@ -10,11 +10,21 @@
 		overflow: -moz-scrollbars-none;
 		color:#efefef;
 	}
+	.simulate-typing{
+		font-style:italic;
+		margin:auto;
+		width:100%;
+		background:transparent;
+		color:#efefef;
+		border:0px;
+		text-align:center;
+		resize:none;
+	}
 
 	.cover {
 		//.setFullBg('../images/BG/bg3.jpg');
 		//.setFullBg('../images/BG/blueback.jpg');
-		border-bottom:10px solid #e5e5e5;
+		border-bottom:10px solid #FFFFFF;
 		//.setFullBg('../images/bg1-full.jpg');
 		height:70%;
 		background: #444;
@@ -23,6 +33,8 @@
 
 	.skillSet {
 		//.setFullBg('../images/minimal.jpg');
+		background: #FFF;
+		color:#333;
 	}
 
 	.main {
@@ -48,16 +60,17 @@
 		//.setFullBg('../../account/images/rm.jpg');
 		color:#333;
 	}
+	.gallery {
+		.setFullBg('../images/gaussian-blur.jpg');
+		color:#333;
+	}
 	.awards {
 		//.setFullBg('../images/gaussian-blur.jpg');
 		color:#333;
 	}
-	.cover .title {
+	.title {
 		font-size:35px;
 		font-weight:300;
-	}
-	.cover .profile-pic {
-		height:250px;
 	}
 	.item-nav {
 		font-size:45px;
@@ -127,22 +140,22 @@
 		top:0px;
 	}
 	.snowkick-wrapper {
-		height:1px;
 		margin: -20px auto;
 	}
 	.snowkick-img {
-		height: 300px;
-		max-height: 300px;
+		height: 540px;
+		max-height: 540px;
 		width: 100%;
-		max-width: 400px;
-		background:url('../images/snowkick.jpg');
+		max-width: 720px;
+		background:url('../images/snowkick3.jpg');
 		background-position:0px 0px;
-		opacity: 0.3;
+		opacity: 0.9;
 		.scale-mixin(1);
 		z-index:9999;
+		border:8px solid #fff;
 	}
 	.snowkick-img:hover {
-		opacity: 0.3;
+		opacity: 0.8;
 	}
 	.item-selector {
 		position: fixed;
@@ -213,7 +226,7 @@
 	.highlighted {
 		-webkit-animation-name: color2;
 		-webkit-animation-duration: 2s;
-		-webkit-animation-iteration-count: 10;
+		-webkit-animation-iteration-count: infinite;
 		-webkit-animation-timing-function: linear;
 		-webkit-animation-delay: 0s;
 	}
@@ -222,6 +235,9 @@
 	}
 	.social-icons li {
 		margin:10px 20px;
+	}
+	.social-icons li a {
+		color:inherit;
 	}
 	@-webkit-keyframes color2 {
 		0% {
@@ -248,7 +264,7 @@
 
 @media (max-width: 998px) {
 	.loop(@from, 25px, 25px);
-	.cover .title {
+	.title {
 		font-size:30px;
 	}
 	.item-nav {
@@ -267,10 +283,13 @@
 	.ul-nav li {
 		margin:10px 20px;
 	}
+	.snowkick-img {
+		.scale-mixin(0.8);
+	}
 }
 @media (max-width:767px) {
 	.loop(@from, 20px, 20px);
-	.cover .title {
+	.title {
 		font-size:25px;
 	}
 	.cover .profile-pic {
@@ -283,13 +302,16 @@
 		margin:5px;
 		font-size:20px;
 	}
+	.snowkick-img {
+		.scale-mixin(0.6);
+	}
 }
 @media (max-width:501px) {
 	.loop(@from, 15px, 15px);
 	.snowkick-wrapper {
 		display:none;
 	}
-	.cover .title {
+	.title {
 		font-size:20px;
 	}
 	.cover .profile-pic {
@@ -301,5 +323,8 @@
 	.social-icons li {
 		font-size: 15px;
 		margin:5px 10px;
+	}
+	.snowkick-img {
+		.scale-mixin(0.3);
 	}
 }

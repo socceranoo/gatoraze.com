@@ -1,17 +1,15 @@
 .full-height.ackground-turquoise(ng-controller='Cover')
-	.cover.color-clouds
+	.cover.color-clouds.background-wetAsphat
 		.height-50
 		//
 			h2.title.text-center
 				| Manjunath &nbsp;"
 				em Anoop
 				|" &nbsp;Mageswaran
-		img.img-responsive.img-circle.profile-pic(src='/portfolio/images/profile-2014.jpg')
+		img.img-responsive.img-circle.block0.profile-pic(src='/portfolio/images/profile-2014.jpg')
 		//img.img-responsive.profile-pic(ng-src='/portfolio/images/pp3.png')
-		h2.title.text-center
-			em hi, i am a software developer from silicon valley, interested in full stack development.
-			//em -- full stack software developer
-	h1.text-center
+		textarea.height-200.title#txt.simulate-typing(disabled='disabled')
+	h1.text-center#emblem(style='display:none')
 		a.btn.background-louds(ng-click='moveRight();' href='javascript:void(0);')
 			img.img-responsive.img-item.block2.pointer(src='/portfolio/images/projects/emblem.png')
 		//span.fa.fa-2x.color-black.fa-search-plus.pointer(ng-click='moveRight()')

@@ -2,19 +2,19 @@ module.exports = function () {
 	var true_var = true;
 	var fals_var = false;
 	var skill = {
-		ccc : {click:true_var,	bg:"#333333", invert:fals_var,	name:"C",			image:"c",			points:["", "", ""]	},
+		ccc : {click:true_var,	bg:"#49a120", invert:fals_var,	name:"C",			image:"c",			points:["", "", ""]	},
 		cpp : {click:true_var,	bg:"#333333", invert:fals_var,	name:"C++",			image:"c++",		points:["", "", ""]	},
 		jav : {click:true_var,	bg:"#F0F56E", invert:true_var,	name:"Java",		image:"java",		points:["", "", ""]	},
 		jvs : {click:true_var,	bg:"#F0DB4F", invert:true_var,	name:"JavaScript",	image:"javascript",	points:["", "", ""]	},
-		pyt : {click:true_var,	bg:"#ECF0F1", invert:true_var,	name:"Python",		image:"python",		points:["", "", ""]	},
-		prl : {click:true_var,	bg:"#2082B3", invert:true_var,	name:"PERL",		image:"perl",		points:["", "", ""]	},
+		pyt : {click:true_var,	bg:"#EFEFEF", invert:true_var,	name:"Python",		image:"python",		points:["", "", ""]	},
+		prl : {click:true_var,	bg:"#2EA5D9", invert:true_var,	name:"PERL",		image:"perl",		points:["", "", ""]	},
 		php : {click:true_var,	bg:"#6182B8", invert:true_var,	name:"Php",			image:"php",		points:["", "", ""]	},
-		njs : {click:true_var,	bg:"#85CD2B", invert:true_var,	name:"Node JS",		image:"node",		points:["", "", ""]	},
-		bsf : {click:true_var,	bg:"#C8F095", invert:true_var,	name:"BookShelf JS",image:"bookshelf",	points:["", "", ""]	},
+		njs : {click:true_var,	bg:"#EFEFEF", invert:true_var,	name:"Node JS",		image:"node",		points:["", "", ""]	},
+		bsf : {click:true_var,	bg:"#EFEFEF", invert:true_var,	name:"BookShelf JS",image:"bookshelf",	points:["", "", ""]	},
 		ajs : {click:true_var,	bg:"#E52C3C", invert:fals_var,	name:"Angular JS",	image:"angular",	points:["", "", ""]	},
 		bjs : {click:true_var,	bg:"#F5F5F5", invert:true_var,	name:"Backbone JS",	image:"backbone",	points:["", "", ""]	},
-		fsk : {click:true_var,	bg:"#FFFFFF", invert:true_var,	name:"Flask",		image:"flask",		points:["", "", ""]	},
-		apc : {click:true_var,	bg:"#FFFFFF", invert:true_var,	name:"Apache",		image:"apache",		points:["", "", ""]	},
+		fsk : {click:true_var,	bg:"#EFEFEF", invert:true_var,	name:"Flask",		image:"flask",		points:["", "", ""]	},
+		apc : {click:true_var,	bg:"#EFEFEF", invert:true_var,	name:"Apache",		image:"apache",		points:["", "", ""]	},
 		sql : {click:true_var,	bg:"#EBEBEB", invert:true_var,	name:"SQLite",		image:"sqlite",		points:["", "", ""]	},
 		mql : {click:true_var,	bg:"#2C596E", invert:fals_var,	name:"MySQL",		image:"mysql",		points:["", "", ""]	},
 		mdb : {click:true_var,	bg:"#82C564", invert:true_var,	name:"mongoDB",		image:"mongo",		points:["", "", ""]	},
@@ -25,10 +25,10 @@ module.exports = function () {
 		css : {click:true_var,	bg:"#1299D1", invert:fals_var,	name:"CSS3",		image:"css",		points:["", "", ""]	},
 		psp : {click:true_var,	bg:"#96CAFE", invert:true_var,	name:"PhotoShop",	image:"photoshop",	points:["", "", ""]	},
 		jqy : {click:true_var,	bg:"#347CB3", invert:fals_var,	name:"jQuery",		image:"jquery",		points:["", "", ""]	},
-		ejs : {click:true_var,	bg:"#F1DB52", invert:true_var,	name:"express",		image:"expressjs",	points:["", "", ""]	},
-		sio : {click:true_var,	bg:"#AAD959", invert:true_var,	name:"SocketIO",	image:"socketio",	points:["", "", ""]	},
+		ejs : {click:true_var,	bg:"#EFEFEF", invert:true_var,	name:"express",		image:"expressjs",	points:["", "", ""]	},
+		sio : {click:true_var,	bg:"#EFEFEF", invert:true_var,	name:"SocketIO",	image:"socketio",	points:["", "", ""]	},
 		jde : {click:true_var,	bg:"#67CC9A", invert:true_var,	name:"Jade",		image:"jade",		points:["", "", ""]	},
-		jin : {click:true_var,	bg:"#FFFFFF", invert:true_var,	name:"Jinja",		image:"jinja",		points:["", "", ""]	},
+		jin : {click:true_var,	bg:"#EFEFEF", invert:true_var,	name:"Jinja",		image:"jinja",		points:["", "", ""]	},
 		ubu : {click:fals_var,	bg:"#C1392B", invert:fals_var,	name:"Linux",		image:"linux",		points:["", "", ""]	},
 		win : {click:fals_var,	bg:"#C1392B", invert:fals_var,	name:"Windows",		image:"windows",	points:["", "", ""]	},
 		mac : {click:fals_var,	bg:"#C1392B", invert:fals_var,	name:"MacOS",		image:"mac",		points:["", "", ""]	},
@@ -38,36 +38,43 @@ module.exports = function () {
 		git : {click:fals_var,	bg:"#EB5436", invert:true_var,	name:"Git",			image:"git",		points:["", "", ""]	},
 	};
 	var project_content = require("./projects/data.json");
+	var work_content = require("./projects/work.json");
 	var exportVariable = {
 		pages: [
-			{bg:"clouds", name:"home", fa:"home", icon:"home"},
-			{bg:"emerald", name:"skills", fa:"star", icon:"star"},
-			{bg:"peterRiver", name:"work", fa:"th-list", icon:"tasks"},
-			{bg:"metroCyan", name:"about", fa:"user", icon:"info-sign"},
-			{bg:"metroOrange", name:"awards", fa:"trophy", icon:"certificate"},
-			{bg:"sunFlower", name:"contact", fa:"phone", icon:"earphone"},
+			{page:0, bg:"clouds", name:"home", fa:"user", icon:"home"},
+			{page:1, bg:"emerald", name:"skills", fa:"star", icon:"star"},
+			{page:6, bg:"peterRiver", name:"work", fa:"briefcase", icon:"tasks"},
+			{page:2, bg:"metroYellow", name:"projects", fa:"code", icon:"tasks"},
+			{page:3, bg:"metroCyan", name:"about", fa:"info-circle", icon:"info-sign"},
+			{page:4, bg:"metroOrange", name:"awards", fa:"trophy", icon:"certificate"},
+			{page:5, bg:"sunFlower", name:"contact", fa:"phone", icon:"earphone"},
+			{page:7, bg:"sunFlower", name:"gallery", fa:"image", icon:"earphone"},
 		],
 		superSet : [
-			{bg:"#EBEBEB", invert:true_var, skills:[ skill.ccc, skill.cpp, skill.jav, skill.jvs, skill.pyt, skill.prl, skill.php ], image:"coding", name:"Languages"},
-			{bg:"#91A6A1", invert:fals_var, skills:[ skill.njs, skill.ejs, skill.bsf, skill.jde, skill.fsk, skill.jin, skill.apc, skill.sio ], image:"server-side", name:"Back-End"},
-			{bg:"#7CB1E6", invert:true_var, skills:[ skill.htm, skill.ajs, skill.bjs, skill.jqy ], image:"front-end", name:"Front-End"},
-			{bg:"#FCD209", invert:true_var,	skills:[ skill.git, skill.vim, skill.wbs, skill.ubu, skill.win, skill.mac ], image:"tools", name:"General"},
-			{bg:"#666699", invert:true_var,	skills:[ skill.sql, skill.mql, skill.mdb, skill.csd ], image:"db", name:"Databases"},
+			{bg:"#333333", invert:fals_var, skills:[ skill.ccc, skill.cpp, skill.jvs, skill.pyt, skill.prl, skill.php ], image:"coding", name:"Languages"},
+			{bg:"#008A01", invert:fals_var, skills:[ skill.njs, skill.ejs, skill.bsf, skill.fsk, skill.apc, skill.sio ], image:"server-side", name:"Back-End"},
+			{bg:"#FF9E3D", invert:true_var, skills:[ skill.htm, skill.jde, skill.jin, skill.ajs, skill.bjs, skill.jqy ], image:"front-end", name:"Front-End"},
+			{bg:"#DE664A", invert:fals_var,	skills:[ skill.git, skill.vim, skill.wbs, skill.ubu, skill.win, skill.mac ], image:"tools", name:"General"},
+			{bg:"#666699", invert:fals_var,	skills:[ skill.sql, skill.mql, skill.mdb, skill.csd ], image:"db", name:"Databases"},
 			{bg:"#FFB319", invert:true_var,	skills:[ skill.les, skill.css, skill.psp, skill.btp ], image:"ux2", name:"UI/UX"},
 			//{bg:"#3587D4", invert:true_var,	skills:[ skill.ubu, skill.nix, skill.win, skill.mac ], image:"general", name:"OS"},
 		],
 		interests : [
-			{invert:fals_var,	name:"I love tech", index:0, image:"tech", col:6, bg:"belizeHole", points:["", "", ""]},
-			{invert:fals_var,	name:"A Gator", index:1, image:"gator3", col:4, bg:"metroGreen", points:["", "", ""]},
-			{invert:true_var,	name:"Symantec", index:2, image:"symantec", col:4, bg:"metroYellow", points:["", "", ""]},
-			{invert:true_var,	name:"Ninja !!!", index:3, image:"kawasaki", col:6, bg:"limeGreen", points:["", "", ""]},
-			{invert:fals_var,	name:"Soccer", index:4, image:"soccer2", col:4, bg:"peterRiver", points:["", "", ""]},
-			{invert:true_var,	name:"Real Madrid", index:5, image:"madrid", col:4, bg:"sunFlower", points:["", "", ""]},
-			{invert:fals_var,	name:"FIFA", image:"fifa2", index:6, col:4, bg:"alizarin", points:["", "", ""]},
-			{invert:true_var,	name:"Music", image:"music", index:7, col:4, bg:"orange", points:["", "", ""]}
+			{invert:fals_var,	name:"a Gator", image:"gator3", col:4, bg:"metroGreen", desc:"graduated from Florida, Gainesville (2010) with Masters degree in computer engineering"},
+			{invert:true_var,	name:"Symantec", image:"symantec", col:4, bg:"metroYellow", desc:"been working at Symantec Corp. Mountain View, CA for almost 4 years now"},
+			{invert:fals_var,	name:"Soccer", image:"soccer2", col:4, bg:"peterRiver", desc:"a huge soccer buff, won't miss out on a chance to play on any occasion"},
+			{invert:true_var,	name:"Real Madrid", image:"madrid", col:4, bg:"sunFlower", desc:"a die-hard fan of Real Madrid C.F, almost follow them religiously"},
+			{invert:fals_var,	name:"FIFA", image:"fifa2", col:4, bg:"alizarin", desc:"don't do bad either and compete in the virtual spectrum of the beautiful game of soccer"},
+			{invert:fals_var,	name:"a Techie", image:"tech", col:6, bg:"belizeHole", desc:"up to date with all the stuff going on in the tech and gadget world"},
+			{invert:true_var,	name:"Music", image:"music", col:4, bg:"orange", desc:"will just listen to any song, any genre, any language which is good"},
+			{invert:true_var,	name:"Ninja", image:"kawasaki", col:6, bg:"limeGreen", desc:"enjoy the ride on my kawasaki ninja 650r every once in a while"},
+			{invert:fals_var,	name:"a Coder", image:"coding", col:4, bg:"metroRed", desc:"like to experiment with code, end up pretty much coding all the time"}
 		],
-
-		projects : project_content
+		projects : project_content,
+		works: work_content
 	};
+	for (var i in exportVariable.interests) {
+		exportVariable.interests[i].index = i;
+	}
 	return exportVariable;
 };

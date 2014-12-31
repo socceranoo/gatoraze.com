@@ -4,7 +4,7 @@ var PageTransitions = function(bgArray) {
 	var $main = $('#pt-main'),
 		curBg = 0;
 		$pages = $main.children('.pt-page'),
-		$leftpane = $('.main').children('.left-pane').eq(0),
+		$leftpane = $('.camouflage'),
 		priAnim = 0,
 		secAnim = 0,
 		pagesCount = $pages.length,
@@ -13,6 +13,7 @@ var PageTransitions = function(bgArray) {
 		isAnimating = false,
 		endCurrPage = false,
 		endNextPage = false,
+		colorClass = "color-"+bgArray[0].split("-")[1],
 		animEndEventNames = {
 			'WebkitAnimation' : 'webkitAnimationEnd',
 			'OAnimation' : 'oAnimationEnd',
@@ -30,19 +31,17 @@ var PageTransitions = function(bgArray) {
 			$page.data('originalClassList', $page.attr('class'));
 		});
 		$pages.eq(current).addClass('pt-page-current '+bgArray[0]);
-		$leftpane.data('originalClassList', $leftpane.attr('class'));
-		var colorClass = "color-"+bgArray[0].split("-")[1];
-		$leftpane.addClass(colorClass);
+		$leftpane.toggleClass(colorClass);
 	}
 
 	function changeleftpane(color) {
-		$leftpane.attr('class', $leftpane.data('originalClassList'));
 		$leftpane.css('color', 'auto');
 		if (color) {
 			$leftpane.css('color', color);
 		}
 		else {
-			var colorClass = "color-"+bgArray[curBg].split("-")[1];
+			$leftpane.toggleClass(colorClass);
+			colorClass = "color-"+bgArray[curBg].split("-")[1];
 			$leftpane.addClass(colorClass);
 		}
 	}
