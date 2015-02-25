@@ -3,32 +3,34 @@ module.exports = function(app, module_obj, io) {
 	var sleep = require('sleep');
 	var playsite = "razePlay";
 	var lobbysite = "Lobby";
-	//Routes 
-	app.get('/', function(req, res){
+	//Routes
+	app.get('/razeplay', function(req, res){
 		if (check_user_name(req)) {
-			res.redirect('/lobby');
+			res.redirect('/razeplay/lobby');
 			return;
 		}
 		res.render('socketio/views/home', {site:playsite, title:playsite+' - home', name: get_guest_name(5000)});
 	});
-	app.post('/', function(req, res){
+	app.post('/razeplay', function(req, res){
 		var user = {name:req.param('user')};
-		res.cookie('user', user.name );
-		res.redirect('/lobby');
+		res.cookie('razeplay_user', user.name );
+		res.redirect('/razeplay/lobby');
 	});
-	app.all('*', function(req, res, next){
+	app.all('/razeplay/*', function(req, res, next){
 		if (!check_user_name(req)) {
-			res.redirect('/');
+			res.redirect('/razeplay');
 			return;
 		} else {
 			next();
 		}
 	});
+	/*
+	*/
 	var process_request = function (req, res, site, players, path) {
 		var rand = Math.floor((Math.random()*500)+1);
 		var session = req.query.session;
 		if (!session) {
-			res.redirect('/'+site+'?session='+rand+'&players='+players);
+			res.redirect('/razeplay/'+site+'?session='+rand+'&players='+players);
 		}
 		session = (!session) ? rand : session;
 		var room = site+session;
@@ -36,48 +38,48 @@ module.exports = function(app, module_obj, io) {
 		if (temp !== null) {
 			players = temp.total;
 		}
-		var user = req.session.user.name;
+		var user = req.session.razeplay_user.name;
 		user = "Guest-"+rand;
 		res.render('socketio/'+path+'/views/home', {site:site, user:user, room:room, session:session, total:players});
 	};
-	app.get('/trump', function(req, res){
+	app.get('/razeplay/trump', function(req, res){
 		var site = "trump";
 		var players = req.query.players;
 		players = (players && (players == 4 || players == 6 || players == 8)) ? players:4;
 		process_request(req, res, site, players, 'game/'+site);
 	});
-	app.get('/spades', function(req, res){
+	app.get('/razeplay/spades', function(req, res){
 		var site = "spades";
 		var players = 4;
 		process_request(req, res, site, players, 'game/trump');
 	});
-	app.get('/tube', function(req, res){
+	app.get('/razeplay/tube', function(req, res){
 		var site = "tube";
 		var players = 10;
 		process_request(req, res, site, players, site);
 	});
 
-	app.get('/hearts', function(req, res){
+	app.get('/razeplay/hearts', function(req, res){
 		var site = "hearts";
 		var players = 4;
 		process_request(req, res, site, players, 'game/'+site);
 	});
 
-	app.post('/*lobby', function(req, res){
-		res.clearCookie('user');
+	app.post('/razeplay/*lobby', function(req, res){
+		res.clearCookie('razeplay_user');
 		req.session.destroy( function(e) {
-			res.redirect('/');
+			res.redirect('/razeplay');
 		});
 	});
 
 	var lobby_request = function (req, res, site) {
 		var list = [];
-		var user = req.session.user.name;
+		var user = req.session.razeplay_user.name;
 		socketServer.getActiveRooms(site, list);
 		res.render('socketio/views/lobby-'+site, {site:lobbysite, title: lobbysite+' - home', user:user, list:list});
 	};
 
-	app.get('/*-lobby', function(req, res) {
+	app.get('/razeplay/*-lobby', function(req, res) {
 		var site = req.params[0];
 		if (socketServer.servers[site])
 			lobby_request(req, res, site);
@@ -85,16 +87,16 @@ module.exports = function(app, module_obj, io) {
 			res.redirect('/');
 	});
 
-	app.get('/lobby', function(req, res) {
-		var user = req.session.user.name;
+	app.get('/razeplay/lobby', function(req, res) {
+		var user = req.session.razeplay_user.name;
 		res.render('socketio/views/lobby-home', {site:lobbysite, title: lobbysite+' - home', user:user, list:socketServer.servers});
 	});
 
 	var check_user_name = function (req) {
-		if (req.cookies.user === undefined){
+		if (req.cookies.razeplay_user === undefined){
 			return false;
 		}
-		req.session.user = {name:req.cookies.user};
+		req.session.razeplay_user = {name:req.cookies.razeplay_user};
 		return true;
 	};
 	var get_guest_name = function (limit) {

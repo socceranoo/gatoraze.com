@@ -1,10 +1,10 @@
 module.exports = function () {
 	var unirest = require('unirest');
-	var python = require('node-python');
-	var py_nfldb = python.import('nfldb');
-	var pyjson = python.import('json');
-	var nflgame = python.import('nflgame');
-	var db = py_nfldb.connect();
+	//var python = require('node-python');
+	//var py_nfldb = python.import('nfldb');
+	//var pyjson = python.import('json');
+	//var nflgame = python.import('nflgame');
+	//var db = py_nfldb.connect();
 
 	var util = require('util');
 	var fs = require('fs');

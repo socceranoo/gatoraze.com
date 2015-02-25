@@ -1,0 +1,13 @@
+extends layout
+block content
+	.row.featurette-divider2
+		.col-md-12.col-sm-12
+			.col-md-8.col-sm-8.col-md-offset-2.col-sm-offset-2.text-center
+				h3.text-center Enter the passcode to continue
+				hr.featurette-divider3
+				form(action='/passcode', method='POST')
+					.col-md-6.col-sm-6.col-md-offset-3.col-sm-offset-3.form-group
+						input.form-control.tn-block(required='' value='' name='entry_key' type='text' )
+						hr.featurette-divider3
+						input.btn.btn-success.btn-lg.btn-block(type='submit' value='submit')
+
