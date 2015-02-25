@@ -1,9 +1,12 @@
 .full-height.interests(ng-controller='Interests')
+	h5.fa.fa-user.fa-2x.menu-icon-top-right.pointer.margin-10(data-toggle='modal', href='#about-modal')
 	.container
 		.row.text-center
-			h1 About me
-			.col-md-12.col-sm-12
-				//h1.text-center
+			h1.text-center.title
+				em My Interests
+			hr.featurette-divider3
+			//.col-md-12.col-sm-12
+				h1.text-center
 					a.btn.btn-info(ng-click='nextInterest(0)') Next
 					a.btn.btn-info(ng-click='selectSubScreen(3, 0, 0)') test
 			.col-md-12.col-sm-12
@@ -12,17 +15,20 @@
 						.pointer(ng-repeat='item in interests[0] track by $index', ng-click='interestClick(0, item)')
 							li.item-class(ng-mouseenter='mouseEnter(0, item)', ng-mouseleave='mouseLeave(0, item)', class='grid-class-{{item.index}}').metro-container.img-rounded
 								.metro(ng-class='{"no-pointer img-front":item.index==0}')
-									h3.text-center {{item.name}}
-									img.img-responsive.img-item.block0.highlighted.pointer(ng-src='/portfolio/images/about-me/{{item.image}}.png')
-								.height-100
+									h3.text-center.title {{item.name}}
+									.half-width.img-responsive
+										img.img-responsive.img-item.highlighted.pointer(ng-src='/portfolio/images/about-me/{{item.image}}.png')
+								.height-50
+								.height-25
 								ul.metro-details(class='background-{{item.bg}}' ng-class='{"color-clouds":item.invert == false}')
-									h2.text-left
+									h5.margin-5 &nbsp;
+									h2.text-left.small-title
 										span.fa(class="fa-quote-left")
-									p.font-25
+									p
 										span &nbsp;...&nbsp;
 										span {{item.desc}}
 										span &nbsp;...&nbsp;
-									h2.text-right
+									h2.text-right.small-title
 										span.fa(class="fa-quote-right")
 	script.
 		var interests1 = !{JSON.stringify(interests)};

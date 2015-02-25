@@ -1,0 +1,8 @@
+ul.list-unstyled.featurette-divider3.camouflage(ng-show='(curSubScreen - curSubScreen%100)/100 === '+cat)
+	//h1.text-center.title Works
+	hr
+	- each item,index in arr
+		li.pointer.clearfix(ng-click='selectPage('+cat+', '+index+')')
+			img.list-image.img-responsive.block3(src='/portfolio/images/projects/'+item.img)
+			h2.small-title.block3.responsive-heading= item.heading
+			hr

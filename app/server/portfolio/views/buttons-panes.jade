@@ -1,0 +1,47 @@
+//LEFT PANE
+
+//.left-pane.background-white.text-center
+	//include page-list
+
+//.background-white.text-center.top-bar
+.background-white.text-center.left-bar
+	ul.page-list.camouflage.list-unstyled.featurette-divider3
+		//h1.font-70.font-stylish.ext-underline.bold
+		//	em M
+		.alf-width.img-responsive.responsive-heading.margin-5
+			img.img-responsive(src='/portfolio/images/name2.png')
+			hr.featurette-divider4
+		-each page,index in pages
+			li(ng-class='{"background-black color-clouds":current == '+page.page+' ||((curSubScreen - curSubScreen%100)/100 == '+page.page+' && curSubScreen != -1 )}')
+				.pointer(ref='/portfolio/'+page.name, ng-click='nextPt('+page.page+')')
+					//h1.glyphicon(class="glyphicon-"+page.icon)
+					h3.fa.fa-3x.title(class="fa-"+page.fa)
+					//h5.responsive-heading= page.name
+					hr.featurette-divider4
+
+//BOTTOM PANE
+a.menu-icon-bottom.btn.background-cloud(ng-click='moveUp();' href='javascript:void(0);')
+		img.img-responsive.img-item.block4(src='/portfolio/images/color-pick.png')
+.bottom-pane.background-black.text-center
+	ul.list-unstyled.list-inline.text-center.full-relative-height
+		li.img-thumbnail.color-item.pointer.valign-middle(ng-repeat='bg in bgArray track by $index', class='{{bg}}', ng-click='changeBg(bg, moveUp)')
+
+
+//RIGHT PANE
+.menu-icon-top-right.pointer.margin-5(ng-hide='curSubScreen == -1', ng-click='moveLeft();')
+	//h3.fa.fa-2x.title.fa-tasklist
+	span.pointer.fa.title.fa-tasks.fa-2x
+	//img.img-responsive.img-item.block3(src='/portfolio/images/projects/emblem.png')
+//.background-white.text-center.menu-icon-top-right.full-height.left-bar(ng-hide='curSubScreen == -1')
+.right-pane.background-white.text-center
+	- var cat = 2
+	- var arr = projects
+	include common-list
+	- var cat = 6
+	- var arr = works
+	include common-list
+	//include interest-list
+
+p.menu-icon-bottom-right.text-center.color-black.font-stylish
+	em &copy;&nbsp;anoop manjunath mageswaran 2015 &nbsp;
+

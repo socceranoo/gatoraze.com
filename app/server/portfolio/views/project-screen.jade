@@ -1,0 +1,49 @@
+- for (var i = 0; i < 1 + project.content.length; i++) {
+	.screen-item
+		.col-md-12.col-sm-12
+			h1.title.ont-uppercase.text-center= project.name
+			ul.list-inline.list-unstyled.text-center
+				li
+					h1.title
+						a.fa.fa-link.color-clouds(target='_blank', href=project.link)
+				li
+					h1.title
+						a.fa.fa-github.color-clouds(target='_blank', href=project.link)
+		ul.list-inline.list-unstyled
+			- for (var j = 0; j < 1 + project.content.length; j++) {
+				li
+					.height-15.width-15.pointer.img-circle(ng-click='selectSubScreen('+cat+', '+index+', '+j+')', ng-class="{'background-white': curSubScreen % 10 != "+j+", 'background-midnightBlue': curSubScreen % 10 == "+j+"}")
+			- }
+		if i == 0
+			hr.featurette-divider3
+			.col-md-12.col-sm-12.featurette-divider3
+				.col-md-12.col-sm-12
+					//
+						.col-md-6.col-sm-6
+							.half-width.img-responsive
+								//img.img-responsive(src='/portfolio/images/projects/'+project.img)
+					h2.small-title.text-center about
+					.well.background-opacity0
+						p= project.about
+				if project.role
+					.col-md-12.col-sm-12
+						h2.small-title.text-center my role
+						.well.background-opacity0
+							p= project.role
+				.col-md-12.col-sm-12
+					.col-md-2.col-sm-2
+					.col-md-8.col-sm-8
+						ul.list-unstyled.list-inline.text-center.background-opacity0.img-rounded
+							- each skill in project.skills
+								li.item-skill(title=skill.name)
+									img.img-responsive.block3.img-rounded.img-circle(src='/portfolio/images/skills/'+skill.image+'.jpg')
+									h5.text-center= skill.name
+		else
+			.col-md-12.col-sm-12
+				.col-md-6.col-sm-6
+					img.img-responsive.img-thumbnail.pointer(src='/portfolio/images/projects/'+project.folder+'/'+project.content[i-1].img, ng-click='selectScreenImage($event)')
+				.col-md-6.col-sm-6
+					h3.eading= project.content[i-1].sub
+					h3.text-center= project.content[i-1].desc
+					include lorem1
+- }

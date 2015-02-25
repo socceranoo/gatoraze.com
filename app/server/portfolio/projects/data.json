@@ -23,12 +23,22 @@
 	},
 	{"img":"dollaraze.png", "desc":"an online expenses tracking and sharing service among your friends", "heading":"dollaRaze", "folder":"dollaraze", "name":"dollaraze", "screens":6, "link":"",
 		"content":[
-			{"sub":"", "img":"1.png", "desc":"This is "}
+			{"sub":"", "img":"1.png", "desc":"This is dollaraze1"},
+			{"sub":"", "img":"2.png", "desc":"This is dollaraze2"},
+			{"sub":"", "img":"3.png", "desc":"This is dollaraze3"},
+			{"sub":"", "img":"4.png", "desc":"This is dollaraze4"},
+			{"sub":"", "img":"5.png", "desc":"This is dollaraze5"},
+			{"sub":"", "img":"6.png", "desc":"This is dollaraze6"},
+			{"sub":"", "img":"7.png", "desc":"This is dollaraze7"}
 		]
 	},
 	{"img":"razetube.png", "desc":"an online service to watch youtube videos together", "heading":"razeTube", "folder":"razetube", "name":"razetube", "screens":6, "link":"",
 		"content":[
-			{"sub":"", "img":"1.png", "desc":"This is "}
+			{"sub":"", "img":"1.png", "desc":"This is "},
+			{"sub":"", "img":"2.png", "desc":"This is "},
+			{"sub":"", "img":"3.png", "desc":"This is "},
+			{"sub":"", "img":"4.png", "desc":"This is "},
+			{"sub":"", "img":"5.png", "desc":"This is "}
 		]
 	},
 	{"img":"nflstats.png", "desc":"an intuitive site to see season statistics of your favorite NFL teams and players", "heading":"nflStats", "folder":"nflstats", "name":"nflstats", "screens":6, "link":"",
@@ -36,9 +46,12 @@
 			{"sub":"", "img":"1.png", "desc":"This is "}
 		]
 	},
-	{"img":"emblem.png", "desc":"a fast and clean registration site using node js and mongo db", "heading":"gatoRaze.com", "folder":"gatoraze", "name":"raze.com", "screens":6, "link":"",
+	{"img":"emblem.png", "desc":"a fast and clean registration site using node js and mysql", "heading":"gatoRaze.com", "folder":"raze.com", "name":"raze.com", "screens":6, "link":"",
 		"content":[
-			{"sub":"", "img":"1.png", "desc":"This is "}
+			{"sub":"", "img":"1.png", "desc":"This is "},
+			{"sub":"", "img":"2.png", "desc":"This is "},
+			{"sub":"", "img":"3.png", "desc":"This is "},
+			{"sub":"", "img":"4.png", "desc":"This is "}
 		]
 	}
 ]

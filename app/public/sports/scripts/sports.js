@@ -149,7 +149,7 @@ myApp.controller("MainCtrl" , function ($scope) {
 		if (input != -1) {
 			page = input;
 		}
-		$scope.current = $scope.ptObj.click(page, false, null, null);
+		$scope.current = $scope.ptObj.click(page, 0, null, null);
 		$container.removeClass("slideRight");
 		$container.removeClass("slideLeft");
 		$container.removeClass("slideUp");

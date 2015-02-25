@@ -1,0 +1,66 @@
+.screen-item
+	h1.pull-left(ng-click='nextPt((curSubScreen - curSubScreen%100)/100);')
+		span.pointer.fa.title.fa-arrow-left.fa-2x
+	h1.title.font-uppercase.text-center= project.name
+	ul.list-inline.list-unstyled.text-center
+		li.small-title
+			a.fa.fa-link.color-clouds(target='_blank', href=project.link)
+		li.small-title
+			a.fa.fa-github.color-clouds(target='_blank', href=project.link)
+	hr.featurette-divider3
+	//img.img-responsive(src='/portfolio/images/projects/'+project.img)
+	.col-md-12.col-sm-12.featurette-divider3
+		.col-md-12.col-sm-12
+			h2.title.text-center.font-stylish about
+			.col-md-2.col-sm-2
+			.col-md-8.col-sm-8.color-black
+				hr
+				p= project.about
+				hr
+		if project.role
+			.col-md-12.col-sm-12.featurette-divider3
+				h2.title.text-center.font-stylish my role
+				.col-md-2.col-sm-2
+				.col-md-8.col-sm-8.color-black.ackground-opacity0
+					hr
+					p= project.role
+					hr
+		if project.motivation
+			.col-md-12.col-sm-12.featurette-divider3
+				h2.title.text-center.font-stylish motivation
+				.col-md-2.col-sm-2
+				.col-md-8.col-sm-8.ackground-opacity0.color-black
+					hr
+					p= project.motivation
+					hr
+		if project.features
+			.col-md-12.col-sm-12.featurette-divider3
+				h2.title.text-center.font-stylish features
+				.col-md-2.col-sm-2
+				.col-md-8.col-sm-8.color-black
+					hr
+					ul.text-left
+						- each feature in project.features
+							li
+								p= feature
+					hr
+		if project.skills
+			.col-md-12.col-sm-12.featurette-divider3
+				h2.title.text-center.font-stylish used
+				.col-md-2.col-sm-2
+				.col-md-8.col-sm-8.color-black
+					hr
+					ul.list-unstyled.list-inline.text-center.img-rounded
+						- each skill in project.skills
+							li
+								img.img-responsive.block3.img-rounded.img-circle(src='/portfolio/images/skills/'+skill.image+'.jpg')
+								h5.text-center= skill.name
+					hr
+		if project.screens
+			.col-md-12.col-sm-12.featurette-divider3
+				h2.title.text-center.font-stylish screenshots
+				hr
+				ul.list-inline.list-unstyled.text-center
+					each screen in project.screens
+						li
+							img.img-responsive.img-thumbnail.pointer.block3(src='/portfolio/images/projects/'+project.folder+'/'+screen+'', ng-click='selectScreenImage($event)')

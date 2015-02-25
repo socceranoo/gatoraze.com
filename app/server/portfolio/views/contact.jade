@@ -1,8 +1,15 @@
 .full-height.contact(ng-controller='Contact')
 	.container.color-clouds.text-center
-		h1
-			| Like my work ?
-			br
+		h1.text-center.title
+			span Like my work  &nbsp;?
+		h1.text-center.title.font-stylish
+			span &nbsp; am &nbsp; just &nbsp;
+			//span i am just &nbsp;
+			span(ng-bind="message[index][0]")
+			span &nbsp;
+			em.camouflage
+				span(ng-bind="' '+message[index][1]+' '")
+			span &nbsp; away
 		//
 			.pull-down-control
 				h3.pointer
@@ -13,26 +20,19 @@
 				img.img-responsive.block0.pointer.pull-right(ng-src='/portfolio/images/pp5.png')
 				h3
 					em.color-metroYellow Leave me a message & help me improve
-		.pull-down-success.clearfix(g-click='pull_up()', style='display:none')
-			h3.block0.pull-right.title
-				span am &nbsp; just &nbsp;
-				//span i am just &nbsp;
-				span(ng-bind="message[index][0]")
-				span &nbsp;
-				em.camouflage
-					span(ng-bind="' '+message[index][1]+' '")
-				span &nbsp; away
-			img.pull-left.block0.pointer(ng-src='/portfolio/images/pp3.png')
-		hr.img-responsive
-
-		.col-md-12.col-sm-12.pull-down-success(style='display:none')
-			ul.social-icons.list-unstyled.list-inline.text-center.featurette-divider2.camouflage
-				li(ng-repeat='icon in arr')
-					a.pointer.title(target='_blank' ng-href='{{icon.href}}')
-						i.fa.fa-2x(ng-class='icon.class')
+		.col-md-12.col-sm-12.pull-down-success.clearfix(g-click='pull_up()', style='display:none')
 			.col-md-12.col-sm-12
+				.col-md-4.col-sm-4
+					img.pull-left.img-responsive.pointer.profile-pic(ng-src='/portfolio/images/pp3.png')
+				.col-md-8.col-sm-8
+					ul.social-icons.list-unstyled.list-inline.text-center.featurette-divider2.camouflage
+						li.margin-15(ng-repeat='icon in arr')
+							a.pointer.small-title(target='_blank' ng-href='{{icon.href}}')
+								i.fa.fa-2x(ng-class='icon.class')
+			hr.featurette-divider3
+			.col-md-12.col-sm-12.featurette-divider
 				.col-md-6.col-sm-6.col-md-offset-3.col-sm-offset-3
-					img.img-responsive(ng-src='/portfolio/images/us-map.png')
+					img.img-responsive(ng-src='/portfolio/images/us-map2.png').camouflage-bg
 
 		.col-md-12.col-sm-12.pull-down-failure(style='display:none')
 			ul.social-icons.list-unstyled.list-inline.text-center.featurette-divider2
@@ -40,16 +40,10 @@
 					a.pointer.color-sunFlower(target='_blank' ng-href='{{arr[1].href}}')
 						i.fa.fa-3x(ng-class='arr[1].class')
 		//
-			.col-md-12.col-sm-12
-				.snowkick-wrapper.featurette-divider2
-					//.col-md-8.col-sm-8.col-md-offset-2.col-sm-offset-2
-					.snowkick-img.img-thumbnail.pointer(ng-click='restartSnowkick(temp)')
-
-		.col-md-12.col-sm-12.copy-right
-			h3.small.text-center.color-clouds
-				span &copy;&nbsp;Anoop Manjunath 2014
-				span &nbsp;
-			//
+			.col-md-12.col-sm-12.copy-right
+				h3.small.text-center.color-clouds
+					span &copy;&nbsp;Anoop Manjunath 2014
+					span &nbsp;
 				h3.small.pull-right
 					a.color-clouds(href='/portfolio/images/UIResume.pdf' target='_blank')
 						i.fa.fa-file-text

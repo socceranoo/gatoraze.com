@@ -1,4 +1,7 @@
-ul.page-list.camouflage.list-unstyled.featurette-divider3(ng-show='current < first_sub')
+ul.page-list.camouflage.list-unstyled.featurette-divider3
+	li
+		img.img-responsive.img-item.block3.margin-10(src='/portfolio/images/icon3.png')
+	hr.featurette-divider4
 	-each page,index in pages
 		li.pointer(ng-click='nextPt('+page.page+')')
 			//h1.glyphicon(class="glyphicon-"+page.icon)

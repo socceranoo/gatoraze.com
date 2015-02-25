@@ -1,19 +1,21 @@
-var PageTransitions = function(bgArray) {
+var PageTransitions = function(bgArray, startPage) {
 
 	var fnHash = {enter:[], leave:[]};
 	var $main = $('#pt-main'),
 		curBg = 0;
 		$pages = $main.children('.pt-page'),
 		$leftpane = $('.camouflage'),
+		$camouflage_bg = $('.camouflage-bg'),
 		priAnim = 0,
 		secAnim = 0,
 		pagesCount = $pages.length,
-		current = 0,
-		previous = 0,
+		current = (typeof startPage !== 'undefined') ? startPage : 0,
+		previous = current,
 		isAnimating = false,
 		endCurrPage = false,
 		endNextPage = false,
 		colorClass = "color-"+bgArray[0].split("-")[1],
+		bgClass = bgArray[0],
 		animEndEventNames = {
 			'WebkitAnimation' : 'webkitAnimationEnd',
 			'OAnimation' : 'oAnimationEnd',
@@ -32,6 +34,19 @@ var PageTransitions = function(bgArray) {
 		});
 		$pages.eq(current).addClass('pt-page-current '+bgArray[0]);
 		$leftpane.toggleClass(colorClass);
+	}
+
+	function changebg(bg) {
+		var $currPage = $pages.eq(current);
+		$leftpane.css('color', 'auto');
+		$leftpane.toggleClass(colorClass);
+		colorClass = "color-"+bg.split("-")[1];
+		$leftpane.addClass(colorClass);
+		$currPage.toggleClass(bgClass);
+		$camouflage_bg.toggleClass(bgClass);
+		$currPage.addClass(bg);
+		$camouflage_bg.toggleClass(bg);
+		bgClass = bg;
 	}
 
 	function changeleftpane(color) {
@@ -81,8 +96,12 @@ var PageTransitions = function(bgArray) {
 				onEndAnimation( $currPage, $nextPage );
 			}
 		});
+		$camouflage_bg.removeClass(bgClass);
 		curBg = (curBg + 1)%bgArray.length;
+		bgClass = bgArray[curBg];
+		changeleftpane(null);
 		$nextPage.addClass(bgArray[curBg]);
+		$camouflage_bg.toggleClass(bgClass);
 		$nextPage.addClass(ret[1]).on( animEndEventName, function() {
 			$nextPage.off( animEndEventName );
 			endNextPage = true;
@@ -120,7 +139,6 @@ var PageTransitions = function(bgArray) {
 		$outpage.attr('class', $outpage.data('originalClassList'));
 		$inpage.attr('class', $inpage.data('originalClassList') + ' pt-page-current' );
 		$inpage.addClass(bgArray[curBg]);
-		changeleftpane(null);
 	}
 
 	function getNextAnimation (sec) {
@@ -235,11 +253,13 @@ var PageTransitions = function(bgArray) {
 		];
 		var ret = arr[priAnim][secAnim];
 		priAnim = (priAnim + 1)%arr.length;
-		if (sec === true) {
-			ret = arr[0][0];
+		if (sec === 1) {
+			ret = sec_arr[1][0];
+		} else if (sec === 2) {
+			ret = sec_arr[1][1];
 		}
 		return ret;
 	}
 	init();
-	return {init : init , click: clickButton, register:register, changeleftpane:changeleftpane};
+	return {init : init , click: clickButton, register:register, changeleftpane:changeleftpane, changebg:changebg};
 };

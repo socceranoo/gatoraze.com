@@ -1,16 +1,7 @@
 .full-height.main(ng-controller='Main')
-	//
-		.dropdown
-			a.dropdown-toggle.color-clouds(data-toggle="dropdown", href='javascript:void(0);')
-				i.fa.fa-list-ul.fa-2x
 	include screen-modal
-	a.menu-icon.btn.background-cloud(ng-hide='current == -1', ng-click='moveRight();' href='javascript:void(0);')
-		img.img-responsive.img-item.block3(src='/portfolio/images/projects/emblem.png')
-	.left-pane.background-white.text-center
-		include page-list
-		include project-list
-		include work-list
-		//include interest-list
+	include about-modal
+	include buttons-panes
 	#pt-main.pt-perspective
 		.pt-page.pt-page-1
 			include cover
@@ -33,6 +24,4 @@
 		.pt-page.pt-page-10
 			.container.screen-container.text-center
 		.pt-page.pt-page-11
-			include project-content
-			include work-content
-			//include interest-content
+			include screen-content

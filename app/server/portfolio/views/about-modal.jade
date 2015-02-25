@@ -1,0 +1,12 @@
+#about-modal.modal.fade
+	.modal-dialog.modal-sm.color-black
+		.modal-content
+			.modal-header
+				h3.pull-right.pointer
+					a.color-metroRed(data-dismiss='modal') &times;
+				h2.text-center.small-title
+					em My strengths
+			.modal-body
+				ul.text-left.img-rounded
+					li(ng-repeat='item in about_me')
+						p(ng-bind='item')

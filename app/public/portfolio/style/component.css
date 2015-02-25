@@ -79,10 +79,10 @@
 }
 .no-touch .cs-style-3 .grid-class-0:hover .metro,
 .cs-style-3 .grid-class-0.cs-hover .metro {
-  -webkit-transform: translateY(100%);
-  -moz-transform: translateY(100%);
-  -ms-transform: translateY(100%);
-  transform: translateY(100%);
+  -webkit-transform: translateY(105%);
+  -moz-transform: translateY(105%);
+  -ms-transform: translateY(105%);
+  transform: translateY(105%);
 }
 .cs-style-3 .metro-details {
   height: inherit;

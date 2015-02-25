@@ -1,13 +1,15 @@
 
-function simulateTyping (str, textArea, delay) {
+function simulateTyping (str, textArea, delay, callback) {
 	var currentCharIndex = 0;
 	var timeout;
 	function typeChar(){
 		var char = str[currentCharIndex];
 		if (textArea.val().length == str.length) {
-			$('#emblem').fadeIn();
 			clearTimeout(timeout);
 			currentCharIndex = 0;
+			if (typeof callback !== 'undefined') {
+				callback();
+			}
 			return;
 		}
 		textArea.val(textArea.val() + char);
@@ -44,34 +46,44 @@ function delayInit () {
 
 function Main($scope) {
 	$scope.first_sub = 8;
-	var test = 1;
+	var test = 2;
+	var sub = -1;
+	$scope.current = current;
 	var bgArray = [
+		"background-orange",
 		"background-metroJade",
-		"background-metroTeal",
-		"background-pumpkin",
-		"background-metroCyan",
-		"background-emerald",
+		//"background-pumpkin",
+		"background-turquoise",
 		"background-metroOrange",
 		"background-peterRiver",
-		"background-asbestos",
+		"background-emerald",
 		"background-metroRed",
-		"background-turquoise"
+		"background-metroCyan",
 	];
 	$scope.delayObj = delayInit();
 	$scope.ptObj = PageTransitions(bgArray);
-	$scope.current = 0;
+	//$scope.ptObj = PageTransitions(bgArray, $scope.current);
+	$scope.bgArray = ["background-asbestos", "background-metroTeal", "background-midnightBlue", "background-metroPurple", "background-sunFlower"];
+	$scope.bgArray = $scope.bgArray.concat(bgArray);
 	$scope.curSubScreen = -1;
 	$scope.curItem = null;
 	$scope.curScreenImage = "";
 	$container = $(".main");
 	$item_divs = [null, null, $(".project-item"), $(".interest-item"), null, null, $(".work-item")];
+	$scope.about_me = null;
 
 	$scope.nextPt = function (page) {
-		if ($container.hasClass("slideRight"))
-			$scope.moveRight();
 		var html = $scope.restoreSubScreen();
 		$scope.curSubScreen = -1;
-		$scope.current = $scope.ptObj.click(page, false, null, html);
+		$scope.navigate(page, 0, null, html);
+	};
+
+	$scope.navigate = function (page, direction, item, html) {
+		$container.removeClass("slideRight");
+		$container.removeClass("slideLeft");
+		$container.removeClass("slideUp");
+		$container.removeClass("slideDown");
+		$scope.current = $scope.ptObj.click(page, direction, item, html);
 	};
 
 	$scope.restoreSubScreen = function () {
@@ -95,22 +107,42 @@ function Main($scope) {
 	$scope.selectSubScreen = function (category, item, screen) {
 		var first_sub = $scope.first_sub;
 		var second_sub = $scope.first_sub + 1;
-		if ($container.hasClass("slideRight"))
-			$scope.moveRight();
 		var index = category*100 + 10*item + screen;
 		if ($scope.curSubScreen == index) {
+			$scope.navigate($scope.current, 0, null, html);
 			return;
 		}
+		var dir = ($scope.curSubScreen < index) ? 1 : 2;
 		var html = $scope.restoreSubScreen();
 		$scope.curItem = $item_divs[category].eq(item).children('.screen-item').eq(screen);
 		var nextPage = ($scope.current == first_sub) ? second_sub : first_sub;
-		$scope.current = $scope.ptObj.click(nextPage, true, $scope.curItem, html);
+		$scope.navigate(nextPage, dir, $scope.curItem, html);
 		$scope.curSubScreen = index;
 	};
+	$scope.nextPt(test);
+	if (test == 2 || test == 6) {
+		if (sub >=0 ) {
+			$scope.selectSubScreen(test, sub, 0);
+		}
+	}
 	$scope.moveRight = function (callback) {
 		$container.toggleClass("slideRight");
 	};
-	$scope.nextPt(test);
+	$scope.moveLeft = function (callback) {
+		$container.toggleClass("slideLeft");
+	};
+	$scope.moveUp = function (callback) {
+		$container.toggleClass("slideUp");
+	};
+	$scope.moveDown = function (callback) {
+		$container.toggleClass("slideDown");
+	};
+	$scope.changeBg = function (bg, callback) {
+		$scope.ptObj.changebg(bg);
+		if (typeof callback !== 'undefined') {
+			callback();
+		}
+	};
 	$scope.selectScreenImage = function ($event) {
 		var elem = $event.target;
 		$scope.curScreenImage = $(elem).attr('src');
@@ -118,6 +150,9 @@ function Main($scope) {
 	};
 	$scope.closeScreenModal = function ($event) {
 		$("#screen-modal").modal('hide');
+	};
+	$scope.selectPage = function(cat, index) {
+		$scope.selectSubScreen(cat, index, 0);
 	};
 }
 /*
@@ -199,15 +234,15 @@ angular.element(document).ready( function () {
 
 
 function Cover($scope) {
-	var actual = false;
+	var actual = true;
 	$scope.position = 0;
 	$scope.navClick = function (index) {
 		$scope.$parent.nextPt(index);
 	};
 	var delay = 80;
-	var string = "\nhi,\ni am a software developer from silicon valley,\ninterested in full stack development.";
+	var string = "\nHello,\nI am a full stack software developer,\nbased in California.";
+	//var string = "\nhi, I am Manjunath,\ni am a software developer from silicon valley,\ninterested in full stack development.";
 	var textArea = $("#txt");
-	$scope.simulateTyping = simulateTyping;
 	$scope.exit = function () {
 		textArea.val('');
 	};
@@ -215,7 +250,9 @@ function Cover($scope) {
 		if (actual === false) {
 			textArea.val(string);
 		}
-		$scope.simulateTyping(string, textArea, delay);
+		simulateTyping(string, textArea, delay, function () {
+			//simulateTyping("Do not use browser back button to navigate", $("#txt2"), delay);
+		});
 	};
 	$scope.entry();
 	//$scope.$parent.ptObj.register(null, "enter", 0, $scope.entry);
@@ -280,27 +317,14 @@ function SkillSet($scope) {
 function Projects($scope) {
 	var delayObj = $scope.$parent.delayObj;
 	$scope.projects = projects;
-	$scope.selectProject = function(index) {
-		$scope.$parent.selectSubScreen(2, index, 0);
-	};
 	$scope.exit = function () {
 		delayObj.iterator($scope, $scope.projects, "valid", false, 0);
 	};
 	$scope.entry = function () {
 		delayObj.iterator($scope, $scope.projects, "valid", true, 100);
 	};
-
 	$scope.exit();
 
-	$scope.mouseEnter = function($event) {
-		var currentElem = $($event.target).parent();
-		currentElem.children('.content').slideDown();
-	};
-
-	$scope.mouseLeave = function($event) {
-		var currentElem = $($event.target).parent();
-		currentElem.children('.content').slideUp();
-	};
 	$scope.$parent.ptObj.register(null, "enter", 2, $scope.entry);
 	$scope.$parent.ptObj.register(null, "leave", 2, $scope.exit);
 }
@@ -309,6 +333,16 @@ function Interests($scope) {
 	$scope.interests=[interests1, interests2];
 	$scope.active = [false, false];
 	$scope.current = [interests1[0], interests2[0]];
+
+	$scope.about_me = [
+		"have experience working with an agile/scrum-based development model",
+		"have experience working with remote, cross-geo and distributed teams",
+		"self-motivated and can work for long hours",
+		"can learn things really fast and get on board quickly",
+		"a huge fan of the open source and can work with 3rd party APIs",
+		"can communicate well with others in both written and verbal forms",
+		"always aim to write elegant and well tested code and take pride in them"
+	];
 
 	$scope.nextInterest = function (option) {
 		var i = 0;
@@ -334,7 +368,7 @@ function Interests($scope) {
 		timer = setInterval(function() {
 			//$scope.index = ($scope.index + 1)%$scope.total;
 			if ($scope.active[0] === true) {
-				return;
+				//return;
 			}
 			$scope.$apply(function () {
 				$scope.nextInterest(0);
@@ -356,6 +390,7 @@ function Interests($scope) {
 	};
 	$scope.$parent.ptObj.register(null, "enter", 3, $scope.startInterestSlide);
 	$scope.$parent.ptObj.register(null, "leave", 3, $scope.stopInterestSlide);
+	$scope.$parent.about_me = $scope.about_me;
 }
 
 
@@ -447,7 +482,6 @@ function Gallery($scope) {
 		} else {
 			$scope.startSnowkick(total-1, -1, -1, 100);
 		}
-		textArea.val('');
 		simulateTyping(string, textArea, delay);
 	};
 	var wp_func_enter = function (direction) {
@@ -456,10 +490,10 @@ function Gallery($scope) {
 	};
 	var wp_func_leave = function (direction) {
 		$scope.stopSnowkick();
-		textArea.val('');
 		var pos_str = "0px 0px";
 		$scope.elem.css('background-position', pos_str);
 	};
+	textArea.val('');
 	$scope.$parent.ptObj.register(null, "enter", 7, wp_func_enter);
 	$scope.$parent.ptObj.register(null, "leave", 7, wp_func_leave);
 }
@@ -467,9 +501,6 @@ function Gallery($scope) {
 function Work($scope) {
 	var delayObj = $scope.$parent.delayObj;
 	$scope.works = works;
-	$scope.selectWork = function(index) {
-		$scope.$parent.selectSubScreen(6, index, 0);
-	};
 	$scope.exit = function () {
 		delayObj.iterator($scope, $scope.works, "valid", false, 0);
 	};
@@ -479,27 +510,18 @@ function Work($scope) {
 
 	$scope.exit();
 
-	$scope.mouseEnter = function($event) {
-		var currentElem = $($event.target).parent();
-		currentElem.children('.content').slideDown();
-	};
-
-	$scope.mouseLeave = function($event) {
-		var currentElem = $($event.target).parent();
-		currentElem.children('.content').slideUp();
-	};
 	$scope.$parent.ptObj.register(null, "enter", 6, $scope.entry);
 	$scope.$parent.ptObj.register(null, "leave", 6, $scope.exit);
 }
 
 function Awards($scope) {
 	$scope.awards = [
-		{result:"Won", name:"Standing Ovation Award", img:"about-me/symantec.png",data:"Symantec Marketing team for action in the making of Symantec’s Disaster recovery solutions videos (1 min and 10 min versions)"},
-		{result:"Won", name:"Standing Ovation Award", img:"about-me/symantec.png", data:"Symantec Engineering team for action in customer escalations and contribution towards product release."},
-		{result:"Won", name:"First place", img:"about-me/symantec.png", data:"Hackathon event at Symantec Engineering team for developing the tool bugspies."},
-		{result:"Nominated", name:"Achievers Award", img:"about-me/symantec.png", data:"Symantec Engineering team."},
-		{result:"Won", name:"Applause Award", img:"about-me/symantec.png", data:"Symantec Engineering team for action in developing a prototype for proof of concept in quick time."},
-		{result:"Won", name:"Achievement Award", img:"about-me/gator.png", data:"New Engineering Graduate Students, University of Florida."},
+		{result:"Won", name:"Standing Ovation Award", img:"about-me/symantec.png",data:"from Symantec Marketing team for action in the making of Symantec’s Disaster recovery solutions videos"},
+		{result:"Won", name:"Standing Ovation Award", img:"about-me/symantec.png", data:"from Symantec Engineering team for action in customer escalations and contribution towards product release."},
+		{result:"Won", name:"First place", img:"about-me/symantec.png", data:"in a hackathon event at Symantec for developing the tool bugspies."},
+		{result:"Nominated for", name:"Achievers Award", img:"about-me/symantec.png", data:"by Symantec Engineering team for contributions in 2013-2014."},
+		{result:"Won", name:"Applause Award", img:"about-me/symantec.png", data:"from Symantec Engineering team for developing the DRaaS prototype for proof of concept."},
+		{result:"Won", name:"Achievement Award", img:"about-me/gator.png", data:"from University of Florida Grad school for new engineering graduate students."},
 	];
 	var classLeft = "turn-page";
 	$scope.page = -1;
@@ -532,11 +554,6 @@ function Awards($scope) {
 		$scope.pageTurn(0);
 		$scope.$digest();
 		return;
-		//$scope.page++;
-		//var elem = $(".page-elem:eq(0)");
-		//elem.addClass(classLeft);
-		//elem.css('z-index', ++$scope.zcounter);
-		//$scope.$digest();
 	};
 	$scope.$parent.ptObj.register(null, "enter", 4, wp_func_enter);
 	$scope.$parent.ptObj.register(null, "leave", 4, $scope.reset);
