@@ -54,20 +54,20 @@ app.post('/passcode', function(req, res){
 	var secret = req.param('entry_key');
 	if (secret == secret_var.secret) {
 		res.cookie('entry_key', secret);
-		res.redirect('/');
+		res.redirect('/portfolio');
 	} else {
-		res.redirect('/404');
+		res.redirect('/passcode');
 	}
 });
 
 app.get('/clearpasscode', function(req, res){
 	res.clearCookie('entry_key');
 	req.session.destroy( function(e) {
-		res.redirect('/');
+		res.redirect('/passcode');
 	});
 });
 
-app.all('*', function(req, res, next){
+app.all('/portfolio', function(req, res, next){
 	if (!check_for_entry_key(req)) {
 		res.clearCookie('entry_key');
 		res.redirect('/passcode');
