@@ -7,7 +7,7 @@
 var express = require('express');
 var http = require('http');
 var app = express();
-var port = 443;
+var port = 80;
 
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server, {log:false});

@@ -239,7 +239,7 @@ function Cover($scope) {
 	$scope.navClick = function (index) {
 		$scope.$parent.nextPt(index);
 	};
-	var delay = 80;
+	var delay = 50;
 	var string = "\nHello,\nI am a full stack software developer,\nbased in San Francisco bay area, California.";
 	//var string = "\nhi, I am Manjunath,\ni am a software developer from silicon valley,\ninterested in full stack development.";
 	var textArea = $("#txt");
