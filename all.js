@@ -7,7 +7,7 @@
 var express = require('express');
 var http = require('http');
 var app = express();
-var port = 80;
+var port = 443;
 
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server, {log:false});
@@ -44,7 +44,7 @@ app.configure('development', function(){
 	app.use(express.errorHandler());
 });
 
-app.get('/404', function(req, res) { res.render('account/views/404', { title: 'Page Not Found'}); });
+//app.get('/404', function(req, res) { res.render('account/views/404', { title: 'Page Not Found'}); });
 
 app.get('/passcode', function(req, res){
 	res.render('account/views/passcode', { title: 'Enter passcode'});

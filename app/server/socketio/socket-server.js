@@ -2,6 +2,7 @@ module.exports = function(IO) {
 	var io = IO;
 	var moment = require('moment');
 	var sleep = require('sleep');
+	var waitfor = require('waitfor');
 	var socketRoomsHash = {};
 	var exportObj = {};
 	var events = require('./game/events').events;
@@ -76,7 +77,7 @@ module.exports = function(IO) {
 		var receiver = socket;
 		for (var i = 0; i < sendData.length; i++) {
 			//console.log(JSON.stringify(sendData[i]));
-			if (sendData[i].event == "sleep") {
+			if (sendData[i].event == events.sleep) {
 				sleep.usleep(sendData[i].data);
 				continue;
 			}

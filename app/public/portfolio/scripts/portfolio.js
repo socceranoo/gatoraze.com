@@ -46,7 +46,7 @@ function delayInit () {
 
 function Main($scope) {
 	$scope.first_sub = 8;
-	var test = 2;
+	var test = 0;
 	var sub = -1;
 	$scope.current = current;
 	var bgArray = [
@@ -240,7 +240,7 @@ function Cover($scope) {
 		$scope.$parent.nextPt(index);
 	};
 	var delay = 80;
-	var string = "\nHello,\nI am a full stack software developer,\nbased in California.";
+	var string = "\nHello,\nI am a full stack software developer,\nbased in San Francisco bay area, California.";
 	//var string = "\nhi, I am Manjunath,\ni am a software developer from silicon valley,\ninterested in full stack development.";
 	var textArea = $("#txt");
 	$scope.exit = function () {

@@ -1,4 +1,4 @@
-#[Node-Login](http://node-login.braitsch.io)
+#[GATORAZE.COM](http://gatoraze.com)
 
 ####A basic login & account management system built in Node.js with the following features :
 
@@ -9,34 +9,40 @@
 * Local Cookie Storage for Returning Users
 * Blowfish-based Scheme Password Encryption
 
+####An online money tracking site to share expenses with roomates and friends
+
+* adding bills
+* deleting bills
+* multiple payee/payers
+
+####An online multiplayer card game portal with game rooms and sessons using socketio and nodejs
+
+* TRUMP (a.k.a 28/48/88)
+* Hearts
+* Spades
+
+
+####An online portfolio of my work
+
+####An online portal to watch youtube videos together
+
 ***
 
-####Node-Login is built on top of the following libraries :
+####GATORAZE.COM is built on top of the following libraries :
 
 * [Node.js](http://nodejs.org/) - Application Server
 * [Express.js](http://expressjs.com/) - Node.js Web Framework
 * [MongoDb](http://www.mongodb.org/) - Database Storage
 * [Jade](http://jade-lang.com/) - HTML Templating Engine
-* [Stylus](http://learnboost.github.com/stylus/) - CSS Preprocessor
 * [EmailJS](http://github.com/eleith/emailjs) - Node.js > SMTP Server Middleware
 * [Moment.js](http://momentjs.com/) - Lightweight Date Library
 * [Twitter Bootstrap](http://twitter.github.com/bootstrap/) - UI Component & Layout Library
+* and many others
 
 ***
 
-A [Live Demo](http://node-login.braitsch.io) and [some thoughts about the app's architecture.](http://www.quietless.com/kitchen/building-a-login-system-in-node-js-and-mongodb/)
+[Visit site](http://gatoraze.com)
 
 ***
 
-####Installation & Setup
-This assumes you already have node.js & npm installed.
-```
-git clone git://github.com/braitsch/node-login.git node-login
-cd node-login
-npm install -d
-node app
-```
-For testing purposes, I've provided a [database dump of all accounts here.](http://node-login.braitsch.io/print)  
-Please note this list and the entire database automatically resets every 24 hours.
-
-Questions and suggestions for improvement are welcome.
+Credits Borrowed the account login part from [original Repo](http://node-login.braitsch.io) and [some thoughts about the author's app's architecture.](http://www.quietless.com/kitchen/building-a-login-system-in-node-js-and-mongodb/)
