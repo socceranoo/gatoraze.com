@@ -3,7 +3,7 @@ var ALL = 2, ALL_BUT_SENDER = 1, SENDER = 0;
 
 var cardClass = require('../card-class');
 var tableClass = require('../table-class');
-var sleepSeconds = 0.0 * 200000;
+var sleepSeconds = 5.0 * 200000;
 
 trump.prototype = new tableClass.obj();
 trump.prototype.constructor = trump;

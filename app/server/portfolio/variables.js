@@ -38,7 +38,9 @@ module.exports = function () {
 		git : {click:fals_var,	bg:"#EB5436", invert:true_var,	name:"git",			image:"git",		points:["", "", ""]	},
 	};
 	var project_content = [
-		{img:"gameroom.png", desc:"an online multiplayer card game portal with inbuilt AI engine", heading:"razePlay", folder:"gameroom", name:"raze-play", link:"",
+		{img:"gameroom.png", desc:"an online multiplayer card game portal with inbuilt AI engine", heading:"razePlay", folder:"gameroom", name:"raze-play",
+			link:"http://gatoraze.com/razeplay",
+			github:"https://github.com/socceranoo/gatoraze.com/tree/master/app/server/socketio/game",
 			about:"This is a multiplayer card game website with support for multiple card games. It is implemented using Node JS with Socket I/O on the back end and web sockets in the front end. Currently has Trump, Hearts and Spades.",
 			motivation:" a huge fan of the game Trump, a south asian bridge like card game. Wanted to create an online site to play with friends.",
 			skills:[ skill.njs, skill.ejs, skill.sio, skill.htm, skill.jde, skill.ajs, skill.jqy, skill.les ],
@@ -62,7 +64,9 @@ module.exports = function () {
 				{sub:"", img:"7.png", desc:"This is gameroom7"}
 			]
 		},
-		{img:"gitstats.png", desc:"an offline, intuitive statistics tool for local and private git repositories", heading:"gitStats", folder:"gitstats", name:"cool-git-stats", link:"",
+		{img:"gitstats.png", desc:"an offline, intuitive statistics tool for local and private git repositories", heading:"gitStats", folder:"gitstats", name:"cool-git-stats",
+			link:"http://gatoraze.com/coolgitstats",
+			github:"https://github.com/socceranoo/git-awsum-stats",
 			about:"This is an offline statistics tool for git repositories implemented using Python. This tool enhances the already developed opensource tool gitstats for better and intuitive visualization",
 			motivation:"a fan of git and wanted to contribute to the opensource git community.",
 			features:[
@@ -81,7 +85,9 @@ module.exports = function () {
 				{sub:"", img:"7.png", desc:"This is gitstats7"}
 			]
 		},
-		{img:"emblem.png", desc:"a fast, clean, simple and scalable registration/login portal using node js and mysql", heading:"gatoRaze.com", folder:"raze.com", name:"raze.com", link:"",
+		{img:"emblem.png", desc:"a fast, clean, simple and scalable registration/login portal using node js and mysql", heading:"gatoRaze.com", folder:"raze.com", name:"raze.com",
+			link:"http://gatoraze.com",
+			github:"https://github.com/socceranoo/gatoraze.com",
 			about:"A registration portal developed using Node Js and Mysql. This is a fast, highly scalable version of the portal originally developed by github user Stephen Braitsch. This was enhanced using Mysql and Node ORM bookshelf JS.",
 			skills:[ skill.njs, skill.ejs, skill.bsf, skill.htm, skill.jde, skill.mql, skill.ajs, skill.les ],
 			screens : [ "1.png", "2.png", "3.png", "4.png" ],
@@ -95,7 +101,9 @@ module.exports = function () {
 				{sub:"", img:"4.png", desc:"This is "}
 			]
 		},
-		{img:"dollaraze.png", desc:"an online expenses tracking and sharing service for debt settlement between friends", heading:"dollaRaze", folder:"dollaraze", name:"dollaraze", link:"",
+		{img:"dollaraze.png", desc:"an online expenses tracking and sharing service for debt settlement between friends", heading:"dollaRaze", folder:"dollaraze", name:"dollaraze",
+			link:"http://gatoraze.com/money",
+			github:"https://github.com/socceranoo/gatoraze.com/blob/master/app/modules/money-table.js",
 			about:"This is an online expense tracking and sharing site where friends can record, add and settle debts with others. This site has a Node Js, Mysql and Bookshelf JS backend and Angular JS in the front end. This site works with the above implemented registration and login portal.",
 			skills:[ skill.njs, skill.ejs, skill.bsf, skill.htm, skill.jde, skill.mql, skill.ajs, skill.les ],
 			screens : [ "1.png", "2.png", "3.png", "4.png", "5.png", "6.png", "7.png" ],
@@ -118,7 +126,9 @@ module.exports = function () {
 				{sub:"", img:"7.png", desc:"This is dollaraze7"}
 			]
 		},
-		{img:"razetube.png", desc:"an online multi guest service to search and watch youtube videos together", heading:"razeTube", folder:"razetube", name:"razetube", link:"",
+		{img:"razetube.png", desc:"an online multi guest service to search and watch youtube videos together", heading:"razeTube", folder:"razetube", name:"razetube",
+			link:"http://gatoraze.com/razeplay/tube-lobby",
+			github:"https://github.com/socceranoo/gatoraze.com/tree/master/app/server/socketio",
 			about:"This is an online multiuser service which allows users to watch youtube videos together. It integrates with the Youtube public APIs to search and fetch videos on the fly. This has a Node JS/Socket I/O back end and an Angular front end. This is incorporated with the gameroom for socket and room managerment",
 			skills:[ skill.njs, skill.ejs, skill.sio, skill.htm, skill.jde, skill.ajs, skill.jqy, skill.les ],
 			screens : [ "1.png", "2.png", "3.png", "4.png", "5.png" ],
@@ -138,7 +148,9 @@ module.exports = function () {
 				{sub:"", img:"5.png", desc:"This is "}
 			]
 		},
-		{img:"nflstats.png", desc:"an intuitive visual site to see season statistics of your favorite NFL teams and players", heading:"nflStats", folder:"nflstats", name:"nflstats", link:"",
+		{img:"nflstats.png", desc:"an intuitive visual site to see season statistics of your favorite NFL teams and players", heading:"nflStats", folder:"nflstats", name:"nflstats",
+			link:"",
+			github:"",
 			about:"This is an UI extension of already existing python tools nflgame and nfldb. The backend for getting stats has python and PostGresSQL. Search for nfldb and nflgame opensource utilities to know further. This site has a clean and queriable UI to make use of the python scripts in the backend.",
 			skills:[ skill.pyt, skill.njs, skill.ejs, skill.htm, skill.jde, skill.ajs, skill.les ],
 			screens : [ "1.png", "2.png", "3.png", "4.png", "5.png" ],

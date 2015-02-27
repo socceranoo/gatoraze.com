@@ -5,11 +5,11 @@
 
 //.background-white.text-center.top-bar
 .background-white.text-center.left-bar
-	ul.page-list.camouflage.list-unstyled.featurette-divider3
+	ul.page-list.camouflage.list-unstyled.featurette-divider3.background-white
 		//h1.font-70.font-stylish.ext-underline.bold
 		//	em M
-		.alf-width.img-responsive.responsive-heading.margin-5
-			img.img-responsive(src='/portfolio/images/name2.png')
+		//.alf-width.img-responsive.responsive-heading.margin-5
+			img.img-responsive.block3(src='/portfolio/images/name2.png')
 			hr.featurette-divider4
 		-each page,index in pages
 			li(ng-class='{"background-black color-clouds":current == '+page.page+' ||((curSubScreen - curSubScreen%100)/100 == '+page.page+' && curSubScreen != -1 )}')
@@ -43,5 +43,7 @@ a.menu-icon-bottom.btn.background-cloud(ng-click='moveUp();' href='javascript:vo
 	//include interest-list
 
 p.menu-icon-bottom-right.text-center.color-black.font-stylish
+	em &nbsp;do not use browser back to navigate&nbsp;
+	br
 	em &copy;&nbsp;anoop manjunath mageswaran 2015 &nbsp;
 

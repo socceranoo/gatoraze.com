@@ -2,12 +2,52 @@ extends layout
 
 block content
 	.row
-		.col-md-8.col-md-offset-2.background-opacity
-			h2.text-center 
-			.col-md-4.col-md-offset-4
-				h3.text-center DOLLARAZE
-				a(href='/money').height-300
-					img.img-circle.img-responsive.background-orange(src='/account/images/money-icon2.png')
+		ul.col-md-10.col-md-offset-1.well.ackground-opacity.list-unstyled.list-inline.text-center
+			h4.text-center
+				a.pull-right(href='/logout') logout
+			hr.featurette-divider3
+			li.margin-10
+				.height-150.width-150.background-emerald.img-rounded.img-thumbnail(style="line-height:150px")
+					a(href='/money')
+						span.text-center.font-80.font-stylish.color-black D
+				h4.text-center dollaraze
+			li.margin-10
+				.height-150.width-150.background-sunFlower.img-rounded.img-thumbnail(style="line-height:150px")
+					a(href='/razeplay')
+						span.text-center.font-80.font-stylish.color-black R
+				h4.text-center razeplay
+			li.margin-10
+				.height-150.width-150.background-orange.img-rounded.img-thumbnail(style="line-height:150px")
+					a(href='/razeplay/tube-lobby')
+						span.text-center.font-80.font-stylish.color-black C
+				h4.text-center connectube
+			li.margin-10
+				.height-150.width-150.background-peterRiver.img-rounded.img-thumbnail(style="line-height:150px")
+					a(href='/portfolio')
+						span.text-center.font-80.font-stylish.color-black P
+				h4.text-center portfolio
+			li.margin-10
+				.height-150.width-150.background-concrete.img-rounded.img-thumbnail(style="line-height:150px")
+					a(href='/coolgitstats')
+						span.text-center.font-80.font-stylish.color-black G
+				h4.text-center gitstats
+			//
+				.col-md-4.col-sm-4
+					h2.text-center dollaraze
+					a(href='/money')
+						img.img-rounded.img-responsive(src='/portfolio/images/projects/dollaraze.png')
+				.col-md-4.col-sm-4
+					h2.text-center razeplay
+					a(href='/money')
+						img.img-rounded.img-responsive(src='/portfolio/images/projects/gameroom.png')
+				.col-md-4.col-sm-4
+					h2.text-center connectube
+					a(href='/razeplay/tube')
+						img.img-rounded.img-responsive(src='/portfolio/images/projects/razetube.png')
+				.col-md-4.col-sm-4
+					h2.text-center gitstats
+					a(href='/coolgitstats')
+						img.img-rounded.img-responsive(src='/portfolio/images/projects/gitstats.png')
 			//
 				.col-md-4
 					h3.text-center TRUMP

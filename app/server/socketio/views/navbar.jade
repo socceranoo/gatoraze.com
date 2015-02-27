@@ -1,5 +1,6 @@
 .brand.container
-	img.img-responsive(src="/socketio/images/gamecenter-icon.png" alt="").pull-left
+	a(href="/razeplay/lobby")
+		img.img-responsive(src="/socketio/images/gamecenter-icon.png" alt="").pull-left
 	form(action='/razeplay/lobby', method='POST').pull-right
 		- if (list)
 			a(href="/razeplay/lobby").btn.btn-success Back to Lobby
