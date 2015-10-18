@@ -1,20 +1,59 @@
 #prev-game.modal.fade(style='overflow:auto')
 	.modal-dialog
-		.modal-content
+		#myCarousel.carousel.slide.modal-content
 			.modal-header.text-center
 				a.close(data-dismiss='modal') &times;
-				h3 Previous game
-			.modal-body.text-center
-				#myCarousel.carousel.slide(ng-show='tableData.prevGame.allRounds.length')
-					a.control.control-left(href="#myCarousel" data-slide="prev") <
-					a.control.control-right(href="#myCarousel" data-slide="next") >
-					.carousel-inner
-						.item.active
-							h2 Game Stats
-							.table-layout
-						.item(ng-repeat='roundObj in tableData.prevGame.allRounds track by $index')
-							h2 Round{{$index+1}}
-							.table-layout
-								.card-holder(ng-repeat='obj in roundObj.round track by $index' class='pos'+total+'-{{shifter(obj.player)}}')
-									.card.green-border(ng-class="{'red-border': obj.player%2 == 1, 'blue-border':$index == 0}" style='background-position:{{obj.card.bgPos[0]}}px {{obj.card.bgPos[1]}}px')
-									span.player-name(ng-class="{'color-metroRed': obj.player%2 == 1}" ng-bind='tableData.players[shifter(obj.player)]')
+				h4 Summary
+			.modal-body.text-center(ng-show='tableData.prevGame.allRounds.length')
+				//a.control.control-left(href="#myCarousel" data-slide="prev") <
+				//a.control.control-right(href="#myCarousel" data-slide="next") >
+				ul.pagination.pagination-sm
+					li
+						a(href="#myCarousel", data-slide-to="0") 0
+					li(ng-repeat='roundObj in tableData.prevGame.allRounds track by $index')
+						a(href="#myCarousel", data-slide-to="{{$index+1}}") {{$index + 1 }}
+				.carousel-inner
+					.item.active
+						div(ng-if='position%2 == tableData.prevGame.stats.team')
+							h3.color-metroGreen.no-margin(ng-if='tableData.prevGame.stats.win === true') You win !!!
+							h3.color-metroRed.no-margin(ng-if='tableData.prevGame.stats.win === false') You lose :(
+						div(ng-if='position%2 != tableData.prevGame.stats.team')
+							h3.color-metroGreen.no-margin(ng-if='tableData.prevGame.stats.win === false') You win !!!
+							h3.color-metroRed.no-margin(ng-if='tableData.prevGame.stats.win === true') You lose :(
+						.table-layout
+							ul.text-center.list-inline
+								li.suit-image(style='background-position:{{suitImg[tableData.prevGame.stats.trump_card.suit.name].bgPos[0]}}px {{suitImg[tableData.prevGame.stats.trump_card.suit.name].bgPos[1]}}px')
+							table.table.table-bordered.table-striped
+								tr
+									th.text-center Setter
+									th.text-center Bid
+									th.text-center Revealer
+									th.text-center Reveal Round
+								tr
+									td.player-name(ng-class="{'color-metroRed': tableData.prevGame.stats.setter%2 == 1}" ng-bind='tableData.players[shifter(tableData.prevGame.stats.setter)]')
+									td(ng-bind='tableData.prevGame.stats.points')
+									td.player-name(ng-class="{'color-metroRed': tableData.prevGame.stats.trump_revealer %2 == 1}" ng-bind='tableData.players[shifter(tableData.prevGame.stats.trump_revealer)]')
+									td(ng-bind='tableData.prevGame.stats.trump_reveal_round')
+							.col-md-12.col-sm-12
+								.col-md-6.col-sm-6(ng-repeat='team in tableData.prevGame.stats.team_info track by $index')
+									table.table.table-bordered.table-striped
+										h3.text-center Team {{$index+1}}
+										tr
+											th.text-center Player
+											th.text-center Points
+										tr(ng-repeat='player in team.players track by $index')
+											td.player-name(ng-class="{'color-metroRed': team.index == 1}" ng-bind='tableData.players[shifter(player.position)]')
+											td(ng-bind='player.points')
+										tr
+											td
+											td(ng-bind='tableData.prevGame.stats.team_points', ng-if='tableData.prevGame.stats.team == team.index')
+											td(ng-bind='tableData.prevGame.stats.rem_points', ng-if='tableData.prevGame.stats.team != team.index')
+					.item(ng-repeat='roundObj in tableData.prevGame.allRounds track by $index')
+						.col-md-12.col-sm-12
+							h3.text-center.no-margin Round {{$index+1}} ({{roundObj.points}})
+							.col-md-10.col-sm-10.col-md-offset-1.col-sm-offset-1
+								.table-layout
+									.card-holder(ng-repeat='obj in roundObj.round track by $index' class='pos'+total+'-{{shifter(obj.player)}}', ng-class="{'non-round-winner':obj.player != roundObj.winner, 'round-winner':obj.player == roundObj.winner}")
+										.card(ng-class="{'blue-border':$index == 0}" style='background-position:{{obj.card.bgPos[0]}}px {{obj.card.bgPos[1]}}px')
+										h4.player-name(ng-class="{'color-metroRed': obj.player%2 == 1}" ng-bind='tableData.players[shifter(obj.player)]')
+									//.trump-position(style='background-position:{{suitImg[roundObj.round[0].card.suit.name].bgPos[0]}}px {{suitImg[roundObj.round[0].card.suit.name].bgPos[1]}}px')

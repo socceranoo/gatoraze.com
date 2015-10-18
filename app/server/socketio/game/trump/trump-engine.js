@@ -1,18 +1,19 @@
+var DIFFICULTY_EASY = 0, DIFFICULTY_MEDIUM = 1, DIFFICULTY_HARD = 2;
 var getPointsObj = function () {
 	return {
-		"A": {rank:5, points:1},
+		"A": {rank:5, points:1, valid:{4:true, 6:true, 8:true}},
 		"2": {rank:1, points:10, valid:{4:false, 6:false, 8:true}},
 		"3": {rank:2, points:5, valid:{4:false, 6:true, 8:true}},
 		"4": {rank:13, points:0, valid:{4:false, 6:false, 8:false}},
 		"5": {rank:12, points:0, valid:{4:false, 6:false, 8:true}},
 		"6": {rank:11, points:0, valid:{4:false, 6:false, 8:true}},
-		"7": {rank:10, points:0},
-		"8": {rank:9, points:0},
-		"9": {rank:4, points:2},
-		"T": {rank:6, points:1},
-		"J": {rank:3, points:3},
-		"Q": {rank:8, points:0},
-		"K": {rank:7, points:0},
+		"7": {rank:10, points:0, valid:{4:true, 6:true, 8:true}},
+		"8": {rank:9, points:0, valid:{4:true, 6:true, 8:true}},
+		"9": {rank:4, points:2, valid:{4:true, 6:true, 8:true}},
+		"T": {rank:6, points:1, valid:{4:true, 6:true, 8:true}},
+		"J": {rank:3, points:3, valid:{4:true, 6:true, 8:true}},
+		"Q": {rank:8, points:0, valid:{4:true, 6:true, 8:true}},
+		"K": {rank:7, points:0, valid:{4:true, 6:true, 8:true}}
 	};
 };
 exports.site = "Trump";
@@ -60,19 +61,17 @@ exports.setTrump = function (playerObj, trump) {
 exports.bestCard = function (playerObj, round, trump) {
 	var index = 0;
 	var i = 0;
+	var cardIndexArr = null;
 	if (playerObj.hand.length === 1 && trump.revealed === false && playerObj.position == trump.setter) {
 		return {card: trump.card, index:index, reveal:true};
 	}
 	if (round.length === 0 ) {
-		//console.log("First Card");
-		return {card: playerObj.hand[index], index:index};
+		cardIndexArr = Object.keys(getValidOpeningCards(playerObj, trump));
+	} else {
+		cardIndexArr = Object.keys(getValidMiddleCards(playerObj, round, trump, round.length));
 	}
-	for (i = 0; i < playerObj.hand.length ; i++) {
-		if(round[0].card.suit.name == playerObj.hand[i].suit.name){
-			//console.log("Lead Card:"+round[0].card.name+" My card:"+playerObj.hand[i].name);
-			return {card: playerObj.hand[i], index:i};
-		}
-	}
+	index = cardIndexArr[0];
+	return {card: playerObj.hand[index], index:index};
 	/*
 	if (trump.revealed === false) {
 		for (i = 0; i < playerObj.hand.length ; i++) {
@@ -86,7 +85,7 @@ exports.bestCard = function (playerObj, round, trump) {
 	}
    */
 	//console.log("Lead Card:"+round[0].card.name+" My card:"+playerObj.hand[index].name+" Trump Revealed is :"+trump.revealed);
-	return {card: playerObj.hand[index], index:index};
+	//return {card: playerObj.hand[index], index:index};
 };
 exports.revealTrump = function (playerObj, round, trump) {
 	var message = '';

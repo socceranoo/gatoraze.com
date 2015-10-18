@@ -4,12 +4,14 @@ block content
 	.row
 		h1.text-center &nbsp;
 		.col-md-12.col-sm-12.featurette-divider3.text-center
+			br
 			- each value, server in list
-				.col-md-6.col-sm-6
+				.col-md-3.col-sm-3
 					h2= value.name
-					.col-md-6.col-sm-6.col-md-offset-3.col-sm-offset-3.well.img-rounded
+					br
+					.img-rounded.ell(class='ackground-'+value.background)
 						a(href='/razeplay/'+server+'-lobby')
-							img.height-300.img-responsive(src="/socketio/images/"+value.image alt="")
+							img.height-250.img-responsive(src="/socketio/images/"+value.image alt="")
 		//
 
 			.col-md-6.col-sm-6.ackground-emerald.text-center

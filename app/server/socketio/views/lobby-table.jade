@@ -1,0 +1,47 @@
+#room-info-modal.modal.fade
+	.modal-dialog.modal-sm
+		.modal-content
+			.modal-header.text-center
+				a.close(data-dismiss='modal') &times;
+				h3 Room info
+			.modal-body.text-justify
+				div.well#control-data(style='height:500px; overflow:auto;')
+
+- if (list.length)
+	h3.text-center Join a game
+	hr
+	table.table.table-bordered.table-striped
+		tr
+			//th Server
+			th Room
+			th In Progress
+			th Players
+			th Info
+			th
+		- each stuff in list
+			tr
+				//td= stuff.game+' ('+stuff.totalPoints+')'
+				td= stuff.room
+				td
+					- if (stuff.inProgress)
+						span.icon.glyphicon.glyphicon-ok.color-metroGreen
+					- else
+						span.icon.glyphicon.glyphicon-remove.color-metroRed
+				td
+					- if (stuff.active < stuff.total)
+						span.color-metroGreen= stuff.active+'/'+stuff.total
+					- else
+						span.color-metroRed= stuff.active+'/'+stuff.total
+				td
+					//stuff.playerInfo
+					a.glyphicon.glyphicon-info-sign(data-toggle='modal' href='#room-info-modal' title='Game info')
+				td
+					- if (stuff.active < stuff.total)
+						a.glyphicon.glyphicon-share-alt.color-metroGreen(href='/razeplay/'+stuff.game+'/?session='+stuff.session)
+					- else
+						span.btn.btn-danger.btn-sm Full
+- else
+	h3.text-center No Tables at this time
+	hr
+h3.text-center Start a new game
+hr

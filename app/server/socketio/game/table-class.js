@@ -1,12 +1,20 @@
 var ALL = 2, ALL_BUT_SENDER = 1, SENDER = 0;
 var events = require('./events').events;
-function player(name, position, human) {
+/*
+ * http://api.randomuser.me/?results=100
+ */
+var uinames = require("./uinames.json");
+var cardClass = require("./card-class");
+function player(name, position, human, bio, difficulty) {
 	this.name = name;
 	this.hand = [];
 	this.position = position;
 	this.points = 0;
+	this.wins = 0;
 	this.team = position%2;
 	this.human = human;
+	this.player_bio = bio;
+	this.difficulty = difficulty;
 }
 player.prototype.getCardSet = function (set) {
 	var first_set = parseInt(this.hand.length / 2 , 10);
@@ -18,6 +26,8 @@ player.prototype.getCardSet = function (set) {
 };
 
 function table(num, room) {
+	this.computerNames = JSON.parse(JSON.stringify(uinames.results));
+	cardClass.shuffle(this.computerNames);
 	this.addHumanMember = function (newPlayer) {
 		var sendData = [];
 		var message, position, compName, data, playerObj;
@@ -41,7 +51,7 @@ function table(num, room) {
 			delete this.members[compName];
 		} else {
 			position = Object.keys(this.members).length;
-			playerObj = new player(newPlayer, position, true);
+			playerObj = new player(newPlayer, position, true, null, -1);
 			this.members[newPlayer] = playerObj;
 		}
 		this.playerArr[position] = newPlayer;
@@ -65,7 +75,7 @@ function table(num, room) {
 		}
 		return [true, sendData];
 	};
-	this.addComputerMember = function (adder) {
+	this.addComputerMember = function (adder, difficulty) {
 		var sendData = [];
 		var message, position, compName, data, playerObj;
 		if (this.inProgress === true) {
@@ -79,8 +89,9 @@ function table(num, room) {
 			return [false, sendData];
 		}
 		position = Object.keys(this.members).length;
-		compName = 'Computer'+position;
-		playerObj = new player(compName, position, false);
+		var bio = this.computerNames[position].user;
+		compName = bio.username;
+		playerObj = new player(compName, position, false, bio, difficulty);
 		this.members[compName] = playerObj;
 		this.playerArr[position] = compName;
 		data = {name:compName, position:position, inProgress:this.inProgress};

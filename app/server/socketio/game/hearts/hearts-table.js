@@ -4,7 +4,7 @@ var PASSLEFT = 0, PASSACROSS = 1, PASSRIGHT = 2, NOPASS = 3;
 
 var cardClass = require('../card-class');
 var tableClass = require('../table-class');
-var sleepSeconds = 0.0 * 200000;
+var sleepSeconds = 2.5 * 200000;
 
 var gameEngine = require('./hearts-engine');
 hearts.prototype = new tableClass.obj();

@@ -3,8 +3,9 @@
 		img.img-responsive(src="/socketio/images/gamecenter-icon.png" alt="").pull-left
 	form(action='/razeplay/lobby', method='POST').pull-right
 		- if (list)
-			a(href="/razeplay/lobby").btn.btn-success Back to Lobby
-		input.btn.btn-danger(type='submit' value='Leave Lobby')
+			a(href="/razeplay/lobby").btn.btn-lg.btn-success
+				span.icon.glyphicon.glyphicon-home
+		input.btn.btn-danger(type='submit' value='Exit')
 	//
 		h2.pull-left
 			span= site

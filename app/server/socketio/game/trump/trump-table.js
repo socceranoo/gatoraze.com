@@ -3,13 +3,16 @@ var ALL = 2, ALL_BUT_SENDER = 1, SENDER = 0;
 
 var cardClass = require('../card-class');
 var tableClass = require('../table-class');
-var sleepSeconds = 5.0 * 200000;
+var sleepSeconds = 0.1 * 200000;
 
 trump.prototype = new tableClass.obj();
 trump.prototype.constructor = trump;
 function trump (num, room) {
 	this.gameEngine = require('./trump-engine');
-	this.autoPrePlay = false;
+	this.autoPrePlay = true;
+	this.autoGamePlay = true;
+	this.autoGameCount = 5;
+	this.gameCount = 0;
 	this.room = room;
 	this.totalPoints = this.gameEngine.getTotalPoints(num);
 	this.cardDeck = this.gameEngine.pruneCardDeck(cardClass.createCardDeck(), num);
@@ -70,6 +73,7 @@ function trump (num, room) {
 		for (var key in this.members) {
 			j = i-1;
 			var userObj = this.members[key];
+			userObj.points = 0;
 			this.setPlayerCards(userObj, j, j+this.handCount);
 			i+= this.handCount;
 			if (userObj.human === true) {
@@ -80,13 +84,93 @@ function trump (num, room) {
 			}
 		}
 	};
-	this.updatePoints = function (winner, points) {
-		for (var key in this.members) {
-			var userObj = this.members[key];
-			if (userObj.position % 2 === winner % 2) {
-				userObj.points += points;
+	this.getGameStats = function () {
+		var statsObj = {
+			'points':this.trump.points,
+			'team':this.trump.setter % 2,
+			'setter':this.trump.setter,
+			'team_points': 0,
+			'win':false,
+			'rem_points':0,
+			'best_player':-1,
+			'best_points':-1,
+			'team_info':[
+				{'index':0, 'players':[]},
+				{'index':1, 'players':[]}
+			],
+			'trump_revealer':this.trump.revealer,
+			'trump_reveal_round':this.trump.revealRound + 1,
+			'trump_card':this.trump.card
+		};
+		var userObj = null;
+		var key = null;
+		for (key in this.members) {
+			userObj = this.members[key];
+			if (userObj.points > statsObj.best_points) {
+				statsObj.best_points = userObj.points;
+				statsObj.best_player = userObj.position;
+			}
+			if (userObj.team === this.trump.setter % 2) {
+				statsObj.team_points += userObj.points;
 			}
 		}
+		statsObj.rem_points = this.totalPoints - statsObj.team_points;
+		if (statsObj.team_points >= this.trump.points) {
+			statsObj.win = true;
+		}
+		for (var i = 0 ; i < this.playerArr.length; i++) {
+			userObj = this.members[this.playerArr[i]];
+			if (userObj.team === statsObj.team) {
+				if (statsObj.win === true) {
+					userObj.wins += 1;
+				}
+			} else {
+				if (statsObj.win === false) {
+					userObj.wins += 1;
+				}
+			}
+			statsObj.team_info[userObj.team].players.push({'position': userObj.position, 'points':userObj.points});
+		}
+		this.checkGameSanity();
+		//console.log("stats:"+JSON.stringify(statsObj));
+		return statsObj;
+	};
+
+	this.checkGameSanity = function() {
+		var index_map = [];
+		var i = 0;
+		var sane = true;
+		for (i = 0 ; i < 52; i++) {
+			index_map.push(0);
+		}
+		for (i = 0 ; i < this.round.length; i++) {
+			var roundObj = this.round[i];
+			if (roundObj.round.length != this.playerArr.length) {
+				console.log("Round "+i+" has only "+roundObj.round.length+" cards and not "+this.playerArr.length+" cards");
+				sane = false;
+			}
+			for (var j = 0; j < roundObj.round.length; j++) {
+				index_map[roundObj.round[j].card.index] += 1;
+			}
+		}
+		for (i = 0 ; i < this.cardDeck.length; i++) {
+			if (index_map[this.cardDeck[i].index] === 0 ) {
+				console.log("Card "+this.cardDeck[i].name+" did not appear at all");
+				sane = false;
+			} else if (index_map[this.cardDeck[i].index] > 1 ) {
+				console.log("Card "+this.cardDeck[i].name+" appeared twice");
+				sane = false;
+			}
+		}
+		if (sane === true) {
+			console.log("Game is Sane");
+		}
+		return;
+	};
+
+	this.updatePoints = function (winner, points) {
+		userObj = this.members[this.playerArr[winner]];
+		userObj.points += points;
 	};
 
 	this.sendPreGameInfo = function (sendData, round) {
@@ -155,6 +239,11 @@ function trump (num, room) {
 		if (human && !this.isValid(data, sendData)) {
 			return sendData;
 		}
+		if (human) {
+			if (this.gameCount < this.autoGameCount) {
+				this.autoGamePlay = true;
+			}
+		}
 		this.currentPlayer++;
 		this.currentPlayer %= this.totalPlayers;
 		this.currentRound.push(data.cardObj);
@@ -165,14 +254,16 @@ function trump (num, room) {
 			sendData.push({dest:ALL, event:events.play, message:"PLAY",  data:{play:true, player:-1, cardObj:data.cardObj}});
 			sendData.push({dest:ALL , event:events.sleep, message:"SLEEP",  data:sleepSeconds});
 			sendData.push({dest:ALL, event:events.round, message:"Round",  data:{prevRound:this.currentRound, winner:roundWinner}});
+			this.updatePoints(roundWinner.player, roundWinner.points);
 			this.round.push({winner:roundWinner.player, points:roundWinner.points, round:this.currentRound});
 			this.currentRound = [];
 			if (this.round.length === this.handCount) {
-				//this.updatePoints();
-				sendData.push({dest:ALL, event:events.game, message:"Game",  data:{prevGame:{allRounds:this.round, stats:null}}});
+				sendData.push({dest:ALL, event:events.game, message:"Game",  data:{prevGame:{allRounds:this.round, stats:this.getGameStats()}}});
 				this.round = [];
 				this.gameStarter++;
 				this.gameStarter %= this.totalPlayers;
+				this.gameCount++;
+				this.autoGamePlay = false;
 				this.startPrePlay(sendData);
 			} else {
 				this.currentPlayer = roundWinner.player;
@@ -185,7 +276,7 @@ function trump (num, room) {
 			sendData.push({dest:ALL, event:events.play, message:"PLAY",  data:data});
 		}
 		playerObj = this.members[this.playerArr[this.currentPlayer]];
-		if (playerObj.human === false) {
+		if (this.autoGamePlay === true || playerObj.human === false) {
 			var newData = JSON.parse(JSON.stringify(data));
 			this.computerPlay(playerObj, newData, sendData);
 		}

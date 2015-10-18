@@ -8,10 +8,10 @@ module.exports = function(IO) {
 	var events = require('./game/events').events;
 	var trump_table = require('./game/trump/trump-table');
 	var servers = {
-		trump: {name:"Trump", image:"trump.png", sessionCount: 0, tableObj:trump_table},
-		spades: {name:"Spades", image:"spades.png", sessionCount: 0, tableObj:trump_table},
-		hearts:{name:"Hearts", image:"QH.png", sessionCount:0, tableObj:require('./game/hearts/hearts-table')},
-		tube:{name:"Connectube", image:"tube.png", sessionCount:0, tableObj:require('./tube/tube-server.js')}
+		trump: {name:"Trump", image:"trump.png", background:"metroJade", sessionCount: 0, tableObj:trump_table},
+		spades: {name:"Spades", image:"spades.png", background:"metroOrange", sessionCount: 0, tableObj:trump_table},
+		hearts:{name:"Hearts", image:"QH.png", background:"metroYellow", sessionCount:0, tableObj:require('./game/hearts/hearts-table')},
+		tube:{name:"Connectube", image:"tube.png", background:"peterRiver", sessionCount:0, tableObj:require('./tube/tube-server.js')}
 	};
 	for (var key in servers) {
 		socketRoomsHash[key] = {};
@@ -38,8 +38,8 @@ module.exports = function(IO) {
 			return success;
 		};
 
-		this.addComputer = function (socket, data) {
-			var ret = this.gameTable.addComputerMember(data.user);
+		this.addComputer = function (socket, data, difficulty) {
+			var ret = this.gameTable.addComputerMember(data.user, difficulty);
 			var success = ret[0];
 			var sendData = ret[1];
 			sendEventsSocket(this.game, socket, sendData, this.userSockets);
@@ -143,7 +143,7 @@ module.exports = function(IO) {
 			});
 			socket.on(events.addComputer, function (data) {
 				var gameRoomObj = socketRoomsHash[data.userInfo.site][data.userInfo.room];
-				gameRoomObj.addComputer(socket, data.userInfo);
+				gameRoomObj.addComputer(socket, data.userInfo, data.difficulty);
 			});
 		}
 	};

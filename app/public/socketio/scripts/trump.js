@@ -214,8 +214,9 @@ function trump($scope) {
 			$scope.$apply();
 		});
 		$("#myCarousel").carousel({interval: false});
-		for (i = 1 ; i < total; i++)
-			$scope.addComputer();
+		for (i = 1 ; i < total; i++) {
+			$scope.addComputer(0);
+		}
 	});
 	socket.on(events.message, function(data) {
 		$scope.addMessage(data.message, data.sender, data.date, data.data);
@@ -360,8 +361,8 @@ function trump($scope) {
 	$scope.addControlData = function (event, data) {
 		$("#control-data").append(event+" : "+JSON.stringify(data));
 	};
-	$scope.addComputer = function() {
-		socket.emit(events.addComputer, {userInfo: userInfo});
+	$scope.addComputer = function(difficulty) {
+		socket.emit(events.addComputer, {userInfo: userInfo, difficulty: difficulty});
 	};
 	$scope.sendMessage = function() {
 		if ($scope.message !== "") {

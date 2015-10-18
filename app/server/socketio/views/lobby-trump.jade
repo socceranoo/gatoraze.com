@@ -8,28 +8,17 @@ block content
 				img.img-responsive(src="/socketio/images/trump.png" alt="")
 				//img.img-responsive(src="/socketio/images/jackspade.png" alt="")
 			.col-md-10.col-sm-10
-				h3.text-center Tables
-				table.table.table-bordered.table-striped
-					tr
-						th Server
-						th Room
-						th In Progress
-						th Players
-						th Info
-						th Join
-					- each stuff in list
-						tr
-							td= stuff.game+' ('+stuff.totalPoints+')'
-							td= stuff.room
-							td= stuff.inProgress
-							td= stuff.active+'/'+stuff.total
-							td= stuff.playerInfo
-							td
-								a(href='/razeplay/'+stuff.game+'/?session='+stuff.session) Join
+				include lobby-table
 				ul.text-center.list-unstyled.list-inline
 					li
-						a.btn.btn-sm.btn-success(href='/razeplay/trump') New 4 player game
+						a.btn.btn-lg.btn-success(href='/razeplay/trump?players=4')
+							span 4 &nbsp;
+							span.icon.glyphicon.glyphicon-user
 					li
-						a.btn.btn-sm.btn-success(href='/razeplay/trump?players=6') New 6 player game
+						a.btn.btn-lg.btn-success(href='/razeplay/trump?players=6')
+							span 6 &nbsp;
+							span.icon.glyphicon.glyphicon-user
 					li
-						a.btn.btn-sm.btn-success(href='/razeplay/trump/?players=8') New 8 player game
+						a.btn.btn-lg.btn-success(href='/razeplay/trump/?players=8')
+							span 8 &nbsp;
+							span.icon.glyphicon.glyphicon-user
