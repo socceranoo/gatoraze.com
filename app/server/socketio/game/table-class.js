@@ -11,6 +11,7 @@ function player(name, position, human, bio, difficulty) {
 	this.hand = [];
 	this.position = position;
 	this.points = 0;
+	this.total_points = 0;
 	this.wins = 0;
 	this.team = position%2;
 	this.human = human;

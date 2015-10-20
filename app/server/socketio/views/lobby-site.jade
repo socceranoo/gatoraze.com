@@ -1,0 +1,26 @@
+extends layout
+block content
+	include navbar
+	.row
+		h1.text-center= obj.name
+		.col-md-12.col-sm-12.featurette-divider.background-unFlower
+			.col-md-2.col-sm-2
+				img.img-responsive(src="/socketio/images/"+obj.image,  alt="")
+			.col-md-10.col-sm-10
+				include lobby-table
+				ul.text-center.list-unstyled.list-inline
+					- each value in obj.info.game
+						li
+							a.btn.btn-lg.btn-success(href='/razeplay/'+site+'?players='+value)
+								span= value
+								span &nbsp;
+								span.icon.glyphicon(class='glyphicon-'+obj.info.icon)
+					//
+						li
+							a.btn.btn-lg.btn-success(href='/razeplay/trump?players=6')
+								span 6 &nbsp;
+								span.icon.glyphicon.glyphicon-user
+						li
+							a.btn.btn-lg.btn-success(href='/razeplay/trump/?players=8')
+								span 8 &nbsp;
+								span.icon.glyphicon.glyphicon-user

@@ -30,6 +30,7 @@ function tube(num, room) {
 		sendData.push({dest:ALL_BUT_SENDER, event:events.playerJoin, message:message, data:data});
 		return [true, sendData];
 	};
+	this.addHumanViewer = this.addHumanMember;
 
 	this.removeHumanMember = function (exitingPlayer) {
 		var sendData = [];

@@ -1,0 +1,6 @@
+.col-md-8.col-md-offset-2.text-center.background-sunFloer
+	h4.color-metroRed(ng-bind='info')
+	//h3.text-center(ng-bind='action')
+	ul.card-set.player-hand.clearfix.list-unstyled.list-inline(ng-cloak ng-class="{'your-turn': (action == 'Play' || action == 'Bid' || action == 'Set Trump')}" ng-show='tableData.players.length')
+		li.card-holder.background-peterRive(ng-class="{'highlight': card.valid === true}" ng-repeat='card in cards')
+			.card(style='background-position:{{card.bgPos[0]}}px {{card.bgPos[1]}}px' ng-click='cardClick(card, $index)')

@@ -13,6 +13,32 @@ exports.createNewGame = function (game, num) {
 function Engine(game, num) {
 	this.game = game;
 	this.totalPlayers = num;
+	this.pointsObj = {
+		"A": {rank:1, points:0},
+		"2": {rank:13, points:0},
+		"3": {rank:12, points:0},
+		"4": {rank:11, points:0},
+		"5": {rank:10, points:0},
+		"6": {rank:9, points:0},
+		"7": {rank:8, points:0},
+		"8": {rank:7, points:0},
+		"9": {rank:6, points:0},
+		"T": {rank:5, points:0},
+		"J": {rank:4, points:0},
+		"Q": {rank:3, points:0},
+		"K": {rank:2, points:0}
+	};
+
+	this.suitObj = {
+		"S": {rank:1, points:0},
+		"H": {rank:2, points:0},
+		"C": {rank:3, points:0},
+		"D": {rank:4, points:0}
+	};
+
+	this.getMinimumBid = function (round) {
+		return 0;
+	};
 
 	this.pruneCardDeck = function (cardDeck) {
 		var ret = [];
@@ -32,10 +58,11 @@ function Engine(game, num) {
 	};
 
 	this.sortPlayerHand = function (cardArr) {
+		var suitObj = this.suitObj;
 		var pointsObj = this.pointsObj;
 		cardArr.sort(function () {
 			return function(a, b) {
-				var sameSuit = pointsObj[b.suit.name].rank - pointsObj[a.suit.name].rank;
+				var sameSuit = suitObj[b.suit.name].rank - suitObj[a.suit.name].rank;
 				if (sameSuit === 0) {
 					return pointsObj[b.rank.name].rank - pointsObj[a.rank.name].rank;
 				} else {
@@ -167,17 +194,17 @@ function Engine(game, num) {
 		return ret;
 	};
 
-	this.bestCard = function (playerObj, round, trump) {
+	this.bestCard = function (playerObj, round, trump, roundNumber) {
 		var index = 0;
 		var cardIndexArr = null;
-		//Trump setter will be -1 in Spades game
+		//Trump setter will be -1 in Spades game and in Hearts Game
 		if (playerObj.position === trump.setter && playerObj.hand.length === 1 && trump.revealed === false) {
 			return {card: trump.card, index:index, reveal:true};
 		}
-		if (round.length === 0 ) {
-			cardIndexArr = Object.keys(this.getValidOpeningCards(playerObj, round.length, trump));
+		if (round.length ) {
+			cardIndexArr = Object.keys(this.getValidMiddleCards(playerObj, round, trump, roundNumber));
 		} else {
-			cardIndexArr = Object.keys(this.getValidMiddleCards(playerObj, round, trump, round.length));
+			cardIndexArr = Object.keys(this.getValidOpeningCards(playerObj, roundNumber, trump));
 		}
 		index = cardIndexArr[0];
 		return {card: playerObj.hand[index], index:index};
@@ -208,15 +235,16 @@ function Engine(game, num) {
 		return {player:leadObj.player, points:points};
 	};
 
-	this.getValidMiddleCards = function (playerObj, round, trump) {
+	this.getValidMiddleCards = function (playerObj, round, trump, roundNumber) {
 		var anyArr = {};
 		var suitArr = {};
 		var i = 0;
 		var message3 = 'Cannot play some other suit than the lead card suit';
-		if (trump.revealed === false && round[round.length - 1].card.suit.name == trump.card.suit.name) {
+		console.log("Round Number :" +roundNumber);
+		console.log(JSON.stringify(round));
+		if (trump.revealed === false && round.length > 0 && round[round.length - 1].card.suit.name == trump.card.suit.name) {
 			trump.revealed = true;
 		}
-
 		for (i = 0; i < playerObj.hand.length ; i++) {
 			anyArr[i] = true;
 			if (round[0].card.suit.name == playerObj.hand[i].suit.name){
@@ -331,25 +359,6 @@ trump_engine.prototype.constructor = trump_engine;
 
 function spade_engine(num) {
 	Engine.call(this, 'spades', num);
-	this.pointsObj = {
-		"A": {rank:1, points:0},
-		"2": {rank:13, points:0},
-		"3": {rank:12, points:0},
-		"4": {rank:11, points:0},
-		"5": {rank:10, points:0},
-		"6": {rank:9, points:0},
-		"7": {rank:8, points:0},
-		"8": {rank:7, points:0},
-		"9": {rank:6, points:0},
-		"T": {rank:5, points:0},
-		"J": {rank:4, points:0},
-		"Q": {rank:3, points:0},
-		"K": {rank:2, points:0},
-	};
-	this.getMinimumBid = function (round) {
-		return 0;
-	};
-
 	this.getTotalPoints = function () {
 		return 13;
 	};
@@ -360,83 +369,35 @@ spade_engine.prototype.constructor = spade_engine;
 
 function hearts_engine(num) {
 	Engine.call(this, 'hearts', num);
-	this.pointsObj = {
-		"A": {rank:1, points:0},
-		"2": {rank:13, points:0},
-		"3": {rank:12, points:0},
-		"4": {rank:11, points:0},
-		"5": {rank:10, points:0},
-		"6": {rank:9, points:0},
-		"7": {rank:8, points:0},
-		"8": {rank:7, points:0},
-		"9": {rank:6, points:0},
-		"T": {rank:5, points:0},
-		"J": {rank:4, points:0},
-		"Q": {rank:3, points:0},
-		"K": {rank:2, points:0},
+	this.suitObj = {
 		"H": {rank:1, points:1},
 		"S": {rank:2, points:0},
 		"C": {rank:4, points:0},
-		"D": {rank:3, points:0},
-		"QS": {rank:0, points:13}
+		"D": {rank:3, points:0}
 	};
 
 	this.getTotalPoints = function () {
 		return 26;
 	};
 
-	this.processRound = function (round, trump) {
+	this.processRound = function (round, roundNumber, trump) {
 		var leadObj = round[0];
 		var points = 0;
 		var pointsObj = this.pointsObj;
+		var suitObj = this.suitObj;
 		for (var i = 0; i < round.length; i++) {
 			if (round[i].card.suit.name == leadObj.card.suit.name) {
 				if (pointsObj[round[i].card.rank.name].rank <= pointsObj[leadObj.card.rank.name].rank) {
 					leadObj = round[i];
 				}
 			}
-			points += pointsObj[round[i].card.suit.name].points;
 			if (round[i].card.name == "QS") {
-				points += pointsObj[round[i].card.name].points;
+				points += 13;
+			} else {
+				points += suitObj[round[i].card.suit.name].points;
 			}
 		}
 		return {player:leadObj.player, points:points};
-	};
-
-	this.bestCard = function (playerObj, round, trump) {
-		var index = 0;
-		var i = 0;
-		if (round.length === 0 ) {
-			return {card: playerObj.hand[index], index:index};
-		}
-		for (i = 0; i < playerObj.hand.length ; i++) {
-			if(round[0].card.suit.name == playerObj.hand[i].suit.name){
-				return {card: playerObj.hand[i], index:i};
-			}
-		}
-		return {card: playerObj.hand[index], index:index};
-	};
-
-	this.isValidCard = function (playerObj, card, round, roundNumber, trump) {
-		var message = '';
-		var i = 0;
-		var suitFound = false;
-
-		var message1 = 'Cannot play hearts before it is revealed';
-		var message3 = 'Cannot play some other suit than the lead card suit';
-
-		if (round.length === 0 ) {
-			return [true, message];
-		}
-		if (card.suit.name == round[0].card.suit.name) {
-			return [true, message];
-		}
-		for (i = 0; i < playerObj.hand.length ; i++) {
-			if (round[0].card.suit.name == playerObj.hand[i].suit.name){
-				suitFound = true;
-			}
-		}
-		return [!suitFound, message3];
 	};
 
 	this.getPassCards = function (playerObj) {

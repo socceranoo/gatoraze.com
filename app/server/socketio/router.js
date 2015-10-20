@@ -39,10 +39,14 @@ module.exports = function(app, module_obj, io) {
 			players = temp.total;
 		}
 		var view_only = req.query.view;
-		view_only = (view_only) ? true : false
+		view_only = (view_only) ? true : false;
 		var user = req.session.razeplay_user.name;
 		user = "Guest-"+rand;
-		res.render('socketio/'+path+'/views/home', {site:site, user:user, room:room, session:session, total:players, view:view_only});
+		if (site == 'tube') {
+			res.render('socketio/tube/views/home', {site:site, user:user, room:room, session:session, total:players});
+		} else {
+			res.render('socketio/game/views/home', {site:site, user:user, room:room, session:session, total:players, view:view_only});
+		}
 	};
 	app.get('/razeplay/trump', function(req, res){
 		var site = "trump";
@@ -74,17 +78,17 @@ module.exports = function(app, module_obj, io) {
 		});
 	});
 
-	var lobby_request = function (req, res, site) {
+	var lobby_request = function (req, res, site, obj) {
 		var list = [];
 		var user = req.session.razeplay_user.name;
 		socketServer.getActiveRooms(site, list);
-		res.render('socketio/views/lobby-'+site, {site:lobbysite, title: lobbysite+' - home', user:user, list:list});
+		res.render('socketio/views/lobby-site', {site:site, title: site+' - lobby', user:user, obj:obj, list:list});
 	};
 
 	app.get('/razeplay/*-lobby', function(req, res) {
 		var site = req.params[0];
 		if (socketServer.servers[site])
-			lobby_request(req, res, site);
+			lobby_request(req, res, site, socketServer.servers[site]);
 		else
 			res.redirect('/');
 	});

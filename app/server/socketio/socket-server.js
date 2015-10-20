@@ -7,12 +7,11 @@ module.exports = function(IO) {
 	var exportObj = {};
 	var events = require('./game/events').events;
 	var game_table = require('./game/game-table');
-	var hearts_table = require('./game/hearts-table');
 	var servers = {
-		trump: {name:"Trump", image:"trump.png", background:"metroJade", sessionCount: 0, tableObj:game_table},
-		spades: {name:"Spades", image:"spades.png", background:"metroOrange", sessionCount: 0, tableObj:game_table},
-		hearts:{name:"Hearts", image:"QH.png", background:"metroYellow", sessionCount:0, tableObj:game_table},
-		tube:{name:"Connectube", image:"tube.png", background:"peterRiver", sessionCount:0, tableObj:require('./tube/tube-server.js')}
+		trump: {name:"Trump", image:"trump.png", background:"metroJade", info:{game:[4, 6, 8], icon:'user'}, sessionCount: 0, tableObj:game_table},
+		spades: {name:"Spades", image:"spades.png", background:"metroOrange", info:{game:[4], icon:'user'}, sessionCount: 0, tableObj:game_table},
+		hearts:{name:"Hearts", image:"QH.png", background:"metroYellow", info:{game:[4], icon:'heart'}, sessionCount:0, tableObj:game_table},
+		tube:{name:"Connectube", image:"tube.png", background:"peterRiver", info:{game:[""], icon:'facetime-video'}, sessionCount:0, tableObj:require('./tube/tube-server.js')}
 	};
 	for (var key in servers) {
 		socketRoomsHash[key] = {};
