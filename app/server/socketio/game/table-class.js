@@ -32,11 +32,22 @@ function table(num, room) {
 	cardClass.shuffle(this.computerNames);
 
 	this.addHumanViewer = function (newPlayer) {
+		var sendData = [];
+		var message;
 		if (this.inProgress === false) {
 			message = "Room "+this.room+" is not currently active for viewing";
 			sendData.push({dest:SENDER , event:events.message, message:message,  data:{error:true}});
 			return [false, sendData];
 		}
+		message = "Welcome to the game room "+this.room+ " as a viewer";
+		sendData.push({dest:SENDER, event:events.welcome, message:message, data:this.playerArr});
+		message = newPlayer + " joined this room as a viewer";
+		if (this.inProgress === true) {
+			sendData.push({dest:ALL , event:events.sleep, message:"SLEEP",  data:1});
+		}
+		sendData.push({dest:ALL_BUT_SENDER, event:events.message, message:message, data:null});
+		sendData.push({dest:SENDER , event:events.ready, message:"READY",  data:{players:this.playerArr}});
+		return [true, sendData];
 	};
 
 	this.addHumanMember = function (newPlayer) {

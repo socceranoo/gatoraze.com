@@ -38,9 +38,11 @@ module.exports = function(app, module_obj, io) {
 		if (temp !== null) {
 			players = temp.total;
 		}
+		var view_only = req.query.view;
+		view_only = (view_only) ? true : false
 		var user = req.session.razeplay_user.name;
 		user = "Guest-"+rand;
-		res.render('socketio/'+path+'/views/home', {site:site, user:user, room:room, session:session, total:players});
+		res.render('socketio/'+path+'/views/home', {site:site, user:user, room:room, session:session, total:players, view:view_only});
 	};
 	app.get('/razeplay/trump', function(req, res){
 		var site = "trump";

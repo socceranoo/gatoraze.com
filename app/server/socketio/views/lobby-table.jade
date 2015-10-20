@@ -34,12 +34,17 @@
 						span.color-metroRed= stuff.active+'/'+stuff.total
 				td
 					//stuff.playerInfo
-					a.glyphicon.glyphicon-info-sign(data-toggle='modal' href='#room-info-modal' title='Game info')
+					a.btn.btn-warning.btn-sm(data-toggle='modal' href='#room-info-modal' title='Game info')
+						span info
 				td
 					- if (stuff.active < stuff.total)
-						a.glyphicon.glyphicon-share-alt.color-metroGreen(href='/razeplay/'+stuff.game+'/?session='+stuff.session)
+						a.btn.btn-success.btn-sm(href='/razeplay/'+stuff.game+'/?session='+stuff.session)
+							span Join
 					- else
 						span.btn.btn-danger.btn-sm Full
+					&nbsp;
+					a.btn.btn-primary.btn-sm(href='/razeplay/'+stuff.game+'/?session='+stuff.session+'&view=true')
+						span View
 - else
 	h3.text-center No Tables at this time
 	hr

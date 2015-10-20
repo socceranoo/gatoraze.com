@@ -10,6 +10,6 @@
 						a.bid-icon.glyphicon.glyphicon-plus.pull-right.olor-metroNavy(href='javascript:void(0);' ng-click='bidObj.increaseBid()')
 						a.bid-icon.glyphicon.glyphicon-ok.color-metroGreen(href='javascript:void(0);' ng-click='bidObj.submitBid()')
 					span.bid-data(ng-bind='tableData.bidData[$index]')
-				span.player-name(ng-bind='tableData.players[$index]' ng-hide='$index == 0')
+				span.player-name(ng-bind='tableData.players[$index]' ng-hide='$index == 0 && position >= 0')
 			.trump-position(ng-show='trump.revealed' style='background-position:{{suitImg[trump.card.suit.name].bgPos[0]}}px {{suitImg[trump.card.suit.name].bgPos[1]}}px')
 			a.trump-position(href='javascript:void(0);' ng-click='revealTrump()' ng-hide='trump.revealed || action != "Play" || canReveal != true')

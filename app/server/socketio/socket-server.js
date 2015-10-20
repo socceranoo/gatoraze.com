@@ -27,7 +27,12 @@ module.exports = function(IO) {
 		this.gameTable = servers[this.game].tableObj.createGame(data);
 
 		this.addUser = function (socket, data) {
-			var ret = this.gameTable.addHumanMember(data.user);
+			var ret;
+			if (data.view === false) {
+				ret = this.gameTable.addHumanMember(data.user);
+			} else {
+				ret = this.gameTable.addHumanViewer(data.user);
+			}
 			var success = ret[0];
 			var sendData = ret[1];
 			if (success) {
@@ -136,7 +141,8 @@ module.exports = function(IO) {
 			servers[data.site].sessionCount++;
 		}
 		var gameRoomObj = socketRoomsHash[data.site][data.room];
-		if (gameRoomObj.addUser(socket, data)) {
+		var success = gameRoomObj.addUser(socket, data);
+		if (data.view === false && success) {
 			socket.on(events.play, function (data) {
 				var gameRoomObj = socketRoomsHash[data.userInfo.site][data.userInfo.room];
 				gameRoomObj.userPlay(socket, data);
@@ -150,7 +156,7 @@ module.exports = function(IO) {
 
 	exportObj.userLeave = function (socket) {
 		var gameRoomObj = socketRoomsHash[socket.data.site][socket.data.room];
-		if (gameRoomObj) {
+		if (socket.data.view === false && gameRoomObj) {
 			gameRoomObj.removeUser(socket);
 		}
 	};

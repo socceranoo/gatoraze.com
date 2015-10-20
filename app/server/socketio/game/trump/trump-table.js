@@ -2,7 +2,7 @@ var events = require('../events').events;
 var ALL = 2, ALL_BUT_SENDER = 1, SENDER = 0;
 var cardClass = require('../card-class');
 var tableClass = require('../table-class');
-var sleepSeconds = 0.1 * 200000;
+var sleepSeconds = 2.1 * 200000;
 var gameEngine = require('./trump-engine');
 
 exports.createGame = function(data) {

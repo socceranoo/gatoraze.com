@@ -3,7 +3,7 @@ $(document).ready(function() {
 });
 
 function trump($scope) {
-	userInfo = {user:user, site:site, room:room , session:session, total:total};
+	userInfo = {user:user, site:site, room:room , session:session, total:total, view:view};
 	events = {
 		message:"message", welcome:"welcome", playerJoin:"player-join",
 		playerLeave:"player-leave", cards:"cards", play:"play",
@@ -30,7 +30,7 @@ function trump($scope) {
 	];
 
 	$scope.starter = -1;
-	$scope.position = 0;
+	$scope.position = -100;
 	$scope.message = '';
 	$scope.connected = false;
 	$scope.messageArr = [];
@@ -159,9 +159,13 @@ function trump($scope) {
 			var i = 0;
 			//$scope.addMessage(data.message, data.sender, data.date, data.data);
 			//$scope.addControlData(events.ready, data.data);
-			$scope.tableData.players = data.data.players.concat(data.data.players.splice(0, $scope.position));
-			$scope.tableData.players[$scope.shifter($scope.position)] = "You";
-			//$scope.tableData.players[$scope.position] = "You ("+$scope.tableData.players[$scope.position]+")";
+			if ($scope.position >= 0) {
+				$scope.tableData.players = data.data.players.concat(data.data.players.splice(0, $scope.position));
+				$scope.tableData.players[$scope.shifter($scope.position)] = "You";
+				//$scope.tableData.players[$scope.position] = "You ("+$scope.tableData.players[$scope.position]+")";
+			} else {
+				$scope.tableData.players = data.data.players;
+			}
 			for (i = 0; i< $scope.tableData.players.length ; i++) {
 				if (data.data.round) {
 					$scope.tableData.round[i] = $scope.cardBack;
@@ -234,9 +238,11 @@ function trump($scope) {
 	});
 	$scope.playFunction = function (data) {
 		var i , j , k = 0;
-		$scope.info = data.message;
-		if ($scope.token != $scope.position) {
-			$scope.info = 'Wait';
+		if ($scope.position >= 0) {
+			$scope.info = data.message;
+		}
+		if ($scope.token !== $scope.position && $scope.token >= 0) {
+			$scope.info = $scope.tableData.players[$scope.shifter($scope.token)] + "'s turn";
 		}
 		if (data.data.cardObj) {
 			if (data.data.cardObj.player == $scope.position) {
@@ -269,7 +275,7 @@ function trump($scope) {
 				}
 			}
 		}
-		if ($scope.token == $scope.position) {
+		if ($scope.token === $scope.position) {
 			if (data.data.validCards) {
 				for (k = 0; k < data.data.validCards.cards.length; k++) {
 					$scope.cards[data.data.validCards.cards[k]].valid = true;
@@ -282,7 +288,7 @@ function trump($scope) {
 			}
 			$scope.action = "Play";
 		} else {
-			$scope.action = "Wait";
+			$scope.action = $scope.tableData.players[$scope.shifter($scope.token)] + "'s turn";
 		}
 
 	};
@@ -293,7 +299,7 @@ function trump($scope) {
 		$scope.bidObj.bidder = data.data.bidObj.bidder;
 		$scope.bidObj.points = data.data.bidObj.points;
 		$scope.bidObj.minimum = data.data.bidObj.minimum;
-		if (data.data.bidObj.bid && $scope.token == $scope.position) {
+		if (data.data.bidObj.bid && $scope.token === $scope.position) {
 			$scope.action = "Bid";
 			for (j = 0; j < $scope.cards.length; j++) {
 				$scope.cards[j].valid = true;
@@ -307,7 +313,7 @@ function trump($scope) {
 
 		//Setting trump for the first time
 		if ($scope.bidObj.bid === false) {
-			if($scope.position == data.data.player) {
+			if($scope.position === data.data.player) {
 				for (j = 0; j < $scope.cards.length; j++) {
 					$scope.cards[j].valid = true;
 				}
@@ -317,7 +323,7 @@ function trump($scope) {
 			if (data.data.bidObj.trump === true) {
 				$scope.trump.setter = data.data.bidObj.bidder;
 				$scope.addControlData(events.play, data.data);
-				if ($scope.trump.setter != $scope.position)
+				if ($scope.trump.setter !== $scope.position)
 					$scope.trump.card = $scope.cardBack;
 				else
 					$scope.trump.card = $scope.cards[data.data.bidObj.index];
@@ -326,7 +332,7 @@ function trump($scope) {
 				if (data.data.bidObj.round == 2) {
 					$scope.bidOver = true;
 					$scope.setDefaultBg(1);
-					if ($scope.trump.setter == $scope.position) {
+					if ($scope.trump.setter === $scope.position) {
 						$scope.cards[data.data.bidObj.index] = $scope.cardBack;
 					}
 					for (j = 0; j < $scope.cards.length; j++) {
@@ -470,7 +476,9 @@ function hearts ($scope) {
 	$scope.bgIcon = "L";
 
 	$scope.playFunction = function (data) {
-		$scope.info = data.message;
+		if ($scope.position >= 0) {
+			$scope.info = data.message;
+		}
 		if (data.data.cardObj) {
 			if (data.data.cardObj.player == $scope.position) {
 				$scope.cards.splice(data.data.cardObj.index, 1);
@@ -479,7 +487,7 @@ function hearts ($scope) {
 		}
 		if (data.data.reveal && data.data.reveal === true) {
 		}
-		if ($scope.token == $scope.position) {
+		if ($scope.token === $scope.position) {
 			$scope.action = "Play";
 		} else {
 			$scope.action = "Wait";
