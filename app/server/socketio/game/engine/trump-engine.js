@@ -3,6 +3,8 @@ var DIFFICULTY_EASY = 0, DIFFICULTY_MEDIUM = 1, DIFFICULTY_HARD = 2;
 exports.createNewGame = function (game, num) {
 	if (game == "trump") {
 		return new trump_engine(num);
+	} else if (game == "hearts") {
+		return new hearts_engine(num);
 	} else {
 		return new spade_engine(num);
 	}
@@ -29,6 +31,20 @@ function Engine(game, num) {
 		return ret;
 	};
 
+	this.sortPlayerHand = function (cardArr) {
+		var pointsObj = this.pointsObj;
+		cardArr.sort(function () {
+			return function(a, b) {
+				var sameSuit = pointsObj[b.suit.name].rank - pointsObj[a.suit.name].rank;
+				if (sameSuit === 0) {
+					return pointsObj[b.rank.name].rank - pointsObj[a.rank.name].rank;
+				} else {
+					return sameSuit;
+				}
+			};
+		}());
+	};
+
 	this.setTrump = function (playerObj, trump) {
 		var index = 0;
 		return playerObj.hand[index];
@@ -40,7 +56,7 @@ function Engine(game, num) {
 		if (round.length) {
 			validArr = this.getValidMiddleCards(playerObj, round, trump, roundNumber);
 		} else {
-			validArr = this.getValidOpeningCards(playerObj, trump);
+			validArr = this.getValidOpeningCards(playerObj, roundNumber, trump);
 			message = 'Cannot play trump before it is revealed';
 		}
 		if (validArr[cardObj.index]) {
@@ -69,7 +85,7 @@ function Engine(game, num) {
 		if (round.length) {
 			cardIndexArr = Object.keys(this.getValidMiddleCards(playerObj, round, trump, roundNumber));
 		} else {
-			cardIndexArr = Object.keys(this.getValidOpeningCards(playerObj, trump));
+			cardIndexArr = Object.keys(this.getValidOpeningCards(playerObj, roundNumber, trump));
 		}
 		var ret = this.revealTrump(playerObj, round, trump);
 		return {cards:cardIndexArr, canReveal:ret[0]};
@@ -107,14 +123,24 @@ function Engine(game, num) {
 		return sane;
 	};
 
-	this.getValidOpeningCards = function (playerObj, trump) {
+	this.getValidOpeningCards = function (playerObj, roundNumber, trump) {
 		var ret = {};
 		var i = 0;
 		var trumpCount = 0;
+		//Hearts first valid card should only be 2C
+		if (trump.setter < 0 && roundNumber === 0 && trump.card.name == "AH") {
+			for (i = 0; i < playerObj.hand.length ; i++) {
+				if (playerObj.hand[i].name == "2C") {
+					ret[i] = true;
+					break;
+				}
+			}
+			return ret;
+		}
 		//If the current player is not the trump setter or trump is already revealed
 		//then any player is free to play any card.
 		//Trump setter will be -1 in Spades game
-		if (trump.revealed === true || (trump.setter != -1 && playerObj.position != trump.setter)) {
+		if (trump.revealed === true || (trump.setter >= 0 && playerObj.position != trump.setter)) {
 			for (i = 0; i < playerObj.hand.length ; i++) {
 				ret[i] = true;
 			}
@@ -149,12 +175,67 @@ function Engine(game, num) {
 			return {card: trump.card, index:index, reveal:true};
 		}
 		if (round.length === 0 ) {
-			cardIndexArr = Object.keys(this.getValidOpeningCards(playerObj, trump));
+			cardIndexArr = Object.keys(this.getValidOpeningCards(playerObj, round.length, trump));
 		} else {
 			cardIndexArr = Object.keys(this.getValidMiddleCards(playerObj, round, trump, round.length));
 		}
 		index = cardIndexArr[0];
 		return {card: playerObj.hand[index], index:index};
+	};
+
+	this.processRound = function (round, roundNumber, trump) {
+		var pointsObj = this.pointsObj;
+		var leadObj = round[0];
+		var points = pointsObj[round[0].card.rank.name].points;
+		for (var i = 1; i < round.length; i++) {
+			points += pointsObj[round[i].card.rank.name].points;
+			if (round[i].card.suit.name == leadObj.card.suit.name) {
+				if (pointsObj[round[i].card.rank.name].rank <= pointsObj[leadObj.card.rank.name].rank) {
+					leadObj = round[i];
+				}
+			} else if (trump.revealed === true && round[i].card.suit.name == trump.card.suit.name) {
+				//Trump setter will be -1 in Spades game
+				if (trump.setter >=0 && roundNumber == trump.revealRound && i < trump.revealPosition) {
+					console.log("Reached Trump but not valid trump");
+					continue;
+				}
+				leadObj = round[i];
+			}
+		}
+		if (trump.setter < 0) {
+			points = 1;
+		}
+		return {player:leadObj.player, points:points};
+	};
+
+	this.getValidMiddleCards = function (playerObj, round, trump) {
+		var anyArr = {};
+		var suitArr = {};
+		var i = 0;
+		var message3 = 'Cannot play some other suit than the lead card suit';
+		if (trump.revealed === false && round[round.length - 1].card.suit.name == trump.card.suit.name) {
+			trump.revealed = true;
+		}
+
+		for (i = 0; i < playerObj.hand.length ; i++) {
+			anyArr[i] = true;
+			if (round[0].card.suit.name == playerObj.hand[i].suit.name){
+				suitArr[i] = true;
+			}
+		}
+		if (Object.keys(suitArr).length) {
+			return suitArr;
+		}
+		return anyArr;
+	};
+
+	this.revealTrump = function (playerObj, round, trump) {
+		var message = '';
+		if (trump.revealed === true) {
+			message = 'Trump already revealed';
+			return [false, message];
+		}
+		return [false, message];
 	};
 
 }
@@ -244,28 +325,6 @@ function trump_engine (num) {
 		}
 		return [!suitFound, message];
 	};
-
-	this.processRound = function (round, roundNumber, trump) {
-		var pointsObj = this.pointsObj;
-		var leadObj = round[0];
-		var points = pointsObj[round[0].card.rank.name].points;
-		for (var i = 1; i < round.length; i++) {
-			points += pointsObj[round[i].card.rank.name].points;
-			if (round[i].card.suit.name == leadObj.card.suit.name) {
-				if (pointsObj[round[i].card.rank.name].rank <= pointsObj[leadObj.card.rank.name].rank) {
-					leadObj = round[i];
-				}
-			} else if (trump.revealed === true && round[i].card.suit.name == trump.card.suit.name) {
-				if (roundNumber == trump.revealRound && i < trump.revealPosition) {
-					console.log("Reached Trump but not valid trump");
-					continue;
-				}
-				leadObj = round[i];
-			}
-		}
-		return {player:leadObj.player, points:points};
-	};
-
 }
 trump_engine.prototype = new Engine();
 trump_engine.prototype.constructor = trump_engine;
@@ -295,58 +354,94 @@ function spade_engine(num) {
 		return 13;
 	};
 
-	this.getValidMiddleCards = function (playerObj, round, trump) {
-		var anyArr = {};
-		var suitArr = {};
-		var i = 0;
-		var message3 = 'Cannot play some other suit than the lead card suit';
-		if (trump.revealed === false && round[round.length - 1].card.suit.name == trump.card.suit.name) {
-			trump.revealed = true;
-		}
+}
+spade_engine.prototype = new Engine();
+spade_engine.prototype.constructor = spade_engine;
 
-		for (i = 0; i < playerObj.hand.length ; i++) {
-			anyArr[i] = true;
-			if (round[0].card.suit.name == playerObj.hand[i].suit.name){
-				suitArr[i] = true;
-			}
-		}
-		if (Object.keys(suitArr).length) {
-			return suitArr;
-		}
-		return anyArr;
+function hearts_engine(num) {
+	Engine.call(this, 'hearts', num);
+	this.pointsObj = {
+		"A": {rank:1, points:0},
+		"2": {rank:13, points:0},
+		"3": {rank:12, points:0},
+		"4": {rank:11, points:0},
+		"5": {rank:10, points:0},
+		"6": {rank:9, points:0},
+		"7": {rank:8, points:0},
+		"8": {rank:7, points:0},
+		"9": {rank:6, points:0},
+		"T": {rank:5, points:0},
+		"J": {rank:4, points:0},
+		"Q": {rank:3, points:0},
+		"K": {rank:2, points:0},
+		"H": {rank:1, points:1},
+		"S": {rank:2, points:0},
+		"C": {rank:4, points:0},
+		"D": {rank:3, points:0},
+		"QS": {rank:0, points:13}
 	};
-	this.processRound = function (round, roundNumber, trump) {
-		var pointsObj = this.pointsObj;
+
+	this.getTotalPoints = function () {
+		return 26;
+	};
+
+	this.processRound = function (round, trump) {
 		var leadObj = round[0];
-		var firstTrump = false;
-		for (var i = 1; i < round.length; i++) {
+		var points = 0;
+		var pointsObj = this.pointsObj;
+		for (var i = 0; i < round.length; i++) {
 			if (round[i].card.suit.name == leadObj.card.suit.name) {
 				if (pointsObj[round[i].card.rank.name].rank <= pointsObj[leadObj.card.rank.name].rank) {
 					leadObj = round[i];
 				}
-			} else if (trump.revealed === true && round[i].card.suit.name == trump.card.suit.name) {
-				if (firstTrump === false) {
-					firstTrump = true;
-					leadObj = round[i];
-				} else {
-					if (pointsObj[round[i].card.rank.name].rank <= pointsObj[leadObj.card.rank.name].rank) {
-						leadObj = round[i];
-					}
-				}
+			}
+			points += pointsObj[round[i].card.suit.name].points;
+			if (round[i].card.name == "QS") {
+				points += pointsObj[round[i].card.name].points;
 			}
 		}
-		return {player:leadObj.player, points:1};
+		return {player:leadObj.player, points:points};
 	};
 
-	this.revealTrump = function (playerObj, round, trump) {
-		var message = '';
-		if (trump.revealed === true) {
-			message = 'Trump already revealed';
-			return [false, message];
+	this.bestCard = function (playerObj, round, trump) {
+		var index = 0;
+		var i = 0;
+		if (round.length === 0 ) {
+			return {card: playerObj.hand[index], index:index};
 		}
-		return [false, message];
+		for (i = 0; i < playerObj.hand.length ; i++) {
+			if(round[0].card.suit.name == playerObj.hand[i].suit.name){
+				return {card: playerObj.hand[i], index:i};
+			}
+		}
+		return {card: playerObj.hand[index], index:index};
+	};
+
+	this.isValidCard = function (playerObj, card, round, roundNumber, trump) {
+		var message = '';
+		var i = 0;
+		var suitFound = false;
+
+		var message1 = 'Cannot play hearts before it is revealed';
+		var message3 = 'Cannot play some other suit than the lead card suit';
+
+		if (round.length === 0 ) {
+			return [true, message];
+		}
+		if (card.suit.name == round[0].card.suit.name) {
+			return [true, message];
+		}
+		for (i = 0; i < playerObj.hand.length ; i++) {
+			if (round[0].card.suit.name == playerObj.hand[i].suit.name){
+				suitFound = true;
+			}
+		}
+		return [!suitFound, message3];
+	};
+
+	this.getPassCards = function (playerObj) {
+		return [0, 1, 2];
 	};
 }
-
-spade_engine.prototype = new Engine();
-spade_engine.prototype.constructor = spade_engine;
+hearts_engine.prototype = new Engine();
+hearts_engine.prototype.constructor = hearts_engine;

@@ -9,7 +9,6 @@ html(ng-app='')
 			block content
 		include ../../../../common-scripts
 		script(src="/socket.io/socket.io.js").
-		//script(src="/socketio/scripts/hearts.js").
 		script(src="/socketio/scripts/trump.js").
 		script.
 			var user= '!{user}';
@@ -17,3 +16,4 @@ html(ng-app='')
 			var session= '!{session}';
 			var room= '!{room}';
 			var total= '!{total}';
+			var view= !{view};

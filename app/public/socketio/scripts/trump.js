@@ -476,6 +476,7 @@ function hearts ($scope) {
 	$scope.bgIcon = "L";
 
 	$scope.playFunction = function (data) {
+		var j;
 		if ($scope.position >= 0) {
 			$scope.info = data.message;
 		}
@@ -483,17 +484,25 @@ function hearts ($scope) {
 			if (data.data.cardObj.player == $scope.position) {
 				$scope.cards.splice(data.data.cardObj.index, 1);
 			}
+			for (j = 0; j < $scope.cards.length; j++) {
+				$scope.cards[j].valid = false;
+			}
 			$scope.tableData.round[$scope.shifter(data.data.cardObj.player)] = data.data.cardObj.card;
 		}
-		if (data.data.reveal && data.data.reveal === true) {
-		}
 		if ($scope.token === $scope.position) {
+			if (data.data.validCards) {
+				for (j = 0; j < data.data.validCards.cards.length; j++) {
+					$scope.cards[data.data.validCards.cards[j]].valid = true;
+				}
+				$scope.addControlData(events.ready, data.data.validCards.cards);
+			}
 			$scope.action = "Play";
 		} else {
 			$scope.action = "Wait";
 		}
-
+		$scope.$apply();
 	};
+
 	$scope.bidFunction = function (data) {
 		if (data.data.passOver && data.data.passOver === true) {
 			$scope.passOver = true;

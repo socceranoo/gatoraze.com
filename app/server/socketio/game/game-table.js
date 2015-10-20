@@ -1,9 +1,9 @@
-var events = require('../events').events;
+var events = require('./events').events;
 var ALL = 2, ALL_BUT_SENDER = 1, SENDER = 0;
-var cardClass = require('../card-class');
-var tableClass = require('../table-class');
-var sleepSeconds = 2.1 * 200000;
-var gameEngine = require('./trump-engine');
+var cardClass = require('./card-class');
+var tableClass = require('./table-class');
+var sleepSeconds = 0.1 * 200000;
+var gameEngine = require('./engine/trump-engine');
 
 exports.createGame = function(data) {
 	if (data.site == "trump")
@@ -172,8 +172,7 @@ function trump_table (num, room, game) {
 		if (playerObj.human === false) {
 			var cardData = {play:true, player:this.currentPlayer, cardObj:{}};
 			this.computerPlay(playerObj, cardData, sendData);
-		}else {
-			console.log(JSON.stringify(this.trump));
+		} else {
 			var validCards = this.gameEngine.getValidCards(playerObj, this.currentRound, this.round.length, this.trump);
 			sendData.push({dest:ALL, event:events.play, message:"PLAY",
 				data:{play:true, player:this.currentPlayer, cardObj:null, validCards:validCards}

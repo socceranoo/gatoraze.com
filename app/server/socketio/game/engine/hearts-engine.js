@@ -1,7 +1,7 @@
 var getPointsObj = function () {
 	return {
 		"A": {rank:1, points:0},
-		"2": {rank:13, points:0, valid:{4:false, 6:false, 8:true}},
+		"2": {rank:13, points:0},
 		"3": {rank:12, points:0},
 		"4": {rank:11, points:0},
 		"5": {rank:10, points:0},
@@ -71,6 +71,7 @@ exports.bestCard = function (playerObj, round, trump) {
 	}
 	return {card: playerObj.hand[index], index:index};
 };
+
 exports.isValidCard = function (playerObj, card, round, roundNumber, trump) {
 	var message = '';
 	var i = 0;
