@@ -557,10 +557,10 @@ body.hearts {
   -webkit-transition: -webkit-transform 0.3s linear;
 }
 .non-round-winner {
-  opacity: 0.7;
-  transform: scale(0.9);
-  -ms-transform: scale(0.9);
-  -webkit-transform: scale(0.9);
+  opacity: 0.6;
+  transform: scale(0.8);
+  -ms-transform: scale(0.8);
+  -webkit-transform: scale(0.8);
   transition: all .3s linear;
   -webkit-transition: -webkit-transform 0.3s linear;
 }

@@ -5,6 +5,7 @@ var events = require('./events').events;
  */
 var uinames = require("./uinames.json");
 var cardClass = require("./card-class");
+
 function player(name, position, human, bio, difficulty) {
 	this.name = name;
 	this.hand = [];
@@ -16,6 +17,7 @@ function player(name, position, human, bio, difficulty) {
 	this.player_bio = bio;
 	this.difficulty = difficulty;
 }
+
 player.prototype.getCardSet = function (set) {
 	var first_set = parseInt(this.hand.length / 2 , 10);
 	var second_set = this.hand.length - first_set;
@@ -28,6 +30,15 @@ player.prototype.getCardSet = function (set) {
 function table(num, room) {
 	this.computerNames = JSON.parse(JSON.stringify(uinames.results));
 	cardClass.shuffle(this.computerNames);
+
+	this.addHumanViewer = function (newPlayer) {
+		if (this.inProgress === false) {
+			message = "Room "+this.room+" is not currently active for viewing";
+			sendData.push({dest:SENDER , event:events.message, message:message,  data:{error:true}});
+			return [false, sendData];
+		}
+	};
+
 	this.addHumanMember = function (newPlayer) {
 		var sendData = [];
 		var message, position, compName, data, playerObj;
@@ -121,11 +132,13 @@ function table(num, room) {
 				console.log("RESET TABLE");
 			}
 			if (this.inProgress === true) {
-				compName = "Computer"+position;
+				var bio = this.computerNames[position].user;
+				compName = bio.username;
 				message += " and has been replaced by computer "+compName;
 				this.members[compName] = playerObj;
 				playerObj.human = false;
 				playerObj.name = compName;
+				playerObj.bio = bio;
 				data.name = compName;
 				this.playerArr[position] = compName;
 				if (this.currentPlayer === position) {
@@ -173,25 +186,10 @@ function table(num, room) {
 		this.members = {};
 		this.playerArr = [];
 		this.gameStarter = 0;
-		this.games = [];
-		this.gameCount = 0;
+		this.currentPlayer = 0;
+		this.allGames = [];
 	};
 	this.resetTable();
-
-	this.startPlay = function (sendData) {
-		this.currentPlayer = this.gameStarter;
-		var playerObj = this.members[this.playerArr[this.currentPlayer]];
-		this.prePlayOver = true;
-		this.sendPreGameInfo(sendData, 2);
-		if (playerObj.human === false) {
-			var cardData = {play:true, player:this.currentPlayer, cardObj:{}};
-			this.computerPlay(playerObj, cardData, sendData);
-		}else {
-			sendData.push({dest:ALL, event:events.play, message:"PLAY",
-				data:{play:true, player:this.currentPlayer, cardObj:null}
-			});
-		}
-	};
 
 	this.playerPlay = function (data) {
 		var sendData = [];

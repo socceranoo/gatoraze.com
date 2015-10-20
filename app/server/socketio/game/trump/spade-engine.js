@@ -15,9 +15,9 @@ var getPointsObj = function () {
 		"K": {rank:2, points:0},
 	};
 };
-exports.site = "Spades";
-exports.server = "Spades Server";
-exports.getMinimumBid = function (game, round) {
+
+exports.game = "spades";
+exports.getMinimumBid = function (round) {
 	return 0;
 };
 
@@ -139,7 +139,7 @@ var getValidMiddleCards = function (playerObj, round, trump) {
 	if (trump.revealed === false && round[round.length - 1].card.suit.name == trump.card.suit.name) {
 		trump.revealed = true;
 	}
-	
+
 	for (i = 0; i < playerObj.hand.length ; i++) {
 		anyArr[i] = true;
 		if (round[0].card.suit.name == playerObj.hand[i].suit.name){

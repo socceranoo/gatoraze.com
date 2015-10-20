@@ -59,6 +59,22 @@ function hearts (num, room) {
 		}
 	};
 
+	this.startPlay = function (sendData) {
+		console.log("Table class startPlay called");
+		this.currentPlayer = this.gameStarter;
+		var playerObj = this.members[this.playerArr[this.currentPlayer]];
+		this.prePlayOver = true;
+		this.sendPreGameInfo(sendData, 2);
+		if (playerObj.human === false) {
+			var cardData = {play:true, player:this.currentPlayer, cardObj:{}};
+			this.computerPlay(playerObj, cardData, sendData);
+		}else {
+			sendData.push({dest:ALL, event:events.play, message:"PLAY",
+				data:{play:true, player:this.currentPlayer, cardObj:null}
+			});
+		}
+	};
+
 	this.updatePoints = function (winner, points) {
 		for (var key in this.members) {
 			var userObj = this.members[key];

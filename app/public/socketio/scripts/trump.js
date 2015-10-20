@@ -213,7 +213,15 @@ function trump($scope) {
 			}
 			$scope.$apply();
 		});
-		$("#myCarousel").carousel({interval: false});
+		$scope.currentPrevGameSlide = -1;
+		$scope.carouselFunc = function() {
+			$("#myCarousel").carousel({interval: false});
+			$("#myCarousel").on('slide.bs.carousel', function(e) {
+				var slideFrom = $(this).find('.active').index();
+				$scope.currentPrevGameSlide = $(e.relatedTarget).index();
+				$scope.$apply();
+			});
+		}();
 		for (i = 1 ; i < total; i++) {
 			$scope.addComputer(0);
 		}

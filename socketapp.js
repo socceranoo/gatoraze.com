@@ -42,6 +42,6 @@ require('./app/server/socketio/router')(app, module_obj, io);
 
 app.get('*', function(req, res) { res.render('account/views/404', { title: 'Page Not Found'}); });
 
-server.listen(port, function(){
+server.listen(port, 'localhost', function(){
 	console.log("Express server listening on port " + app.get('port'));
 });
