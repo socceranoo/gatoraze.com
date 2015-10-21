@@ -1,12 +1,15 @@
 $(document).ready(function() {
 });
+var REPLACE_COMPUTER_SPECIFIC = 0, REPLACE_COMPUTER_ANY = 1, CHANGE_DIFFICULTY = 2;
 
 function trump($scope) {
 	var socket = io.connect();
+	$scope.alreadyWelcomed = false;
 	$scope.events = {
 		message:"message", welcome:"welcome", playerJoin:"player-join",
 		playerLeave:"player-leave", cards:"cards", play:"play",
-		round:"round", game:"game", ready:"ready", addComputer:"add-computer",
+		round:"round", game:"game", ready:"ready", changeComputer:"change-computer",
+		playerChange:"player-change",
 		setPseudo: "setPseudo"
 	};
 	$scope.emitEvent = function (evt, data) {
@@ -65,7 +68,7 @@ function trump($scope) {
 	$scope.blank = {name:"$scope.blank", index:0, bgPos:[222, 0], valid:false};
 	$scope.cardBack = joker;
 	$scope.trump = {card:null, setter:-1, points:0, revealed:false, index:-1};
-	$scope.tableData = {players : [], round :[], prevRound:[], bidData:[], prevGame:{stats:null, allRounds:[]}};
+	$scope.tableData = {players : [], playerDetails:[], round :[], prevRound:[], bidData:[], prevGame:{stats:null, allRounds:[]}};
 	$scope.bidOver = false;
 	var defaultInfo = 'Welcome';
 	$scope.info = defaultInfo;
@@ -146,19 +149,33 @@ function trump($scope) {
 		//$scope.addMessage(data.message, data.sender, data.date, data.data);
 		$scope.connected = true;
 		//$scope.addControlData($scope.events.welcome, data.data);
-		for (var i = 0; i< data.data.length; i++) {
-			if (data.data[i] == $scope.roomInfo.user) {
+		var playerArr = data.data;
+		for (var i = 0; i< playerArr.length; i++) {
+			if (playerArr[i] == $scope.roomInfo.user) {
 				$scope.position = i;
 				$scope.roomInfo.view = false;
 				break;
 			}
 		}
+		if ($scope.alreadyWelcomed === true) {
+			return;
+		}
+		socket.on($scope.events.playerChange, function(data) {
+			$scope.info = data.message;
+			//$scope.addMessage(data.message, data.sender, data.date, data.data);
+			$scope.addControlData($scope.events.playerChange, data.data);
+			if (data.data.inProgress) {
+				$scope.tableData.players[$scope.shifter(data.data.position)] = data.data.name;
+			}
+			$scope.$apply();
+		});
 		socket.on($scope.events.playerJoin, function(data) {
 			$scope.info = data.message;
 			//$scope.addMessage(data.message, data.sender, data.date, data.data);
 			$scope.addControlData($scope.events.playerJoin, data.data);
 			if (data.data.inProgress) {
 				$scope.tableData.players[$scope.shifter(data.data.position)] = data.data.name;
+				$scope.tableData.playerDetails[$scope.shifter(data.data.position)] = data.data.details;
 			}
 			$scope.$apply();
 		});
@@ -168,6 +185,7 @@ function trump($scope) {
 			$scope.addControlData($scope.events.playerLeave, data.data);
 			if (data.data.inProgress) {
 				$scope.tableData.players[$scope.shifter(data.data.position)] = data.data.name;
+				$scope.tableData.playerDetails[$scope.shifter(data.data.position)] = data.data.details;
 			}
 			$scope.$apply();
 		});
@@ -187,8 +205,14 @@ function trump($scope) {
 				$scope.tableData.players = data.data.players.concat(data.data.players.splice(0, $scope.position));
 				$scope.tableData.players[$scope.shifter($scope.position)] = "You";
 				//$scope.tableData.players[$scope.position] = "You ("+$scope.tableData.players[$scope.position]+")";
+				if (data.data.details) {
+					$scope.tableData.playerDetails = data.data.details.concat(data.data.details.splice(0, $scope.position));
+				}
 			} else {
 				$scope.tableData.players = data.data.players;
+				if (data.data.details) {
+					$scope.tableData.playerDetails = data.data.details;
+				}
 			}
 			for (i = 0; i< $scope.tableData.players.length ; i++) {
 				if (data.data.round) {
@@ -227,7 +251,7 @@ function trump($scope) {
 		socket.on($scope.events.cards, function(data) {
 			//$scope.addMessage(data.message, data.sender, data.date, data.data);
 			$scope.cards = $scope.cards.concat(data.data.cards);
-			//$scope.addControlData($scope.events.cards, data.data);
+			$scope.addControlData($scope.events.cards, data.data);
 			$scope.$apply();
 		});
 		socket.on($scope.events.play, function(data) {
@@ -250,9 +274,7 @@ function trump($scope) {
 				$scope.$apply();
 			});
 		}();
-		for (i = 1 ; i < $scope.roomInfo.total; i++) {
-			$scope.addComputer(0);
-		}
+		$scope.alreadyWelcomed = true;
 	});
 	socket.on($scope.events.message, function(data) {
 		$scope.addMessage(data.message, data.sender, data.date, data.data);
@@ -396,12 +418,19 @@ function trump($scope) {
 		$("#ccbox").append("<p class=small><span class=date>"+date+" : </span><span class=sender>"+sender+" : </span><span class=message>"+msg+"</span></p>");
 		$('#ccbox').scrollTop($("#ccbox").prop('scrollHeight'));
 	};
+
 	$scope.addControlData = function (event, data) {
 		$("#control-data").append(event+" : "+JSON.stringify(data));
 	};
-	$scope.addComputer = function(difficulty) {
-		$scope.emitEvent($scope.events.addComputer, {difficulty: difficulty});
+
+	$scope.replaceComputer = function(index) {
+		$scope.emitEvent($scope.events.changeComputer, {mode:REPLACE_COMPUTER_SPECIFIC, difficulty:0, position:index});
 	};
+
+	$scope.changeDifficulty = function(index, difficulty) {
+		$scope.emitEvent($scope.events.changeComputer, {mode:CHANGE_DIFFICULTY, difficulty:difficulty, position:index});
+	};
+
 	$scope.sendMessage = function() {
 		if ($scope.message !== "") {
 			socket.emit($scope.events.message, $scope.message);

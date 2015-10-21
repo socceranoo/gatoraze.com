@@ -107,6 +107,37 @@ body.modal-open {
 	left:0%;
 	z-index:10;
 }
+
+.highlighted-mixin(@duration) {
+	-webkit-animation-name: color2;
+	-webkit-animation-duration: @duration;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-timing-function: linear;
+	-webkit-animation-delay: 0s;
+
+}
+
+.highlighted {
+	.highlighted-mixin(2s);
+}
+
+@-webkit-keyframes color2 {
+	0% {
+		opacity:1;
+	}
+	25% {
+		opacity:0.5;
+	}
+	50% {
+		opacity:0;
+	}
+	75% {
+		opacity:0.5;
+	}
+	100% {
+		opacity: 1;
+	}
+}
 @minBarSize : 30px;
 .setBars(@leftBarSize, @rightBarSize, @topBarSize, @bottomBarSize) {
 	.left-bar {

@@ -32,11 +32,10 @@ module.exports = function(IO) {
 		};
 
 		this.addUser = function (socket, data) {
-			var ret;
-			ret = this.gameTable.addHumanMember(data.user);
+			var ret = this.gameTable.addHumanMember(data.user);
 			var success = ret[0];
 			var sendData = ret[1];
-			if (success) {
+			if (success === true) {
 				addToRoom(socket, data);
 				this.userSockets[data.user] = socket;
 			}
@@ -44,14 +43,15 @@ module.exports = function(IO) {
 			return success;
 		};
 
-		this.addComputer = function (socket, data, difficulty) {
-			var ret = this.gameTable.addComputerMember(data.user, difficulty);
+		this.changeComputer = function (socket, userInfo, data) {
+			var ret = this.gameTable.changeComputerMember(userInfo.user, data);
 			var success = ret[0];
 			var sendData = ret[1];
 			sendEventsSocket(this.game, socket, sendData, this.userSockets);
 		};
 
 		this.removeUser = function (socket) {
+			console.log("CLOSING SOCKET:"+JSON.stringify(socket.data));
 			removeFromRoom(socket);
 			delete this.userSockets[socket.data.user];
 			var sendData = this.gameTable.removeHumanMember(socket.data.user);
@@ -91,6 +91,9 @@ module.exports = function(IO) {
 			if (sendData[i].receiver) {
 				receiver = socketHash[sendData[i].receiver];
 			}
+			if (receiver === undefined) {
+				console.log(JSON.stringify(sendData[i]));
+			}
 			sendFunction[sendData[i].dest](sender, receiver, sendData[i].event, sendData[i].message, sendData[i].data);
 			//console.log(sendData[i].message);
 		}
@@ -109,7 +112,6 @@ module.exports = function(IO) {
 	var sendToEmitter = function(sender, socket, event, message, data) {
 		var messageObj = {sender:sender, message:message, data:data, date: getMoment()};
 		socket.emit(event, messageObj);
-
 	};
 	//Function 1
 	var roomBroadcastExceptSender = function(sender, socket, event, message, data) {
@@ -133,10 +135,6 @@ module.exports = function(IO) {
 	var sendFunction = [sendToEmitter, roomBroadcastExceptSender, roomBroadcast,  serverBroadcast];
 
 	exportObj.userJoin = function (socket, data) {
-		socket.on(events.message, function (message) {
-			roomBroadcastExceptSender(socket.data.user, socket, events.message, message, null);
-		});
-
 		var socketRoomObj = socketRoomsHash[data.site][data.room];
 		if (!socketRoomObj) {
 			console.log(data);
@@ -146,21 +144,25 @@ module.exports = function(IO) {
 			return;
 		}
 		var success = socketRoomObj.addUser(socket, data);
-		if (data.view === false && success) {
+		if (success) {
+			socket.on(events.message, function (message) {
+				roomBroadcastExceptSender(socket.data.user, socket, events.message, message, null);
+			});
 			socket.on(events.play, function (data) {
+				console.log(JSON.stringify(data));
 				var socketRoomObj = socketRoomsHash[data.userInfo.site][data.userInfo.room];
 				socketRoomObj.userPlay(socket, data);
 			});
-			socket.on(events.addComputer, function (data) {
+			socket.on(events.changeComputer, function (data) {
 				var socketRoomObj = socketRoomsHash[data.userInfo.site][data.userInfo.room];
-				socketRoomObj.addComputer(socket, data.userInfo, data.difficulty);
+				socketRoomObj.changeComputer(socket, data.userInfo, data);
 			});
 		}
 	};
 
 	exportObj.userLeave = function (socket) {
 		var socketRoomObj = socketRoomsHash[socket.data.site][socket.data.room];
-		if (socket.data.view === false && socketRoomObj) {
+		if (socketRoomObj) {
 			socketRoomObj.removeUser(socket);
 		}
 	};

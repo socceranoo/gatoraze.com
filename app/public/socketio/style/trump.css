@@ -138,6 +138,30 @@ body.modal-open {
   left: 0%;
   z-index: 10;
 }
+.highlighted {
+  -webkit-animation-name: color2;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-delay: 0s;
+}
+@-webkit-keyframes color2 {
+  0% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0;
+  }
+  75% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 .font-stylish {
   font-family: 'Rouge Script', sans-serif;
 }
@@ -535,9 +559,9 @@ body.hearts {
   outline: 5px solid #3498db !important;
 }
 .current-turn {
-  transform: scale(1.4);
-  -ms-transform: scale(1.4);
-  -webkit-transform: scale(1.4);
+  transform: scale(1.3);
+  -ms-transform: scale(1.3);
+  -webkit-transform: scale(1.3);
   transition: all .3s linear;
   -webkit-transition: -webkit-transform 0.3s linear;
 }
@@ -723,6 +747,21 @@ body.hearts {
   background-position: 222px -222px;
   width: 111px;
   height: 111px;
+}
+.center-position {
+  width: 55.5px;
+  height: 55.5px;
+  position: absolute;
+  top: 46.25px;
+  left: 27.75px;
+}
+.img-user-thumbnail {
+  position: absolute;
+  top: -25px;
+  left: -25px;
+  width: 50px;
+  height: 50px;
+  z-index: 100;
 }
 .trump-position {
   background-image: url("../images/suits333.png");

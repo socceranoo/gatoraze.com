@@ -53,6 +53,7 @@
 							h3.text-center.no-margin Round {{$index+1}} ({{roundObj.points}})
 							.table-layout
 								.card-holder(ng-repeat='obj in roundObj.round track by $index' class='pos'+total+'-{{shifter(obj.player)}}', ng-class="{'non-round-winner':obj.player != roundObj.winner, 'round-winner':obj.player == roundObj.winner}")
+									img.img-thumbnail.img-circle.img-user-thumbnail(src='{{tableData.playerDetails[obj.player].thumbnail}}')
 									.card(ng-class="{'blue-border':$index == 0}" style='background-position:{{obj.card.bgPos[0]}}px {{obj.card.bgPos[1]}}px')
 									h4.player-name(ng-class="{'color-metroRed': obj.player%2 == 1}" ng-bind='tableData.players[shifter(obj.player)]')
 								.trump-position(ng-class="{'opacity-mild': currentPrevGameSlide < tableData.prevGame.stats.trump_reveal_round}", style='background-position:{{suitImg[tableData.prevGame.stats.trump_card.suit.name].bgPos[0]}}px {{suitImg[tableData.prevGame.stats.trump_card.suit.name].bgPos[1]}}px')

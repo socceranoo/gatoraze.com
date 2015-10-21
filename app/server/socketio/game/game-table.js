@@ -3,7 +3,7 @@ var ALL = 2, ALL_BUT_SENDER = 1, SENDER = 0;
 var PASSLEFT = 0, PASSACROSS = 1, PASSRIGHT = 2, NOPASS = 3;
 var cardClass = require('./card-class');
 var tableClass = require('./table-class');
-var sleepSeconds = 1.3 * 200000;
+var sleepSeconds = 0.3 * 200000;
 var gameEngine = require('./engine/trump-engine');
 
 exports.createGame = function(data) {
@@ -432,13 +432,15 @@ function trump_table (num, room, game) {
 		return sendData;
 	};
 	this.sendCurrentState = function (playerObj, sendData) {
+		var details = this.getReadyData();
 		if (this.prePlayOver === true) {
-			sendData.push({dest:SENDER, event:events.ready, message:"READY", data:{inProgress:true, players:this.playerArr, round:this.currentRound, trumpData:{setter:this.trump.setter, points:this.trump.points, revealed:this.trump.revealed, card:(this.trump.revealed === true)?this.trump.card:null }}});
+			sendData.push({dest:SENDER, event:events.ready, message:"READY", data:{inProgress:true, players:this.playerArr, details:details.details, round:this.currentRound, trumpData:{setter:this.trump.setter, points:this.trump.points, revealed:this.trump.revealed, card:(this.trump.revealed === true)?this.trump.card:null }}});
 			sendData.push({dest:SENDER, event:events.cards, message:"CARDS",  data:{set:1, cards:playerObj.getCardSet(1)}});
+			sendData.push({dest:ALL , event:events.sleep, message:"SLEEP",  data:sleepSeconds});
 			sendData.push({dest:SENDER, event:events.cards, message:"CARDS",  data:{set:2, cards:playerObj.getCardSet(2)}});
 		} else {
 			sendData.push( {dest:SENDER, event:events.ready, message:"READY",
-				data:{inProgress:true, players:this.playerArr, bidData:this.bidData, trumpData:{setter:this.trump.setter, points:this.trump.points}}
+				data:{inProgress:true, details:details.details, players:this.playerArr, bidData:this.bidData, trumpData:{setter:this.trump.setter, points:this.trump.points}}
 			});
 			sendData.push({dest:SENDER, event:events.cards, message:"CARDS",  data:{set:1, cards:playerObj.getCardSet(1)}});
 			if (this.trump.card !== null) {
@@ -446,6 +448,7 @@ function trump_table (num, room, game) {
 			}
 		}
 	};
+
 	this.resumeOnPlayerLeave = function (playerObj, sendData) {
 		if (this.prePlayOver === true) {
 			var cardData = {play:true, player:this.currentPlayer, cardObj:{}};
@@ -638,8 +641,9 @@ function hearts_table (num, room, game) {
 	};
 
 	this.sendCurrentState = function (playerObj, sendData) {
+		var details = this.getReadyData();
 		var data = {player:this.currentPlayer, play:false, game:(this.allGames.length%this.totalPlayers)};
-		sendData.push({dest:SENDER, event:events.ready, message:"READY", data:{inProgress:true, players:this.playerArr, round:this.currentRound}});
+		sendData.push({dest:SENDER, event:events.ready, message:"READY", data:{inProgress:true, details:details.details, players:this.playerArr, round:this.currentRound}});
 		sendData.push({dest:SENDER, event:events.cards, message:"CARDS",  data:{set:1, cards:playerObj.hand}});
 		if (this.prePlayOver === true) {
 			sendData.push({dest:SENDER, event:events.play, message:"PLAY", data:{play:false, player:this.currentPlayer, passOver:this.prePlayOver, cards:null}});
