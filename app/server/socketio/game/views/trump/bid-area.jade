@@ -1,0 +1,7 @@
+.background(ng-show='$index == 0 && bidObj.bid && action == "Bid"')
+	h3.bid-points.color-metroRed(ng-bind='bidObj.points')
+	a.bid-icon.glyphicon.glyphicon-minus.pull-left.olor-metroNavy(href='javascript:void(0);' ng-click='bidObj.decreaseBid()')
+	a.bid-icon.glyphicon.glyphicon-remove.color-metroRed(href='javascript:void(0);' ng-hide='bidObj.minimum' ng-click='bidObj.passBid()')
+	a.bid-icon.glyphicon.glyphicon-plus.pull-right.olor-metroNavy(href='javascript:void(0);' ng-click='bidObj.increaseBid()')
+	a.bid-icon.glyphicon.glyphicon-ok.color-metroGreen(href='javascript:void(0);' ng-click='bidObj.submitBid()')
+span.bid-data(ng-bind='tableData.bidData[$index]')

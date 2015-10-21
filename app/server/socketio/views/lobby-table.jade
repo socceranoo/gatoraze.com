@@ -42,9 +42,10 @@
 							span Join
 					- else
 						span.btn.btn-danger.btn-sm Full
-					&nbsp;
-					a.btn.btn-primary.btn-sm(href='/razeplay/'+stuff.game+'/?session='+stuff.session+'&view=true')
-						span View
+					- if (stuff.inProgress)
+						span &nbsp;
+						a.btn.btn-primary.btn-sm(href='/razeplay/'+stuff.game+'/?session='+stuff.session+'&view=true')
+							span View
 - else
 	h3.text-center No Tables at this time
 	hr

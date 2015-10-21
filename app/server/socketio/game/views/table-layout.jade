@@ -1,0 +1,11 @@
+.col-md-12(ng-cloak ng-show='tableData.round.length')
+	.col-md-6.col-md-offset-3.background-opacit0.img-rounded
+		.table-layout.clearfix
+			.card-holder(ng-class="{'current-turn': $index == shifter(token)}", ng-repeat='card in tableData.round track by $index' class='pos'+total+'-{{$index}}')
+				.card(ng-class="{'active': $index == token, 'blue-border': $index == shifter(starter)}", class='background-{{tableColors[$index]}}', style='background-position:{{card.bgPos[0]}}px {{card.bgPos[1]}}px')
+					- if (site == 'trump' || site == 'spades')
+						include trump/bid-area
+				.player-name(ng-hide='$index == 0 && $scope.position >= 0' class="color-{{tableColors[$index]}}")
+					span(ng-bind='tableData.players[$index]')
+			.trump-position(ng-show='centerObj.suitObj.show()' style='background-position:{{centerObj.suitObj.suit().bgPos[0]}}px {{centerObj.suitObj.suit().bgPos[1]}}px')
+			a.trump-position(href='javascript:void(0);' ng-click='centerObj.clickObj.click()' ng-hide='centerObj.clickObj.hide()' style='background-position:{{centerObj.clickObj.suit().bgPos[0]}}px {{centerObj.clickObj.suit().bgPos[1]}}px')

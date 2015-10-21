@@ -26,13 +26,14 @@ module.exports = function(IO) {
 		//Members are maintained in the gameTable.members.
 		this.gameTable = servers[this.game].tableObj.createGame(data);
 
+		this.checkUserInfo = function (data) {
+			return (this.game == data.site && this.room == data.room &&
+				this.session == data.session && this.total == data.total);
+		};
+
 		this.addUser = function (socket, data) {
 			var ret;
-			if (data.view === false) {
-				ret = this.gameTable.addHumanMember(data.user);
-			} else {
-				ret = this.gameTable.addHumanViewer(data.user);
-			}
+			ret = this.gameTable.addHumanMember(data.user);
 			var success = ret[0];
 			var sendData = ret[1];
 			if (success) {
@@ -49,6 +50,7 @@ module.exports = function(IO) {
 			var sendData = ret[1];
 			sendEventsSocket(this.game, socket, sendData, this.userSockets);
 		};
+
 		this.removeUser = function (socket) {
 			removeFromRoom(socket);
 			delete this.userSockets[socket.data.user];
@@ -135,41 +137,52 @@ module.exports = function(IO) {
 			roomBroadcastExceptSender(socket.data.user, socket, events.message, message, null);
 		});
 
-		if (!socketRoomsHash[data.site][data.room]) {
-			//console.log(data);
-			socketRoomsHash[data.site][data.room] = new socketRoom(data);
-			servers[data.site].sessionCount++;
+		var socketRoomObj = socketRoomsHash[data.site][data.room];
+		if (!socketRoomObj) {
+			console.log(data);
+			return;
 		}
-		var gameRoomObj = socketRoomsHash[data.site][data.room];
-		var success = gameRoomObj.addUser(socket, data);
+		if (socketRoomObj.checkUserInfo(data) === false) {
+			return;
+		}
+		var success = socketRoomObj.addUser(socket, data);
 		if (data.view === false && success) {
 			socket.on(events.play, function (data) {
-				var gameRoomObj = socketRoomsHash[data.userInfo.site][data.userInfo.room];
-				gameRoomObj.userPlay(socket, data);
+				var socketRoomObj = socketRoomsHash[data.userInfo.site][data.userInfo.room];
+				socketRoomObj.userPlay(socket, data);
 			});
 			socket.on(events.addComputer, function (data) {
-				var gameRoomObj = socketRoomsHash[data.userInfo.site][data.userInfo.room];
-				gameRoomObj.addComputer(socket, data.userInfo, data.difficulty);
+				var socketRoomObj = socketRoomsHash[data.userInfo.site][data.userInfo.room];
+				socketRoomObj.addComputer(socket, data.userInfo, data.difficulty);
 			});
 		}
 	};
 
 	exportObj.userLeave = function (socket) {
-		var gameRoomObj = socketRoomsHash[socket.data.site][socket.data.room];
-		if (socket.data.view === false && gameRoomObj) {
-			gameRoomObj.removeUser(socket);
+		var socketRoomObj = socketRoomsHash[socket.data.site][socket.data.room];
+		if (socket.data.view === false && socketRoomObj) {
+			socketRoomObj.removeUser(socket);
 		}
 	};
 	exportObj.availableServers = Object.keys(servers);
 	exportObj.servers = servers;
 
 	exportObj.getRoomInfo = function (site, room) {
-		var gameRoomObj = socketRoomsHash[site][room];
-		if (gameRoomObj) {
-			return gameRoomObj.getRoomInfo();
+		var socketRoomObj = socketRoomsHash[site][room];
+		if (socketRoomObj) {
+			return socketRoomObj.getRoomInfo();
 		} else {
 			return null;
 		}
+	};
+	exportObj.initializeSocketRoom = function (site, session, room, total) {
+		var data = {site:site, session:session, room:room, total:total};
+		var socketRoomObj = socketRoomsHash[site][room];
+		if (!socketRoomObj) {
+			socketRoomsHash[data.site][data.room] = new socketRoom(data);
+			servers[site].sessionCount++;
+		}
+		return true;
 	};
 	exportObj.getSessionCount = function (site) {
 		return servers[site].sessionCount;

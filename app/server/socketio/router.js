@@ -24,8 +24,6 @@ module.exports = function(app, module_obj, io) {
 			next();
 		}
 	});
-	/*
-	*/
 	var process_request = function (req, res, site, players, path) {
 		var rand = Math.floor((Math.random()*500)+1);
 		var session = req.query.session;
@@ -37,27 +35,26 @@ module.exports = function(app, module_obj, io) {
 		var temp = socketServer.getRoomInfo(site, room);
 		if (temp !== null) {
 			players = temp.total;
+		} else {
+			socketServer.initializeSocketRoom(site, session, room, players);
 		}
 		var view_only = req.query.view;
 		view_only = (view_only) ? true : false;
 		var user = req.session.razeplay_user.name;
 		user = "Guest-"+rand;
-		if (site == 'tube') {
-			res.render('socketio/tube/views/home', {site:site, user:user, room:room, session:session, total:players});
-		} else {
-			res.render('socketio/game/views/home', {site:site, user:user, room:room, session:session, total:players, view:view_only});
-		}
+		var info = {site:site, user:user, room:room, session:session, total:players, view:view_only};
+		res.render('socketio/'+path+'/views/home', info);
 	};
 	app.get('/razeplay/trump', function(req, res){
 		var site = "trump";
 		var players = req.query.players;
 		players = (players && (players == 4 || players == 6 || players == 8)) ? players:4;
-		process_request(req, res, site, players, 'game/'+site);
+		process_request(req, res, site, players, 'game');
 	});
 	app.get('/razeplay/spades', function(req, res){
 		var site = "spades";
 		var players = 4;
-		process_request(req, res, site, players, 'game/trump');
+		process_request(req, res, site, players, 'game');
 	});
 	app.get('/razeplay/tube', function(req, res){
 		var site = "tube";
@@ -68,7 +65,7 @@ module.exports = function(app, module_obj, io) {
 	app.get('/razeplay/hearts', function(req, res){
 		var site = "hearts";
 		var players = 4;
-		process_request(req, res, site, players, 'game/'+site);
+		process_request(req, res, site, players, 'game');
 	});
 
 	app.post('/razeplay/*lobby', function(req, res){

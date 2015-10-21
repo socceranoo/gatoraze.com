@@ -240,8 +240,8 @@ function Engine(game, num) {
 		var suitArr = {};
 		var i = 0;
 		var message3 = 'Cannot play some other suit than the lead card suit';
-		console.log("Round Number :" +roundNumber);
-		console.log(JSON.stringify(round));
+		//console.log("Round Number :" +roundNumber);
+		//console.log(JSON.stringify(round));
 		if (trump.revealed === false && round.length > 0 && round[round.length - 1].card.suit.name == trump.card.suit.name) {
 			trump.revealed = true;
 		}

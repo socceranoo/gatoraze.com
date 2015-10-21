@@ -3,7 +3,7 @@ var ALL = 2, ALL_BUT_SENDER = 1, SENDER = 0;
 var PASSLEFT = 0, PASSACROSS = 1, PASSRIGHT = 2, NOPASS = 3;
 var cardClass = require('./card-class');
 var tableClass = require('./table-class');
-var sleepSeconds = 0.1 * 200000;
+var sleepSeconds = 1.3 * 200000;
 var gameEngine = require('./engine/trump-engine');
 
 exports.createGame = function(data) {
@@ -213,7 +213,7 @@ function trump_table (num, room, game) {
 				sendData.push({dest:SENDER, event:events.play, message:validObj[1],  data:data});
 			}
 		} else {
-			console.log(JSON.stringify(data.cardObj));
+			//console.log(JSON.stringify(data.cardObj));
 			validObj = this.gameEngine.isValidCard(playerObj, data.cardObj, this.currentRound, this.round.length, this.trump);
 			if (validObj[0] === false) {
 				data.cardObj = null;
@@ -239,7 +239,7 @@ function trump_table (num, room, game) {
 		this.currentPlayer++;
 		this.currentPlayer %= this.totalPlayers;
 		this.currentRound.push(data.cardObj);
-		console.log(JSON.stringify(data.cardObj));
+		//console.log(JSON.stringify(data.cardObj));
 		var prevPlayerObj = this.members[this.playerArr[data.cardObj.player]];
 		prevPlayerObj.hand.splice(data.cardObj.index, 1);
 		if (this.currentRound.length == this.totalPlayers) {
@@ -569,7 +569,7 @@ function hearts_table (num, room, game) {
 			playerObj = this.members[this.playerArr[i]];
 			for (j = 0; j < playerObj.hand.length; j++) {
 				if (playerObj.hand[j].name == "2C") {
-					console.log("2C is with " + playerObj.position);
+					console.log("2C is with " + playerObj.name);
 					this.gameStarter = playerObj.position;
 				}
 			}
@@ -620,7 +620,7 @@ function hearts_table (num, room, game) {
 		this.currentPlayer++;
 		this.currentPlayer %= this.totalPlayers;
 		delete data.passCards;
-		delete data.game;
+		//delete data.game;
 		if (this.passCount == this.totalPlayers) {
 			this.startPlay(sendData);
 		} else {

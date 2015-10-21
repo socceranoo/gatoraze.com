@@ -51,7 +51,6 @@
 					.item(ng-repeat='roundObj in tableData.prevGame.allRounds track by $index')
 						.col-md-12.col-sm-12
 							h3.text-center.no-margin Round {{$index+1}} ({{roundObj.points}})
-							//.col-md-10.col-sm-10.col-md-offset-1.col-sm-offset-1
 							.table-layout
 								.card-holder(ng-repeat='obj in roundObj.round track by $index' class='pos'+total+'-{{shifter(obj.player)}}', ng-class="{'non-round-winner':obj.player != roundObj.winner, 'round-winner':obj.player == roundObj.winner}")
 									.card(ng-class="{'blue-border':$index == 0}" style='background-position:{{obj.card.bgPos[0]}}px {{obj.card.bgPos[1]}}px')

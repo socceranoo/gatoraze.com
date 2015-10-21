@@ -9,12 +9,8 @@ block content
 	include prev-game
 	.row.text-center
 		include buttons
-		- if (site == 'trump' || site == 'spades')
-			include trump/table-layout
-			include trump/cards
-			- if (site == 'trump')
-				include trump/trump-area
-		- else if (site == 'hearts')
-			include hearts/table-layout
-			include hearts/cards
+		include table-layout
+		include cards
+		- if (site == 'trump')
+			include trump/trump-area
 
