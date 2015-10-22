@@ -27,7 +27,7 @@
 					//tr(ng-repeat='(key, value) in tableData.playerDetails[curUserPosition]')
 						td.text-center(ng-bind='key')
 						td.text-center(ng-bind='value')
-				ul.list-inline.text-center(ng-if='tableData.playerDetails[curUserPosition].human === false')
+				ul.list-inline.text-center(ng-if='tableData.playerDetails[curUserPosition].human === false && position >= 0')
 					h3.text-center Set Bot Difficulty
 					li.btn.btn-primary(ng-click='changeDifficulty(tableData.playerDetails[curUserPosition].position, 0)', ng-if='tableData.playerDetails[curUserPosition].difficulty != "Easy"')
 						span.fa.fa-car

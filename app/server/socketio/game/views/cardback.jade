@@ -6,5 +6,5 @@
 				h3 Choose Card back
 			.modal-body.text-center
 				ul.list-inline.list-unstyled
-					li.card-holder(ng-repeat='obj in cardBackArr track by $index' style="cursor:pointer;" ng-click='changeCardBack($index)')
+					li.card-holder(ng-repeat='obj in cardBackArr track by $index' style="cursor:pointer;" ng-click='changeCardBack($index)', data-dismiss='modal')
 						.card.green-border(style='background-position:{{obj.bgPos[0]}}px {{obj.bgPos[1]}}px')

@@ -371,10 +371,11 @@ function trump($scope) {
 			if (data.data.bidObj.trump === true) {
 				$scope.trump.setter = data.data.bidObj.bidder;
 				$scope.addControlData($scope.events.play, data.data);
-				if ($scope.trump.setter !== $scope.position)
+				if ($scope.trump.setter !== $scope.position) {
 					$scope.trump.card = $scope.cardBack;
-				else
+				} else {
 					$scope.trump.card = $scope.cards[data.data.bidObj.index];
+				}
 				$scope.trump.points = data.data.bidObj.points;
 				$scope.clearBidData();
 				if (data.data.bidObj.round == 2) {

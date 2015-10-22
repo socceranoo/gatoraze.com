@@ -77,6 +77,20 @@ function Engine(game, num) {
 		return playerObj.hand[index];
 	};
 
+	this.roundOver = function(round) {
+		if (round.length == this.totalPlayers) {
+			return true;
+		} else {
+			return false;
+		}
+	};
+	this.gameOver = function (allRounds, initialHandCount) {
+		if (allRounds.length == initialHandCount) {
+			return true;
+		} else {
+			return false;
+		}
+	};
 	this.isValidCard = function (playerObj, cardObj, round, roundNumber, trump) {
 		var validArr = null;
 		var message = 'Not a valid Card';

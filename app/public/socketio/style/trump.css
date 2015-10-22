@@ -566,7 +566,7 @@ body.hearts {
   -webkit-animation-delay: 0s;
 }
 .empty-card {
-  opacity: 0.2;
+  opacity: 0.1;
 }
 .round-winner {
   opacity: 1.0;

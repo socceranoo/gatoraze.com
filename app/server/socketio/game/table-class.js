@@ -34,6 +34,7 @@ player.prototype.getCardSet = function (set) {
 function table(num, room) {
 	this.computerNames = JSON.parse(JSON.stringify(uinames.results));
 	cardClass.shuffle(this.computerNames);
+	this.playTimer = false;
 
 	this.getUserData = function(userObj) {
 		var diff_class = ["fa-car", "fa-plane", "fa-rocket"];

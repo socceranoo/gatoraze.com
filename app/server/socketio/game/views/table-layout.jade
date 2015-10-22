@@ -10,7 +10,7 @@
 						span &nbsp; &nbsp;
 						span.fa.fa-desktop(ng-if='tableData.playerDetails[$index].human === false')
 						span.fa.fa-user(ng-if='tableData.playerDetails[$index].human')
-					table.table.table-bordered.user-details.well.color-clouds(class="background-{{tableColors[$index]}}", ng-show='hoverEdit >= 0')
+					table.table.table-bordered.user-details.well.color-black(class="background-{{tableColors[$index]}}", ng-show='hoverEdit >= 0')
 						tr(ng-show='key != "thumbnail" && key != "human" && key != "difficulty_class" && key != "gender" && key != "name"', ng-repeat='(key, value) in tableData.playerDetails[$index]')
 							td.text-center(ng-bind='key')
 							td.text-center(ng-bind='value')
