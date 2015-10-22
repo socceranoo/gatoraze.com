@@ -23,6 +23,7 @@ module.exports = function(IO) {
 		this.session = data.session;
 		this.total = data.total;
 		this.userSockets = {};
+		this.timeoutObject = null;
 		//Members are maintained in the gameTable.members.
 		this.gameTable = servers[this.game].tableObj.createGame(data);
 
@@ -57,10 +58,29 @@ module.exports = function(IO) {
 			var sendData = this.gameTable.removeHumanMember(socket.data.user);
 			sendEventsSocket(this.game, socket, sendData, this.userSockets);
 		};
-		this.userPlay = function (socket, data) {
-			var sendData = this.gameTable.playerPlay(data);
+		this.userPlay = function (socket, data, sendData) {
+			if (sendData === null) {
+				sendData = this.gameTable.playerPlay(data);
+				if (this.timeoutObject !== null) {
+					clearTimeout(this.timeoutObject);
+					this.timeoutObject = null;
+				}
+			}
+			//Else it is recursion of the timer
 			//console.log(JSON.stringify(sendData));
-			sendEventsSocket(this.game, socket, sendData, this.userSockets);
+			var timerData = sendEventsSocket(this.game, socket, sendData, this.userSockets);
+			console.log(this.timeoutObject);
+			if (timerData !== null) {
+				console.log("TIMER Starting for "+timerData.time/1000+" seconds");
+				var self = this;
+				this.timeoutObject = setTimeout(function () {
+					var newSendData = [];
+					console.log(this.room);
+					console.log(JSON.stringify(this.gameTable.trump));
+					timerData.callback(timerData, newSendData);
+					this.userPlay(socket, data, newSendData);
+				}.bind(this), timerData.time);
+			}
 		};
 		this.getRoomInfo = function () {
 			var retdata = {game:this.game, room:this.room, session:this.session};
@@ -92,11 +112,16 @@ module.exports = function(IO) {
 				receiver = socketHash[sendData[i].receiver];
 			}
 			if (receiver === undefined) {
-				console.log(JSON.stringify(sendData[i]));
+				console.log("RECEIVER is undefined ASSERT:"+JSON.stringify(sendData[i]));
+			}
+			if (sendData[i].event == events.timer) {
+				//ASSUMING TIMER WILL ALWAYS BE LAST// OPtimize for in between timers later
+				return sendData[i].data;
 			}
 			sendFunction[sendData[i].dest](sender, receiver, sendData[i].event, sendData[i].message, sendData[i].data);
 			//console.log(sendData[i].message);
 		}
+		return null;
 	};
 
 	var addToRoom = function(socket, data) {
@@ -151,7 +176,7 @@ module.exports = function(IO) {
 			socket.on(events.play, function (data) {
 				console.log(JSON.stringify(data));
 				var socketRoomObj = socketRoomsHash[data.userInfo.site][data.userInfo.room];
-				socketRoomObj.userPlay(socket, data);
+				socketRoomObj.userPlay(socket, data, null);
 			});
 			socket.on(events.changeComputer, function (data) {
 				var socketRoomObj = socketRoomsHash[data.userInfo.site][data.userInfo.room];
