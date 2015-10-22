@@ -1,12 +1,9 @@
-ul.pagination
+ul.pagination.color-metroYellow
 	a.icon-top.glyphicon.glyphicon-list-alt(data-toggle='modal' href='#control-modal' title='Control data')
 	a.icon-top.glyphicon.glyphicon-comment(data-toggle='modal' href='#chat-modal' title='Chat')
 	a.icon-top.glyphicon.glyphicon-fast-backward(data-toggle='modal' href='#prev-game' title='Previous Game')
 	a.icon-top.glyphicon.glyphicon-step-backward(data-toggle='modal' href='#prev-round' title='Previous Round')
-	span.icon-top.color-metroPurple.heading= site
-	a.icon-top.fa.fa-car(href='javascript:void(0);' ng-click='addComputer(0)' title='Add an easy computer')
-	a.icon-top.fa.fa-plane(href='javascript:void(0);' ng-click='addComputer(1)' title='Add a medium computer')
-	a.icon-top.fa.fa-rocket(href='javascript:void(0);' ng-click='addComputer(2)' title='Add a hard computer')
+	span.heading.fa-2x.color-metroOrange= site
 	a.icon-top.glyphicon.glyphicon-list(href='/razeplay/'+site+'-lobby' title='Back to '+site+' rooms')
 	a.icon-top.glyphicon.glyphicon-home(href='/razeplay/lobby' title='Back to lobby')
 	a.icon-top.glyphicon.glyphicon-retweet(data-toggle='modal' href='#card-back' title='Card back')

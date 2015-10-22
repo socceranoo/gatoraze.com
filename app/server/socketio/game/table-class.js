@@ -15,6 +15,7 @@ function player(name, position, human, bio, difficulty) {
 	this.points = 0;
 	this.total_points = 0;
 	this.wins = 0;
+	this.total_games = 0;
 	this.team = position%2;
 	this.human = human;
 	this.bio = bio;
@@ -35,26 +36,30 @@ function table(num, room) {
 	cardClass.shuffle(this.computerNames);
 
 	this.getUserData = function(userObj) {
+		var diff_class = ["fa-car", "fa-plane", "fa-rocket"];
+		var diff_name = ["Easy", "Medium", "Hard"];
 		console.log(userObj.name);
+		var details = {
+			username:userObj.name,
+			name:userObj.name,
+			human:userObj.human,
+			wins:userObj.wins+"/"+userObj.total_games,
+			position:userObj.position,
+			difficulty_class:diff_class[userObj.difficulty],
+			difficulty:diff_name[userObj.difficulty]
+		};
 		if (userObj.human === true) {
-			return {
-				username:userObj.name,
-				gender:"",
-				name:userObj.name,
-				human:userObj.human,
-				wins:userObj.wins,
-				thumbnail:"http://4vector.com/i/free-vector-male-user-icon-clip-art_125620_male-user-icon-clip-art/Male_User_Icon_clip_art_hight.png"
-			};
+			details.name = userObj.name;
+			details.gender = "";
+			details.thumbnail = "http://4vector.com/i/free-vector-male-user-icon-clip-art_125620_male-user-icon-clip-art/Male_User_Icon_clip_art_hight.png";
+			details.type = "Human";
 		} else {
-			return {
-				username:userObj.name,
-				gender:userObj.bio.gender,
-				name:userObj.bio.name.first+" "+userObj.bio.name.last,
-				human:userObj.human,
-				wins:userObj.wins,
-				thumbnail:userObj.bio.picture.thumbnail
-			};
+			details.name = userObj.bio.name.first+" "+userObj.bio.name.last;
+			details.gender = userObj.bio.gender;
+			details.thumbnail = userObj.bio.picture.thumbnail;
+			details.type = "Bot";
 		}
+		return details;
 	};
 
 	this.getReadyData = function () {
@@ -77,7 +82,7 @@ function table(num, room) {
 
 		if (Object.keys(this.members).length === 0) {
 			position = Object.keys(this.members).length;
-			playerObj = new player(newPlayer, position, true, null, -1);
+			playerObj = new player(newPlayer, position, true, null, 1);
 			this.members[newPlayer] = playerObj;
 			this.playerArr[position] = newPlayer;
 			message = "Welcome to the game room "+this.room;
@@ -145,14 +150,14 @@ function table(num, room) {
 			if (this.members[user]) {
 				playerObj = this.members[this.playerArr[input.position]];
 				//Changing difficulty should happen only for a computer
-				if (playerObj.human === true) {
+				if (playerObj.human === false) {
 					//Difficulty value should be in valid diffculty levels
 					if (temp_arr.indexOf(input.difficulty) >= 0) {
 						//change bio and name later
 						message = playerObj.name+" has replaced the computer " +playerObj.name;
 						playerObj.difficulty = input.difficulty;
-						data = {name:playerObj.name, position:input.position, inProgress:this.inProgress};
-						sendData.push({dest:ALL_BUT_SENDER, event:events.playerChange, message:message, data:data});
+						data = {name:playerObj.name, position:input.position, inProgress:this.inProgress, details:this.getUserData(playerObj)};
+						sendData.push({dest:ALL, event:events.playerChange, message:message, data:data});
 						return [true, sendData];
 					} else {
 						message = "Invalid difficulty specified";
@@ -161,7 +166,7 @@ function table(num, room) {
 					message = "Invalid player specified";
 				}
 			} else {
-				message = "Insufficient permission to perform the operation";
+				message = "Only active players can perform this operation";
 			}
 			sendData.push({dest:SENDER , event:events.message, message:message,  data:{error:true}});
 			return [false, sendData];
@@ -236,13 +241,12 @@ function table(num, room) {
 				playerObj.human = false;
 				playerObj.name = compName;
 				playerObj.bio = bio;
-				data.name = compName;
 				this.playerArr[position] = compName;
 				if (this.currentPlayer === position) {
 					this.resumeOnPlayerLeave(playerObj, sendData);
 				}
 			}
-			data = {name:exitingPlayer, position:position, inProgress:this.inProgress, details:this.getUserData(playerObj)};
+			data = {name:compName, position:position, inProgress:this.inProgress, details:this.getUserData(playerObj)};
 			sendData.unshift({dest:ALL_BUT_SENDER , event:events.playerLeave, message:message,  data:data});
 		}
 		return sendData;

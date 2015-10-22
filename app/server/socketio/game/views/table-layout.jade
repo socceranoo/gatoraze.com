@@ -1,14 +1,23 @@
 .col-md-12(ng-cloak ng-show='tableData.round.length')
-	.col-md-6.col-md-offset-3.background-opacit0.img-rounded
-		.table-layout.clearfix
-			.card-holder(ng-class="{'current-turn': $index == shifter(token)}", ng-repeat='card in tableData.round track by $index' class='pos'+total+'-{{$index}}')
-				img.img-thumbnail.img-circle.img-user-thumbnail(src='{{tableData.playerDetails[$index].thumbnail}}')
-				.card(ng-class="{'active': $index == token, 'blue-border': $index == shifter(starter)}", class='background-{{tableColors[$index]}}', style='background-position:{{card.bgPos[0]}}px {{card.bgPos[1]}}px')
+	.background-opacity0-4.img-circle(ng-class="{'col-sm-6 col-sm-offset-3 col-md-6 col-md-offset-3':roomInfo.total < 5, 'col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2': roomInfo.total > 5}")
+		.table-layout.clearfix.background-opacit
+			.card-holder(ng-repeat='card in tableData.round track by $index' class='pos'+total+'-{{$index}}')
+				div(class='user-img-pos'+total+'-{{$index}} color-{{tableColors[$index]}}')
+					img.img-thumbnail.img-circle.user-img.pointer(ng-mouseover="hoverEdit = $index ; $parent.curUserPosition = $index", ng-mouseleave="hoverEdit = -1", ng-class="{'current-turn': $index == shifter(token)}", src='{{tableData.playerDetails[$index].thumbnail}}', data-toggle='modal', href='#user-info')
+					span.player-name(ng-bind='tableData.players[$index]', ng-hide='$index == 0 && $scope.position >= 0')
+					div(style="font-size:18px")
+						span.fa(class="{{tableData.playerDetails[$index].difficulty_class}}")
+						span &nbsp; &nbsp;
+						span.fa.fa-desktop(ng-if='tableData.playerDetails[$index].human === false')
+						span.fa.fa-user(ng-if='tableData.playerDetails[$index].human')
+					table.table.table-bordered.user-details.well.color-clouds(class="background-{{tableColors[$index]}}", ng-show='hoverEdit >= 0')
+						tr(ng-show='key != "thumbnail" && key != "human" && key != "difficulty_class" && key != "gender" && key != "name"', ng-repeat='(key, value) in tableData.playerDetails[$index]')
+							td.text-center(ng-bind='key')
+							td.text-center(ng-bind='value')
+				.card(ng-class="{'empty-card':card.name == cardBack.name, 'blue-border': $index == shifter(starter)}", class='background-{{tableColors[$index]}}', style='background-position:{{card.bgPos[0]}}px {{card.bgPos[1]}}px')
 					.center-position.background-oacity.pointer(ng-if='position < 0', ng-click='replaceComputer($index)')
 						span.fa-3x.glyphicon.glyphicon-plus-sign
 					- if (site == 'trump' || site == 'spades')
 						include trump/bid-area
-				.player-name(ng-hide='$index == 0 && $scope.position >= 0' class="color-{{tableColors[$index]}}")
-					span(ng-bind='tableData.players[$index]')
 			.trump-position(ng-show='centerObj.suitObj.show()' style='background-position:{{centerObj.suitObj.suit().bgPos[0]}}px {{centerObj.suitObj.suit().bgPos[1]}}px')
 			a.trump-position(href='javascript:void(0);' ng-click='centerObj.clickObj.click()' ng-hide='centerObj.clickObj.hide()' style='background-position:{{centerObj.clickObj.suit().bgPos[0]}}px {{centerObj.clickObj.suit().bgPos[1]}}px')

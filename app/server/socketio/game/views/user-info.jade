@@ -1,0 +1,43 @@
+#user-info.modal.fade
+	.modal-dialog.modal-sm
+		.modal-content
+			.modal-header.text-center
+				a.close(data-dismiss='modal') &times;
+				h3(ng-bind='tableData.playerDetails[curUserPosition].name')
+			.modal-body.text-justify
+				table.table.table-bordered
+					img.img-circle.img-responsive.height-100(src="{{tableData.playerDetails[curUserPosition].thumbnail}}")
+					br
+					tr.text-center
+						th Username
+						td(ng-bind='tableData.playerDetails[curUserPosition].username')
+					tr.text-center
+						th Type
+						td(ng-bind='tableData.playerDetails[curUserPosition].type')
+					tr.text-center(ng-if='tableData.playerDetails[curUserPosition].human === false')
+						th Difficulty
+						td
+							span.fa(class="{{tableData.playerDetails[curUserPosition].difficulty_class}}")
+							| &nbsp; (
+							span(ng-bind='tableData.playerDetails[curUserPosition].difficulty')
+							| )
+					tr.text-center
+						th Wins/Games
+						td(ng-bind='tableData.playerDetails[curUserPosition].wins')
+					//tr(ng-repeat='(key, value) in tableData.playerDetails[curUserPosition]')
+						td.text-center(ng-bind='key')
+						td.text-center(ng-bind='value')
+				ul.list-inline.text-center(ng-if='tableData.playerDetails[curUserPosition].human === false')
+					h3.text-center Set Bot Difficulty
+					li.btn.btn-primary(ng-click='changeDifficulty(tableData.playerDetails[curUserPosition].position, 0)', ng-if='tableData.playerDetails[curUserPosition].difficulty != "Easy"')
+						span.fa.fa-car
+						span &nbsp;
+						span Easy
+					li.btn.btn-warning(ng-click='changeDifficulty(tableData.playerDetails[curUserPosition].position, 1)', ng-if='tableData.playerDetails[curUserPosition].difficulty != "Medium"')
+						span.fa.fa-plane
+						span &nbsp;
+						span Med
+					li.btn.btn-danger(ng-click='changeDifficulty(tableData.playerDetails[curUserPosition].position, 2)', ng-if='tableData.playerDetails[curUserPosition].difficulty != "Hard"')
+						span.fa.fa-rocket
+						span &nbsp;
+						span Hard

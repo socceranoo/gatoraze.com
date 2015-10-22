@@ -1,5 +1,5 @@
-.col-md-8.col-md-offset-2.text-center.background-sunFloer
-	h4.color-metroRed(ng-bind='info')
+.col-md-8.col-md-offset-2.text-center
+	h3.color-metroOrange(ng-bind='info')
 	//h3.text-center.featurette-divider(ng-bind='action')
 	ul.card-set.player-hand.clearfix.list-unstyled.list-inline(ng-cloak ng-class="{'your-turn': setCardClassObj.yourTurn()}" ng-show='tableData.players.length')
 		li.card-holder(ng-class="{'clicked': setCardClassObj.clicked(card), 'highlight': setCardClassObj.highlight(card) }" ng-repeat='card in cards')

@@ -1,22 +1,12 @@
-#room-info-modal.modal.fade
-	.modal-dialog.modal-sm
-		.modal-content
-			.modal-header.text-center
-				a.close(data-dismiss='modal') &times;
-				h3 Room info
-			.modal-body.text-justify
-				div.well#control-data(style='height:500px; overflow:auto;')
-
 - if (list.length)
-	h3.text-center Join a game
+	h3.text-center Active Tables
 	hr
 	table.table.table-bordered.table-striped
 		tr
 			//th Server
 			th Room
-			th In Progress
-			th Players
-			th Info
+			th Status
+			th Human Players
 			th
 		- each stuff in list
 			tr
@@ -33,19 +23,8 @@
 					- else
 						span.color-metroRed= stuff.active+'/'+stuff.total
 				td
-					//stuff.playerInfo
-					a.btn.btn-warning.btn-sm(data-toggle='modal' href='#room-info-modal' title='Game info')
-						span info
-				td
-					- if (stuff.active < stuff.total)
-						a.btn.btn-success.btn-sm(href='/razeplay/'+stuff.game+'/?session='+stuff.session)
-							span Join
-					- else
-						span.btn.btn-danger.btn-sm Full
-					- if (stuff.inProgress)
-						span &nbsp;
-						a.btn.btn-primary.btn-sm(href='/razeplay/'+stuff.game+'/?session='+stuff.session+'&view=true')
-							span View
+					a.btn.btn-success.btn-sm(href='/razeplay/'+stuff.game+'/?session='+stuff.session)
+						span Join
 - else
 	h3.text-center No Tables at this time
 	hr

@@ -1,6 +1,7 @@
 $(document).ready(function() {
 });
 var REPLACE_COMPUTER_SPECIFIC = 0, REPLACE_COMPUTER_ANY = 1, CHANGE_DIFFICULTY = 2;
+var DIFFICULTY_EASY = 0, DIFFICULTY_MEDIUM = 1, DIFFICULTY_HARD = 2;
 
 function trump($scope) {
 	var socket = io.connect();
@@ -17,14 +18,14 @@ function trump($scope) {
 		socket.emit(evt, data);
 	};
 	$scope.tableColors = [
+		"metroYellow",
 		"metroGreen",
-		"metroOrange",
 		"metroCyan",
-		"metroPurple",
-		"metroPink",
 		"metroJade",
+		"metroRed",
+		"metroNavy",
 		"metroTeal",
-		"metroYellow"
+		"metroPink"
 	];
 
 	$scope.roomInfo = {
@@ -53,7 +54,8 @@ function trump($scope) {
 		{name:"CB3", index:0, bgPos:[555, -888], valid:false},
 		{name:"CB4", index:0, bgPos:[333, -888], valid:false},
 		{name:"CB5", index:0, bgPos:[111, -888], valid:false},
-		{name:"CB6", index:0, bgPos:[888, -1036], valid:false}
+		{name:"CB6", index:0, bgPos:[888, -1036], valid:false},
+		{name:"CB7", index:0, bgPos:[666, -1036], valid:false}
 	];
 
 	$scope.starter = -1;
@@ -64,7 +66,7 @@ function trump($scope) {
 	$scope.cards = [];
 	$scope.token = -1;
 	$scope.oldBidObj = null;
-	var joker = {name:"JOKER", index:0, bgPos:[777, -888], valid:false};
+	var joker = {name:"JOKER", index:0, bgPos:[111, -888], valid:false};
 	$scope.blank = {name:"$scope.blank", index:0, bgPos:[222, 0], valid:false};
 	$scope.cardBack = joker;
 	$scope.trump = {card:null, setter:-1, points:0, revealed:false, index:-1};
@@ -72,7 +74,6 @@ function trump($scope) {
 	$scope.bidOver = false;
 	var defaultInfo = 'Welcome';
 	$scope.info = defaultInfo;
-
 	$scope.roundOver = function (data) {
 		//$scope.addMessage(data.message, data.sender, data.date, data.data);
 		$scope.tableData.prevRound = data.data.prevRound;
@@ -166,6 +167,7 @@ function trump($scope) {
 			$scope.addControlData($scope.events.playerChange, data.data);
 			if (data.data.inProgress) {
 				$scope.tableData.players[$scope.shifter(data.data.position)] = data.data.name;
+				$scope.tableData.playerDetails[$scope.shifter(data.data.position)] = data.data.details;
 			}
 			$scope.$apply();
 		});
@@ -200,7 +202,7 @@ function trump($scope) {
 		socket.on($scope.events.ready, function(data) {
 			var i = 0;
 			//$scope.addMessage(data.message, data.sender, data.date, data.data);
-			//$scope.addControlData($scope.events.ready, data.data);
+			$scope.addControlData($scope.events.ready, data.data);
 			if ($scope.position >= 0) {
 				$scope.tableData.players = data.data.players.concat(data.data.players.splice(0, $scope.position));
 				$scope.tableData.players[$scope.shifter($scope.position)] = "You";
@@ -437,230 +439,230 @@ function trump($scope) {
 			$scope.addMessage($scope.message, "Me : ", new Date().toLocaleString(), null);
 			$scope.message = '';
 		} else {
-				socket.emit('event1', {});
+			socket.emit('event1', {});
+		}
+	};
+	$scope.cardClick = function (card, index) {
+		if ($scope.action == "Set Trump") {
+			$scope.emitEvent($scope.events.play, {play:false, trump:card, bidObj:$scope.oldBidObj});
+			$scope.trump.card = card;
+			$scope.action = "Wait";
+		}
+		if ($scope.token == $scope.position && $scope.action == "Play") {
+			if (card.name == $scope.blank.name || card.name == $scope.cardBack.name) {
+				$scope.info = "Cannot play closed card";
+				return;
 			}
-		};
-		$scope.cardClick = function (card, index) {
-			if ($scope.action == "Set Trump") {
-				$scope.emitEvent($scope.events.play, {play:false, trump:card, bidObj:$scope.oldBidObj});
-				$scope.trump.card = card;
-				$scope.action = "Wait";
+			/*
+			if (card.valid !== true) {
+				$scope.info = "Not a valid card";
 			}
-			if ($scope.token == $scope.position && $scope.action == "Play") {
-				if (card.name == $scope.blank.name || card.name == $scope.cardBack.name) {
-					$scope.info = "Cannot play closed card";
-					return;
-				}
-				/*
-				if (card.valid !== true) {
-					$scope.info = "Not a valid card";
-				}
-				*/
-				//$("#control-data").append("Click : "+card.name);
-				$scope.emitEvent($scope.events.play, {play:true, player:$scope.position, cardObj:{card:card, player:$scope.position, index:index}});
-				$scope.action = "Wait";
-			}
-		};
-		$scope.revealTrump = function () {
-			if ($scope.token == $scope.position && $scope.action == "Play") {
-				$scope.emitEvent($scope.events.play, {play:true, player:$scope.position, reveal:true});
-				$scope.action = "Wait";
-			}
-		};
-		$scope.changeCardBack = function (option) {
-			$scope.cardBack.bgPos = $scope.cardBackArr[option].bgPos;
-			$scope.$apply();
-		};
-		$scope.shifter = function (number) {
-			return ($scope.roomInfo.total + number - $scope.position ) % $scope.roomInfo.total;
-		};
-		$scope.centerObj = {
-			suitObj : {
-				show: function () {
-					return ($scope.trump.revealed === true);
-				},
-				suit: function () {
-					if ($scope.trump.card !== null) {
-						return $scope.suitImg[$scope.trump.card.suit.name];
-					} else {
-						return $scope.suitImg['-'];
-					}
-				}
+			*/
+			//$("#control-data").append("Click : "+card.name);
+			$scope.emitEvent($scope.events.play, {play:true, player:$scope.position, cardObj:{card:card, player:$scope.position, index:index}});
+			$scope.action = "Wait";
+		}
+	};
+	$scope.revealTrump = function () {
+		if ($scope.token == $scope.position && $scope.action == "Play") {
+			$scope.emitEvent($scope.events.play, {play:true, player:$scope.position, reveal:true});
+			$scope.action = "Wait";
+		}
+	};
+	$scope.changeCardBack = function (option) {
+		$scope.cardBack.bgPos = $scope.cardBackArr[option].bgPos;
+		$scope.$apply();
+	};
+	$scope.shifter = function (number) {
+		return ($scope.roomInfo.total + number - $scope.position ) % $scope.roomInfo.total;
+	};
+	$scope.centerObj = {
+		suitObj : {
+			show: function () {
+				return ($scope.trump.revealed === true);
 			},
-			clickObj : {
-				hide: function () {
-					return ($scope.trump.revealed || $scope.action != "Play" || $scope.canReveal !== true);
-				},
-				suit: function () {
-					return $scope.suitImg.T;
-				},
-				click: $scope.revealTrump
+			suit: function () {
+				if ($scope.trump.card !== null) {
+					return $scope.suitImg[$scope.trump.card.suit.name];
+				} else {
+					return $scope.suitImg['-'];
+				}
 			}
-		};
+		},
+		clickObj : {
+			hide: function () {
+				return ($scope.trump.revealed || $scope.action != "Play" || $scope.canReveal !== true);
+			},
+			suit: function () {
+				return $scope.suitImg.T;
+			},
+			click: $scope.revealTrump
+		}
+	};
 
-		$scope.setCardClassObj = {
-			yourTurn : function () {
-				return ($scope.action == 'Play' || $scope.action == 'Bid' || $scope.action == 'Set Trump');
-			},
-			highlight : function(card) {
-				return (card.valid === true);
-			},
-			clicked : function (card) {
-				return false;
+	$scope.setCardClassObj = {
+		yourTurn : function () {
+			return ($scope.action == 'Play' || $scope.action == 'Bid' || $scope.action == 'Set Trump');
+		},
+		highlight : function(card) {
+			return (card.valid === true);
+		},
+		clicked : function (card) {
+			return false;
+		}
+	};
+}
+
+function spades ($scope) {
+	trump.call(this, $scope);
+}
+
+spades.prototype = Object.create(trump.prototype);
+
+function hearts ($scope) {
+	$scope.passOver = false;
+	$scope.firstHearts = false;
+	$scope.passCards = [];
+	$scope.submitPass = function() {
+		if ($scope.token == $scope.position && $scope.action == "Pass" ){
+			if ($scope.passCards.length == 3) {
+				$scope.emitEvent($scope.events.play, {play:false, player:$scope.position, passCards:$scope.passCards});
+				$scope.action = "Wait";
+				$scope.cards[$scope.passCards[0]].valid = false;
+				$scope.cards[$scope.passCards[1]].valid = false;
+				$scope.cards[$scope.passCards[2]].valid = false;
+				passSent = true;
+			} else {
+				$scope.info = "Select 3 cards to pass";
 			}
-		};
-	}
+		}
+	};
 
-	function spades ($scope) {
-		trump.call(this, $scope);
-	}
+	trump.call(this, $scope);
 
-	spades.prototype = Object.create(trump.prototype);
+	var passArr = ["L", "A", "R", "-"];
+	var passSent = false;
 
-	function hearts ($scope) {
+	$scope.gameOver = function(data){
+		//$scope.addMessage(data.message, data.sender, data.date, data.data);
+		$scope.starter = -1;
 		$scope.passOver = false;
 		$scope.firstHearts = false;
-		$scope.passCards = [];
-		$scope.submitPass = function() {
-			if ($scope.token == $scope.position && $scope.action == "Pass" ){
+		$scope.setDefaultBg(1);
+		$scope.tableData.prevRound = [];
+		$scope.tableData.prevGame = data.data.prevGame;
+		//$scope.addControlData($scope.events.game, data.data);
+	};
+	$scope.bgIcon = "L";
+
+	$scope.playFunction = function (data) {
+		var j;
+		if ($scope.position >= 0) {
+			$scope.info = data.message;
+		}
+		if (data.data.cardObj) {
+			if (data.data.cardObj.player == $scope.position) {
+				$scope.cards.splice(data.data.cardObj.index, 1);
+			}
+			for (j = 0; j < $scope.cards.length; j++) {
+				$scope.cards[j].valid = false;
+			}
+			$scope.tableData.round[$scope.shifter(data.data.cardObj.player)] = data.data.cardObj.card;
+		}
+		if ($scope.token === $scope.position) {
+			if (data.data.validCards) {
+				for (j = 0; j < data.data.validCards.cards.length; j++) {
+					$scope.cards[data.data.validCards.cards[j]].valid = true;
+				}
+				$scope.addControlData($scope.events.ready, data.data.validCards.cards);
+			}
+			$scope.action = "Play";
+		} else {
+			$scope.action = "Wait";
+		}
+		$scope.$apply();
+	};
+
+	$scope.bidFunction = function (data) {
+		if (data.data.game !== undefined) {
+			$scope.addControlData("Pass", data.data.game);
+			$scope.bgIcon = passArr[data.data.game];
+		}
+		if (data.data.passOver && data.data.passOver === true) {
+			$scope.passOver = true;
+			passSent = false;
+			if (data.data.cards) {
+				for (var i = 0; i < $scope.passCards.length; i++) {
+					$scope.cards[$scope.passCards[i]] = data.data.cards[i];
+				}
+			}
+			$scope.passCards.splice(0, 3);
+			return;
+		}
+		if ($scope.token === $scope.position) {
+			$scope.action = "Pass";
+		} else {
+			$scope.action = "Wait";
+		}
+		$scope.setDefaultBg(1);
+		$scope.$apply();
+	};
+	$scope.cardClick = function (card, index) {
+		if ($scope.passOver === false && passSent === false) {
+			var cardFound = $.inArray(index, $scope.passCards);
+			if (cardFound == -1) {
 				if ($scope.passCards.length == 3) {
-					$scope.emitEvent($scope.events.play, {play:false, player:$scope.position, passCards:$scope.passCards});
-					$scope.action = "Wait";
-					$scope.cards[$scope.passCards[0]].valid = false;
-					$scope.cards[$scope.passCards[1]].valid = false;
-					$scope.cards[$scope.passCards[2]].valid = false;
-					passSent = true;
-				} else {
-					$scope.info = "Select 3 cards to pass";
-				}
-			}
-		};
-
-		trump.call(this, $scope);
-
-		var passArr = ["L", "A", "R", "-"];
-		var passSent = false;
-
-		$scope.gameOver = function(data){
-			//$scope.addMessage(data.message, data.sender, data.date, data.data);
-			$scope.starter = -1;
-			$scope.passOver = false;
-			$scope.firstHearts = false;
-			$scope.setDefaultBg(1);
-			$scope.tableData.prevRound = [];
-			$scope.tableData.prevGame = data.data.prevGame;
-			//$scope.addControlData($scope.events.game, data.data);
-		};
-		$scope.bgIcon = "L";
-
-		$scope.playFunction = function (data) {
-			var j;
-			if ($scope.position >= 0) {
-				$scope.info = data.message;
-			}
-			if (data.data.cardObj) {
-				if (data.data.cardObj.player == $scope.position) {
-					$scope.cards.splice(data.data.cardObj.index, 1);
-				}
-				for (j = 0; j < $scope.cards.length; j++) {
-					$scope.cards[j].valid = false;
-				}
-				$scope.tableData.round[$scope.shifter(data.data.cardObj.player)] = data.data.cardObj.card;
-			}
-			if ($scope.token === $scope.position) {
-				if (data.data.validCards) {
-					for (j = 0; j < data.data.validCards.cards.length; j++) {
-						$scope.cards[data.data.validCards.cards[j]].valid = true;
-					}
-					$scope.addControlData($scope.events.ready, data.data.validCards.cards);
-				}
-				$scope.action = "Play";
-			} else {
-				$scope.action = "Wait";
-			}
-			$scope.$apply();
-		};
-
-		$scope.bidFunction = function (data) {
-			if (data.data.game !== undefined) {
-				$scope.addControlData("Pass", data.data.game);
-				$scope.bgIcon = passArr[data.data.game];
-			}
-			if (data.data.passOver && data.data.passOver === true) {
-				$scope.passOver = true;
-				passSent = false;
-				if (data.data.cards) {
-					for (var i = 0; i < $scope.passCards.length; i++) {
-						$scope.cards[$scope.passCards[i]] = data.data.cards[i];
-					}
-				}
-				$scope.passCards.splice(0, 3);
-				return;
-			}
-			if ($scope.token === $scope.position) {
-				$scope.action = "Pass";
-			} else {
-				$scope.action = "Wait";
-			}
-			$scope.setDefaultBg(1);
-			$scope.$apply();
-		};
-		$scope.cardClick = function (card, index) {
-			if ($scope.passOver === false && passSent === false) {
-				var cardFound = $.inArray(index, $scope.passCards);
-				if (cardFound == -1) {
-					if ($scope.passCards.length == 3) {
-						$scope.info = "Select only 3 cards";
-						return;
-					}
-					card.valid = true;
-					$scope.passCards.push(index);
-				} else {
-					card.valid = false;
-					$scope.passCards.splice(cardFound, 1);
-				}
-				//$scope.addControlData($scope.events.welcome, $scope.passCards);
-				return;
-			}
-			if ($scope.token == $scope.position && $scope.action == "Play") {
-				if (card.name == $scope.blank.name || card.name == $scope.cardBack.name) {
-					$scope.info = "Cannot play closed card";
+					$scope.info = "Select only 3 cards";
 					return;
 				}
-				//$("#control-data").append("Click : "+card.name);
-				$scope.emitEvent($scope.events.play, {play:true, player:$scope.position, cardObj:{card:card, player:$scope.position, index:index}});
-				$scope.action = "Wait";
+				card.valid = true;
+				$scope.passCards.push(index);
+			} else {
+				card.valid = false;
+				$scope.passCards.splice(cardFound, 1);
 			}
-		};
-		$scope.setCardClassObj = {
-			yourTurn : function () {
-				return ($scope.action == 'Pass' || $scope.action == 'Play');
-			},
-			highlight : function(card) {
-				return ((card.valid === true && $scope.passOver === true) || $scope.passOver === false);
-			},
-			clicked : function (card) {
-				return (card.valid === true && $scope.passOver === false);
+			//$scope.addControlData($scope.events.welcome, $scope.passCards);
+			return;
+		}
+		if ($scope.token == $scope.position && $scope.action == "Play") {
+			if (card.name == $scope.blank.name || card.name == $scope.cardBack.name) {
+				$scope.info = "Cannot play closed card";
+				return;
 			}
-		};
-		$scope.centerObj = {
-			suitObj : {
-				show: function () {
-					return ($scope.firstHearts === true);
-				},
-				suit: function () {
-					return $scope.suitImg.H;
-				}
+			//$("#control-data").append("Click : "+card.name);
+			$scope.emitEvent($scope.events.play, {play:true, player:$scope.position, cardObj:{card:card, player:$scope.position, index:index}});
+			$scope.action = "Wait";
+		}
+	};
+	$scope.setCardClassObj = {
+		yourTurn : function () {
+			return ($scope.action == 'Pass' || $scope.action == 'Play');
+		},
+		highlight : function(card) {
+			return ((card.valid === true && $scope.passOver === true) || $scope.passOver === false);
+		},
+		clicked : function (card) {
+			return (card.valid === true && $scope.passOver === false);
+		}
+	};
+	$scope.centerObj = {
+		suitObj : {
+			show: function () {
+				return ($scope.firstHearts === true);
 			},
-			clickObj : {
-				hide: function () {
-					return ($scope.passOver === true);
-				},
-				suit: function () {
-					return $scope.suitImg[$scope.bgIcon];
-				},
-				click: $scope.submitPass
+			suit: function () {
+				return $scope.suitImg.H;
 			}
-		};
-	}
+		},
+		clickObj : {
+			hide: function () {
+				return ($scope.passOver === true);
+			},
+			suit: function () {
+				return $scope.suitImg[$scope.bgIcon];
+			},
+			click: $scope.submitPass
+		}
+	};
+}
 hearts.prototype = Object.create(trump.prototype);

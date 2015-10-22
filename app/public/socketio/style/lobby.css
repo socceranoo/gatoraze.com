@@ -138,6 +138,30 @@ body.modal-open {
   left: 0%;
   z-index: 10;
 }
+.highlighted {
+  -webkit-animation-name: color2;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-delay: 0s;
+}
+@-webkit-keyframes color2 {
+  0% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0;
+  }
+  75% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 .font-stylish {
   font-family: 'Rouge Script', sans-serif;
 }
@@ -177,7 +201,7 @@ table.fixed-layout {
   padding: 0px 0px 0px 0px !important;
 }
 .opacity-mild {
-  opacity: 0.3;
+  opacity: 0.3 !important;
 }
 .opacity-none {
   opacity: 0;
@@ -193,6 +217,9 @@ table.fixed-layout {
 }
 .background-opacity0 {
   background: rgba(0, 0, 0, 0.2);
+}
+.background-opacity0-4 {
+  background: rgba(0, 0, 0, 0.4);
 }
 .owesyou {
   color: #27ae60;

@@ -3,7 +3,7 @@ var ALL = 2, ALL_BUT_SENDER = 1, SENDER = 0;
 var PASSLEFT = 0, PASSACROSS = 1, PASSRIGHT = 2, NOPASS = 3;
 var cardClass = require('./card-class');
 var tableClass = require('./table-class');
-var sleepSeconds = 0.3 * 200000;
+var sleepSeconds = 1 * 200000;
 var gameEngine = require('./engine/trump-engine');
 
 exports.createGame = function(data) {
@@ -141,6 +141,7 @@ function trump_table (num, room, game) {
 		}
 		for (var i = 0 ; i < this.playerArr.length; i++) {
 			userObj = this.members[this.playerArr[i]];
+			userObj.total_games += 1;
 			if (userObj.team === statsObj.team) {
 				if (statsObj.win === true) {
 					userObj.wins += 1;
@@ -252,6 +253,7 @@ function trump_table (num, room, game) {
 			this.currentRound = [];
 			if (this.round.length === this.handCount) {
 				sendData.push({dest:ALL, event:events.game, message:"Game",  data:{prevGame:{allRounds:this.round, stats:this.getGameStats()}}});
+				sendData.push({dest:ALL , event:events.ready, message:"READY",  data:this.getReadyData()});
 				this.allGames.push(this.round);
 				this.round = [];
 				this.gameStarter++;
