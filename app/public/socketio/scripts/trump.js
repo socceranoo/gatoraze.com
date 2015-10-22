@@ -6,6 +6,7 @@ var DIFFICULTY_EASY = 0, DIFFICULTY_MEDIUM = 1, DIFFICULTY_HARD = 2;
 function trump($scope) {
 	var socket = io.connect();
 	$scope.alreadyWelcomed = false;
+
 	$scope.events = {
 		message:"message", welcome:"welcome", playerJoin:"player-join",
 		playerLeave:"player-leave", cards:"cards", play:"play",
@@ -13,10 +14,12 @@ function trump($scope) {
 		playerChange:"player-change",
 		setPseudo: "setPseudo"
 	};
+
 	$scope.emitEvent = function (evt, data) {
 		data.userInfo = $scope.roomInfo;
 		socket.emit(evt, data);
 	};
+
 	$scope.tableColors = [
 		"metroYellow",
 		"metroGreen",
@@ -161,6 +164,7 @@ function trump($scope) {
 		if ($scope.alreadyWelcomed === true) {
 			return;
 		}
+
 		socket.on($scope.events.playerChange, function(data) {
 			$scope.info = data.message;
 			//$scope.addMessage(data.message, data.sender, data.date, data.data);
@@ -171,6 +175,7 @@ function trump($scope) {
 			}
 			$scope.$apply();
 		});
+
 		socket.on($scope.events.playerJoin, function(data) {
 			$scope.info = data.message;
 			//$scope.addMessage(data.message, data.sender, data.date, data.data);
@@ -181,6 +186,7 @@ function trump($scope) {
 			}
 			$scope.$apply();
 		});
+
 		socket.on($scope.events.playerLeave, function(data) {
 			$scope.info = data.message;
 			//$scope.addMessage(data.message, data.sender, data.date, data.data);
@@ -191,14 +197,20 @@ function trump($scope) {
 			}
 			$scope.$apply();
 		});
+
 		socket.on($scope.events.round, function(data) {
 			$scope.roundOver(data);
 		});
+
 		socket.on($scope.events.game, function(data) {
 			$scope.gameOver(data);
 			$("#prev-game").modal();
 			$scope.$apply();
+			setTimeout(function () {
+				//$("#prev-game").modal('hide');
+			}, 4000);
 		});
+
 		socket.on($scope.events.ready, function(data) {
 			var i = 0;
 			//$scope.addMessage(data.message, data.sender, data.date, data.data);
