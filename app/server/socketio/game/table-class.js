@@ -35,8 +35,6 @@ function table(num, room) {
 	this.computerNames = JSON.parse(JSON.stringify(uinames.results));
 	cardClass.shuffle(this.computerNames);
 	this.timerSetForPlayer = -1;
-	this.testGamePlay = true;
-	this.testGamePlayCount = 10;
 
 	this.getUserData = function(userObj) {
 		var diff_class = ["fa-car", "fa-plane", "fa-rocket"];
