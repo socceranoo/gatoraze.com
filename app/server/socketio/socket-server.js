@@ -56,6 +56,10 @@ module.exports = function(IO) {
 			removeFromRoom(socket);
 			delete this.userSockets[socket.data.user];
 			var sendData = this.gameTable.removeHumanMember(socket.data.user);
+			if (this.gameTable.humanCount() === 0 && this.timeoutObject !== null) {
+				clearTimeout(this.timeoutObject);
+				this.timeoutObject = null;
+			}
 			this.sendEventsSocket(socket, sendData);
 		};
 		this.userPlay = function (socket, data, sendData) {
@@ -73,14 +77,14 @@ module.exports = function(IO) {
 			//Else it is recursion of the timer
 			//console.log(JSON.stringify(sendData));
 			var timerData = sendEventsSocket(this.game, socket, sendData, this.userSockets);
-			console.log(this.timeoutObject);
+			//console.log(this.timeoutObject);
 			if (timerData !== null) {
-				console.log("TIMER Starting for "+timerData.time/1000+" seconds");
+				//console.log("TIMER Starting for "+timerData.time/1000+" seconds");
 				var self = this;
 				this.timeoutObject = setTimeout(function () {
 					var newSendData = [];
-					console.log(this.room);
-					console.log(JSON.stringify(this.gameTable.trump));
+					//console.log(this.room);
+					//console.log(JSON.stringify(this.gameTable.trump));
 					timerData.callback(timerData, newSendData);
 					this.userPlay(socket, data, newSendData);
 				}.bind(this), timerData.time);
