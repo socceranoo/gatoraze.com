@@ -40,7 +40,7 @@ module.exports = function(IO) {
 				addToRoom(socket, data);
 				this.userSockets[data.user] = socket;
 			}
-			sendEventsSocket(this.game, socket, sendData, this.userSockets);
+			this.sendEventsSocket(socket, sendData);
 			return success;
 		};
 
@@ -48,7 +48,7 @@ module.exports = function(IO) {
 			var ret = this.gameTable.changeComputerMember(userInfo.user, data);
 			var success = ret[0];
 			var sendData = ret[1];
-			sendEventsSocket(this.game, socket, sendData, this.userSockets);
+			this.sendEventsSocket(socket, sendData);
 		};
 
 		this.removeUser = function (socket) {
@@ -56,7 +56,7 @@ module.exports = function(IO) {
 			removeFromRoom(socket);
 			delete this.userSockets[socket.data.user];
 			var sendData = this.gameTable.removeHumanMember(socket.data.user);
-			sendEventsSocket(this.game, socket, sendData, this.userSockets);
+			this.sendEventsSocket(socket, sendData);
 		};
 		this.userPlay = function (socket, data, sendData) {
 			if (sendData === null) {
@@ -66,6 +66,10 @@ module.exports = function(IO) {
 					this.timeoutObject = null;
 				}
 			}
+			this.sendEventsSocket(socket, sendData);
+		};
+
+		this.sendEventsSocket = function(socket, sendData) {
 			//Else it is recursion of the timer
 			//console.log(JSON.stringify(sendData));
 			var timerData = sendEventsSocket(this.game, socket, sendData, this.userSockets);
@@ -82,6 +86,7 @@ module.exports = function(IO) {
 				}.bind(this), timerData.time);
 			}
 		};
+
 		this.getRoomInfo = function () {
 			var retdata = {game:this.game, room:this.room, session:this.session};
 			this.gameTable.getTableInfo(retdata);
