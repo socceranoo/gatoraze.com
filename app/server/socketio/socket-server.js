@@ -79,7 +79,7 @@ module.exports = function(IO) {
 			var timerData = sendEventsSocket(this.game, socket, sendData, this.userSockets);
 			//console.log(this.timeoutObject);
 			if (timerData !== null) {
-				//console.log("TIMER Starting for "+timerData.time/1000+" seconds");
+				//console.log("TIMER Starting for "+timerData.timeOut/1000+" seconds");
 				var self = this;
 				this.timeoutObject = setTimeout(function () {
 					var newSendData = [];
@@ -87,7 +87,7 @@ module.exports = function(IO) {
 					//console.log(JSON.stringify(this.gameTable.trump));
 					timerData.callback(timerData, newSendData);
 					this.userPlay(socket, data, newSendData);
-				}.bind(this), timerData.time);
+				}.bind(this), timerData.timeOut);
 			}
 		};
 
@@ -125,7 +125,8 @@ module.exports = function(IO) {
 			}
 			if (sendData[i].event == events.timer) {
 				//ASSUMING TIMER WILL ALWAYS BE LAST// OPtimize for in between timers later
-				return sendData[i].data;
+				sendFunction[sendData[i].dest](sender, receiver, sendData[i].event, sendData[i].message, sendData[i].outData);
+				return sendData[i].internalData;
 			}
 			sendFunction[sendData[i].dest](sender, receiver, sendData[i].event, sendData[i].message, sendData[i].data);
 			//console.log(sendData[i].message);

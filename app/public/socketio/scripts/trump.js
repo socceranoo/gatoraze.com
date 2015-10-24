@@ -1,18 +1,25 @@
 $(document).ready(function() {
+	//$.circleProgress.defaults.animation.duration = 5000;
+	$.circleProgress.defaults.animation.easing = "linear";
 });
 var REPLACE_COMPUTER_SPECIFIC = 0, REPLACE_COMPUTER_ANY = 1, CHANGE_DIFFICULTY = 2;
 var DIFFICULTY_EASY = 0, DIFFICULTY_MEDIUM = 1, DIFFICULTY_HARD = 2;
+var userImgWidth = 80;
+var thickness = 5;
 
 function trump($scope) {
 	var socket = io.connect();
 	$scope.alreadyWelcomed = false;
+	$scope.timerSeconds = '';
+	$scope.minTimerDisplay = 4;
 
 	$scope.events = {
 		message:"message", welcome:"welcome", playerJoin:"player-join",
 		playerLeave:"player-leave", cards:"cards", play:"play",
 		round:"round", game:"game", ready:"ready", changeComputer:"change-computer",
 		playerChange:"player-change",
-		setPseudo: "setPseudo"
+		setPseudo: "setPseudo",
+		timer:"timer"
 	};
 
 	$scope.emitEvent = function (evt, data) {
@@ -21,14 +28,14 @@ function trump($scope) {
 	};
 
 	$scope.tableColors = [
-		"metroYellow",
-		"metroGreen",
-		"metroCyan",
-		"metroJade",
-		"metroRed",
-		"metroNavy",
-		"metroTeal",
-		"metroPink"
+		__metro_yellow,
+		__metro_jade,
+		__metro_cyan,
+		__metro_red,
+		__metro_navy,
+		__metro_green,
+		__metro_teal,
+		__metro_pink
 	];
 
 	$scope.roomInfo = {
@@ -165,17 +172,22 @@ function trump($scope) {
 			return;
 		}
 
-		socket.on($scope.events.playerChange, function(data) {
+		$scope.onPlayerChange = function (data) {
 			$scope.info = data.message;
 			//$scope.addMessage(data.message, data.sender, data.date, data.data);
-			$scope.addControlData($scope.events.playerChange, data.data);
+			//$scope.addControlData(data.event, data.data);
 			if (data.data.inProgress) {
 				$scope.tableData.players[$scope.shifter(data.data.position)] = data.data.name;
 				$scope.tableData.playerDetails[$scope.shifter(data.data.position)] = data.data.details;
 			}
 			$scope.$apply();
-		});
+		};
 
+		socket.on($scope.events.playerChange, $scope.onPlayerChange);
+		socket.on($scope.events.playerJoin, $scope.onPlayerChange);
+		socket.on($scope.events.playerLeave, $scope.onPlayerChange);
+
+		/*
 		socket.on($scope.events.playerJoin, function(data) {
 			$scope.info = data.message;
 			//$scope.addMessage(data.message, data.sender, data.date, data.data);
@@ -197,6 +209,7 @@ function trump($scope) {
 			}
 			$scope.$apply();
 		});
+	   */
 
 		socket.on($scope.events.round, function(data) {
 			$scope.roundOver(data);
@@ -230,7 +243,8 @@ function trump($scope) {
 			}
 			for (i = 0; i< $scope.tableData.players.length ; i++) {
 				if (data.data.round) {
-					$scope.tableData.round[i] = $scope.cardBack;
+					$scope.tableData.round[i] = $scope.blank;
+					//$scope.tableData.round[i] = $scope.cardBack;
 				} else {
 					$scope.tableData.round[i] = $scope.blank;
 				}
@@ -267,6 +281,38 @@ function trump($scope) {
 			$scope.cards = $scope.cards.concat(data.data.cards);
 			$scope.addControlData($scope.events.cards, data.data);
 			$scope.$apply();
+		});
+		socket.on($scope.events.timer, function(data) {
+			//$scope.addMessage(data.message, data.sender, data.date, data.data);
+			//$scope.addControlData($scope.events.play, data.data);
+			var timerPlayer = data.data.player;
+			var id = "#playtimer-"+$scope.shifter(timerPlayer);
+			var timeOut = data.data.timeOut;
+			$scope.timerSeconds = parseInt(timeOut/1000, 10);
+			$(id).circleProgress({
+				value: 1.0,
+				size:80,
+				thickness:5,
+				fill: {gradient: [__metro_orange, $scope.tableColors[$scope.shifter(timerPlayer)]]},
+				animation: { duration: timeOut}
+			}).on('circle-animation-progress', function(event, progress) {
+				var curTimer = 0;
+				if (timerPlayer != $scope.token) {
+					$(this).circleProgress({value:1.0, animation:false, fill : {gradient: [$scope.tableColors[$scope.shifter(timerPlayer)], "#efefef"]}});
+					$scope.timerSeconds= '';
+				}
+				curTimer = Math.ceil(timeOut/1000 * (1.0 - progress));
+				if (curTimer != $scope.timerSeconds) {
+					$scope.timerSeconds = curTimer;
+					$scope.$digest();
+				}
+				//$(this).find('strong').html(parseInt(100 * progress) + '<i>%</i>');
+			}).on('circle-animation-end', function(event) {
+				$(this).circleProgress({value:1.0, animation:false, fill: {gradient: [$scope.tableColors[$scope.shifter(timerPlayer)], "#efefef"]}});
+				//var canvas = $(this).find('canvas')[0];
+				//var context = canvas.getContext('2d');
+				//context.clearRect(0, 0, canvas.width, canvas.height);
+			});
 		});
 		socket.on($scope.events.play, function(data) {
 			//$scope.addMessage(data.message, data.sender, data.date, data.data);
@@ -361,13 +407,14 @@ function trump($scope) {
 		$scope.bidObj.minimum = data.data.bidObj.minimum;
 		if (data.data.bidObj.bid && $scope.token === $scope.position) {
 			$scope.action = "Bid";
+			$scope.tableData.bidData[$scope.shifter($scope.token)] = ' ';
 			for (j = 0; j < $scope.cards.length; j++) {
 				$scope.cards[j].valid = true;
 			}
 		} else {
 			$scope.action = "Wait";
 			for (j = 0; j < $scope.cards.length; j++) {
-				$scope.cards[j].valid = false;
+				$scope.cards[j].valid = true;
 			}
 		}
 
@@ -417,10 +464,11 @@ function trump($scope) {
 	};
 	$scope.setDefaultBg = function (option) {
 		var card = null;
-		if (option === 0)
-			card = $scope.blank;
-		else
-			card = $scope.cardBack;
+		//if (option === 0)
+			//card = $scope.blank;
+		//else
+			//card = $scope.cardBack;
+		card = $scope.blank;
 		for (var i = 0; i< $scope.tableData.round.length ; i++) {
 			$scope.tableData.round[i] = card;
 		}
@@ -495,7 +543,7 @@ function trump($scope) {
 				return ($scope.trump.revealed === true);
 			},
 			suit: function () {
-				if ($scope.trump.card !== null) {
+				if ($scope.trump.card) {
 					return $scope.suitImg[$scope.trump.card.suit.name];
 				} else {
 					return $scope.suitImg['-'];
@@ -669,7 +717,7 @@ function hearts ($scope) {
 		},
 		clickObj : {
 			hide: function () {
-				return ($scope.passOver === true);
+				return ($scope.position != $scope.token || $scope.passOver === true);
 			},
 			suit: function () {
 				return $scope.suitImg[$scope.bgIcon];
@@ -679,3 +727,16 @@ function hearts ($scope) {
 	};
 }
 hearts.prototype = Object.create(trump.prototype);
+
+function test ($scope) {
+	$scope.testclick = function () {
+		var id = "#circle";
+		$(id).circleProgress({
+			value: 0.9,
+			animation: {duration: 1200, easing: "circleProgressEase" }
+		}).on('circle-animation-progress', function(event, progress) {
+			$(this).find('strong').html(parseInt(100 * progress) + '<i>%</i>');
+		});
+
+	};
+}

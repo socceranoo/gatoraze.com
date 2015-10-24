@@ -38,7 +38,7 @@ body.hearts {
 	margin:0px auto;
 	width:@cardWidth;
 	height:@cardHeight;
-	background-image:url("../images/cardset5.png");
+	background-image:url("../images/cardset5.png") !important;
 	background-position:222px 0px;
 	//box-shadow: 0 0 10px #222222;
 	border-radius:10px;
@@ -49,11 +49,9 @@ body.hearts {
 .player-hand .card {
 	cursor:pointer;
 }
-.round-starter {
-	outline:5px solid @peterRiver !important;
-}
+
 .current-turn {
-	.highlighted-mixin(3s);
+	//.highlighted-mixin(3s);
 	//.scale-mixin(1.3);
 }
 
@@ -74,8 +72,8 @@ body.hearts {
 	.scale-mixin(0.8);
 }
 
-.blue-border {
-	outline:5px solid @peterRiver !important;
+.round-starter {
+	//outline:5px solid @peterRiver !important;
 	border-radius:10px;
 }
 .red-border {
@@ -86,6 +84,7 @@ body.hearts {
 }
 .bid-data {
 	line-height:@cardHeight;
+	top:0px;
 	font-size:55px;
 	margin:0px;
 	padding:0px;
@@ -120,7 +119,7 @@ body.hearts {
 .player-name {
 	position:absolute;
 	top:-25px;
-	left:-5px;
+	left:0px;
 	font-size:16px;
 	display:inline;
 	overflow: hidden;
@@ -131,15 +130,30 @@ body.hearts {
 
 @userImgWidth : 70px;
 @userImgHeight : 70px;
+@userImgMargin : 5px;
 .user-details {
 	position:absolute;
 	left:-@userImgWidth;
 	z-index:400;
 }
-.user-img {
-	width:@userImgWidth;
-	height:@userImgHeight;
-	z-index:10;
+
+.progress-circle {
+	width: @userImgWidth - 2*@userImgMargin;
+	height: @userImgHeight - 2*@userImgMargin;
+	//margin: 0 auto;
+	.user-img {
+		width:@userImgWidth;
+		height:@userImgHeight;
+		vertical-align: top;
+		margin: @userImgMargin;
+		border-radius:50%;
+		z-index:400;
+	}
+	canvas {
+		position: absolute;
+		left: 0;
+		top: 0;
+	}
 }
 
 @shift4:50%;
@@ -198,7 +212,8 @@ body.hearts {
 .user-img-pos8-7 {position:absolute; top:@cardHeight - @userImgHeight/2; right:-(@userImgWidth + @hor_offset8)}
 
 .suit-image {
-	background-image:url("../images/suits333.png");
+	//background-image:url("../images/suits333.png");
+	background-image:url("../images/suits444.png");
 	background-position:222px -222px;
 	width:@cardWidth;
 	height:@cardWidth;

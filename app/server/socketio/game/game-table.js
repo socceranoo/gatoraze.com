@@ -4,8 +4,8 @@ var PASSLEFT = 0, PASSACROSS = 1, PASSRIGHT = 2, NOPASS = 3;
 var cardClass = require('./card-class');
 var tableClass = require('./table-class');
 var SLEEP_SECONDS = 0.3 * 200000;
-var PLAYER_TIMEOUT = 3000;
-var COMPUTER_TIMEOUT = 500;
+var PLAYER_TIMEOUT = 5000;
+var COMPUTER_TIMEOUT = 1000;
 var gameEngine = require('./engine/trump-engine');
 
 exports.createGame = function(data) {
@@ -29,7 +29,7 @@ function trump_table (num, room, game) {
 	this.gameStarter = 0;
 	this.cutToChase = false;
 	this.testGamePlay = true;
-	this.testGamePlayCount = 10;
+	this.testGamePlayCount = 0;
 	this.bidCount = 0;
 	this.minimumBid = 0;
 	this.currentBid = 0;
@@ -190,6 +190,7 @@ function trump_table (num, room, game) {
 		if (option === 1) {
 			target_func = this.computerPlay.bind(this);
 		} else {
+			sendData.push({dest:ALL, event:events.play, message:"PLAY",  data:newData});
 			target_func = this.computerPrePlay.bind(this);
 		}
 		if (this.testGamePlay === true) {
@@ -214,9 +215,9 @@ function trump_table (num, room, game) {
 				}
 			}.bind(this);
 			//SETTING TIME OUT EVENT FOR COMPUTER PLAY instead of Recursion
-			var timerData = {time:timeOut, data:JSON.parse(JSON.stringify(newData)), player:newData.player, callback:callback};
+			var timerData = {timeOut:timeOut, data:JSON.parse(JSON.stringify(newData)), player:newData.player, callback:callback};
 			//console.log("Setting timer with option "+option+" with data:"+JSON.stringify(timerData.data));
-			sendData.push({dest:ALL, event:events.timer, message:"TIMER",  data:timerData});
+			sendData.push({dest:ALL, event:events.timer, message:"TIMER",  internalData:timerData, outData:{timeOut:timeOut, player:newData.player}});
 		}
 	};
 
@@ -227,12 +228,10 @@ function trump_table (num, room, game) {
 		this.currentPlayer = this.gameStarter;
 		var playerObj = this.members[this.playerArr[this.currentPlayer]];
 		var cardData = {play:true, player:this.currentPlayer, cardObj:{}};
-		if (playerObj.human === true) {
-			var validCards = this.gameEngine.getValidCards(playerObj, this.currentRound, this.round.length, this.trump);
-			sendData.push({dest:ALL, event:events.play, message:"PLAY",
-				data:{play:true, player:this.currentPlayer, cardObj:null, validCards:validCards}
-			});
-		}
+		var validCards = this.gameEngine.getValidCards(playerObj, this.currentRound, this.round.length, this.trump);
+		sendData.push({dest:ALL, event:events.play, message:"PLAY",
+			data:{play:true, player:this.currentPlayer, cardObj:null, validCards:validCards}
+		});
 		this.setTimerForPlay(playerObj, cardData, sendData, 1);
 	};
 
@@ -367,9 +366,7 @@ function trump_table (num, room, game) {
 		var playerObj = this.members[this.playerArr[this.currentPlayer]];
 
 		if (this.cutToChase === false) {
-			if (playerObj.human === true) {
-				sendData.push({dest:ALL, event:events.play, message:"PLAY", data:data});
-			}
+			//sendData.push({dest:ALL, event:events.play, message:"PLAY", data:data});
 			this.setTimerForPlay(playerObj, data, sendData, 2);
 		} else {
 			this.trump.card = this.gameEngine.setTrump(playerObj, this.trump);
@@ -450,9 +447,7 @@ function trump_table (num, room, game) {
 			}
 		}
 		playerObj = this.members[this.playerArr[data.player]];
-		if (playerObj.human === true) {
-			sendData.push({dest:ALL, event:events.play, message:"PLAY",  data:data});
-		}
+		//sendData.push({dest:ALL, event:events.play, message:"PLAY",  data:data});
 		this.setTimerForPlay(playerObj, data, sendData, 2);
 		return sendData;
 	};
@@ -501,9 +496,7 @@ function spades_table(num, room, game) {
 		var playerObj = this.members[this.playerArr[this.currentPlayer]];
 
 		if (this.cutToChase === false) {
-			if (playerObj.human === true) {
-				sendData.push({dest:ALL, event:events.play, message:"PLAY", data:data});
-			}
+			//sendData.push({dest:ALL, event:events.play, message:"PLAY", data:data});
 			this.setTimerForPlay(playerObj, data, sendData, 2);
 		} else {
 			this.startPlay(sendData);
@@ -534,9 +527,7 @@ function spades_table(num, room, game) {
 		}
 		playerObj = this.members[this.playerArr[this.currentPlayer]];
 		data.player = this.currentPlayer;
-		if (playerObj.human === true) {
-			sendData.push({dest:ALL, event:events.play, message:"PLAY",  data:data});
-		}
+		//sendData.push({dest:ALL, event:events.play, message:"PLAY",  data:data});
 		this.setTimerForPlay(playerObj, data, sendData, 2);
 		return sendData;
 	};
@@ -556,9 +547,7 @@ function hearts_table (num, room, game) {
 		var playerObj = this.members[this.playerArr[this.currentPlayer]];
 
 		if (this.cutToChase === false && this.allGames.length%this.totalPlayers !== NOPASS) {
-			if (playerObj.human === true) {
-				sendData.push({dest:ALL, event:events.play, message:"PLAY", data:data});
-			}
+			//sendData.push({dest:ALL, event:events.play, message:"PLAY", data:data});
 			this.setTimerForPlay(playerObj, data, sendData, 2);
 		} else {
 			this.startPlay(sendData);
@@ -600,6 +589,11 @@ function hearts_table (num, room, game) {
 		this.prePlayOver = true;
 		var i, userObj;
 		var game = this.allGames.length%this.totalPlayers;
+		if (this.cutToChase === true || game === NOPASS) {
+			this.findGameStarter();
+			sendData.push({dest:ALL, event:events.play, message:"PLAY", data:{play:false, player:-1, passOver:true}});
+			return;
+		}
 		var offset = this.totalPlayers;
 		if (game === PASSLEFT) {
 			offset = offset - 1;
@@ -607,10 +601,6 @@ function hearts_table (num, room, game) {
 			offset = offset - 2;
 		} else if (game === PASSRIGHT) {
 			offset = offset - 3;
-		} else {
-			this.findGameStarter();
-			sendData.push({dest:ALL, event:events.play, message:"PLAY", data:{play:false, player:-1, passOver:true}});
-			return;
 		}
 		this.passCards = [];
 		for (i = 0; i < this.playerArr.length; i++) {
@@ -647,10 +637,8 @@ function hearts_table (num, room, game) {
 		}
 		playerObj = this.members[this.playerArr[this.currentPlayer]];
 		data.player = this.currentPlayer;
-		if (playerObj.human === true) {
-			sendData.push({dest:ALL, event:events.play, message:"PLAY",  data:data});
-		}
-		this.setTimerForPlay(playerObj, data, sendData);
+		//sendData.push({dest:ALL, event:events.play, message:"PLAY",  data:data});
+		this.setTimerForPlay(playerObj, data, sendData, 2);
 		return sendData;
 	};
 

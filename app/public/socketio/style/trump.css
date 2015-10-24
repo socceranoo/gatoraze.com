@@ -547,23 +547,13 @@ body.hearts {
   margin: 0px auto;
   width: 111px;
   height: 148px;
-  background-image: url("../images/cardset5.png");
+  background-image: url("../images/cardset5.png") !important;
   background-position: 222px 0px;
   border-radius: 10px;
   opacity: 0.9;
 }
 .player-hand .card {
   cursor: pointer;
-}
-.round-starter {
-  outline: 5px solid #3498db !important;
-}
-.current-turn {
-  -webkit-animation-name: color2;
-  -webkit-animation-duration: 3s;
-  -webkit-animation-iteration-count: infinite;
-  -webkit-animation-timing-function: linear;
-  -webkit-animation-delay: 0s;
 }
 .empty-card {
   opacity: 0.1;
@@ -591,12 +581,12 @@ body.hearts {
   transition: all .3s linear;
   -webkit-transition: -webkit-transform 0.3s linear;
 }
-.blue-border {
-  outline: 5px solid #3498db !important;
+.round-starter {
   border-radius: 10px;
 }
 .bid-data {
   line-height: 148px;
+  top: 0px;
   font-size: 55px;
   margin: 0px;
   padding: 0px;
@@ -632,7 +622,7 @@ body.hearts {
 .player-name {
   position: absolute;
   top: -25px;
-  left: -5px;
+  left: 0px;
   font-size: 16px;
   display: inline;
   overflow: hidden;
@@ -645,10 +635,22 @@ body.hearts {
   left: -70px;
   z-index: 400;
 }
-.user-img {
+.progress-circle {
+  width: 60px;
+  height: 60px;
+}
+.progress-circle .user-img {
   width: 70px;
   height: 70px;
-  z-index: 10;
+  vertical-align: top;
+  margin: 5px;
+  border-radius: 50%;
+  z-index: 400;
+}
+.progress-circle canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 .pos4-0 {
   position: absolute;
@@ -861,7 +863,7 @@ body.hearts {
   right: -85px;
 }
 .suit-image {
-  background-image: url("../images/suits333.png");
+  background-image: url("../images/suits444.png");
   background-position: 222px -222px;
   width: 111px;
   height: 111px;
@@ -882,7 +884,7 @@ body.hearts {
   z-index: 100;
 }
 .trump-position {
-  background-image: url("../images/suits333.png");
+  background-image: url("../images/suits444.png");
   background-position: 222px -222px;
   width: 111px;
   height: 111px;
