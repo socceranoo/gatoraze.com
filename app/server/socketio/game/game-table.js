@@ -29,7 +29,7 @@ function trump_table (num, room, game) {
 	this.gameStarter = 0;
 	this.cutToChase = false;
 	this.testGamePlay = true;
-	this.testGamePlayCount = 0;
+	this.testGamePlayCount = 10;
 	this.bidCount = 0;
 	this.minimumBid = 0;
 	this.currentBid = 0;

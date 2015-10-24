@@ -347,7 +347,7 @@ function trump_engine (num) {
 		var message = '';
 		if (trump.revealed === true) {
 			message = 'Trump already revealed';
-			return [true, message];
+			return [false, message];
 		}
 		if (playerObj.hand.length === 1 && playerObj.position == trump.setter) {
 			return [true, message];
