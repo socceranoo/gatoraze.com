@@ -293,7 +293,7 @@ function trump($scope) {
 				value: 1.0,
 				size:80,
 				thickness:5,
-				fill: {gradient: [__metro_orange, $scope.tableColors[$scope.shifter(timerPlayer)]]},
+				fill : {gradient: [$scope.tableColors[$scope.shifter(timerPlayer)], "#efefef"]},
 				animation: { duration: timeOut}
 			}).on('circle-animation-progress', function(event, progress) {
 				var curTimer = 0;
@@ -308,7 +308,7 @@ function trump($scope) {
 				}
 				//$(this).find('strong').html(parseInt(100 * progress) + '<i>%</i>');
 			}).on('circle-animation-end', function(event) {
-				$(this).circleProgress({value:1.0, animation:false, fill: {gradient: [$scope.tableColors[$scope.shifter(timerPlayer)], "#efefef"]}});
+				//$(this).circleProgress({value:1.0, animation:false, fill: {gradient: [$scope.tableColors[$scope.shifter(timerPlayer)], "#efefef"]}});
 				//var canvas = $(this).find('canvas')[0];
 				//var context = canvas.getContext('2d');
 				//context.clearRect(0, 0, canvas.width, canvas.height);
@@ -350,7 +350,7 @@ function trump($scope) {
 		if ($scope.token !== $scope.position && $scope.token >= 0) {
 			$scope.info = $scope.tableData.players[$scope.shifter($scope.token)] + "'s turn";
 		}
-		if (data.data.cardObj) {
+		if (data.data.cardObj && data.data.cardObj.card) {
 			if (data.data.cardObj.player == $scope.position) {
 				$scope.cards.splice(data.data.cardObj.index, 1);
 				for (j = 0; j < $scope.cards.length; j++) {
@@ -576,6 +576,27 @@ function trump($scope) {
 
 function spades ($scope) {
 	trump.call(this, $scope);
+	$scope.centerObj = {
+		suitObj : {
+			show: function () {
+				return ($scope.trump.revealed === true);
+			},
+			suit: function () {
+				return $scope.suitImg.S;
+			}
+		},
+		clickObj : {
+			hide: function () {
+				return true;
+			},
+			suit: function () {
+				return $scope.suitImg.S;
+			},
+			click: function () {
+
+			}
+		}
+	};
 }
 
 spades.prototype = Object.create(trump.prototype);

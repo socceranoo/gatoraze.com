@@ -1,4 +1,5 @@
 var DIFFICULTY_EASY = 0, DIFFICULTY_MEDIUM = 1, DIFFICULTY_HARD = 2;
+var assert = require('assert');
 
 exports.createNewGame = function (game, num) {
 	if (game == "trump") {
@@ -154,13 +155,11 @@ function Engine(game, num) {
 				console.log("Card "+cardDeck[i].name+" did not appear at all");
 				sane = false;
 			} else if (index_map[cardDeck[i].index] > 1 ) {
-				console.log("Card "+cardDeck[i].name+" appeared twice");
+				console.log("Card "+cardDeck[i].name+" appeared "+index_map[cardDeck[i].index]+ " times");
 				sane = false;
 			}
 		}
-		if (sane === true) {
-			console.log("Game is Sane");
-		}
+		assert.equal(sane, true, "Game Sanity Failed");
 		return sane;
 	};
 

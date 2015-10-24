@@ -298,9 +298,9 @@ function table(num, room) {
 		var sendData = [];
 		delete data.userInfo;
 		if (data.play) {
-			return this.nextPlay(data, sendData, true);
+			return this.processNextPlay(data, sendData, true);
 		} else {
-			return this.nextPrePlay(data, sendData);
+			return this.processPrePlay(data, sendData);
 		}
 	};
 }
