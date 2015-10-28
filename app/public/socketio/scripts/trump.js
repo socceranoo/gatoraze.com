@@ -113,31 +113,31 @@ function trump($scope) {
 		points:0,
 		minimum:false,
 		increaseBid : function() {
-			if ($scope.bidObj.bid && $scope.token == $scope.position) {
+			if ($scope.bidObj.bid && $scope.token == $scope.position && $scope.bidObj.points !== "00") {
 				$scope.bidObj.points++;
 			}
 		},
 		decreaseBid: function() {
-			if ($scope.bidObj.bid && $scope.token == $scope.position) {
+			if ($scope.bidObj.bid && $scope.token == $scope.position && $scope.bidObj.points != "00") {
 				$scope.bidObj.points--;
 			}
 		},
 		submitBid: function() {
 			if ($scope.bidObj.bid && $scope.token == $scope.position) {
-				if ($scope.bidObj.points <= $scope.oldBidObj.points) {
-					if ($scope.bidObj.points < $scope.oldBidObj.points) {
-						$scope.info ='Cannot bid equal or lesser';
-						return;
-					} else {
-						if ($scope.bidObj.minimum !== true) {
-							$scope.info ='Cannot bid equal or lesser';
-							return;
-						}
-					}
-				}
+				//if ($scope.bidObj.points <= $scope.oldBidObj.points) {
+					//if ($scope.bidObj.points < $scope.oldBidObj.points) {
+						//$scope.info ='Cannot bid equal or lesser';
+						//return;
+					//} else {
+						//if ($scope.bidObj.minimum !== true) {
+							//$scope.info ='Cannot bid equal or lesser';
+							//return;
+						//}
+					//}
+				//}
 				$scope.action = "Wait";
 				$scope.bidObj.minimum = false;
-				$scope.emitEvent($scope.events.play, {play:false, player:$scope.position, trump:null, bidObj:$scope.bidObj});
+				$scope.emitEvent($scope.events.play, {play:false, pass:false, player:$scope.position, trump:null, bidObj:$scope.bidObj});
 			}
 		},
 		passBid: function() {
@@ -220,7 +220,7 @@ function trump($scope) {
 			$("#prev-game").modal();
 			$scope.$apply();
 			setTimeout(function () {
-				//$("#prev-game").modal('hide');
+				$("#prev-game").modal('hide');
 			}, 4000);
 		});
 
@@ -266,7 +266,7 @@ function trump($scope) {
 				$scope.trump.setter = data.data.trumpData.setter;
 				$scope.trump.points = data.data.trumpData.points;
 				$scope.trump.revealed = data.data.trumpData.revealed;
-				if ($scope.trump.revealed === true) {
+				if (data.data.trumpData.card) {
 					$scope.trump.card = data.data.trumpData.card;
 				} else {
 					$scope.trump.card = $scope.cardBack;
@@ -279,16 +279,23 @@ function trump($scope) {
 		socket.on($scope.events.cards, function(data) {
 			//$scope.addMessage(data.message, data.sender, data.date, data.data);
 			$scope.cards = $scope.cards.concat(data.data.cards);
+			if ($scope.trump.setter == $scope.position) {
+				for (i = 0; i < $scope.cards.length; i++) {
+					if ($scope.trump.card.name == $scope.cards[i].name) {
+						$scope.cards[i] = $scope.cardBack;
+					}
+				}
+			}
 			$scope.addControlData($scope.events.cards, data.data);
 			$scope.$apply();
 		});
 		socket.on($scope.events.timer, function(data) {
 			//$scope.addMessage(data.message, data.sender, data.date, data.data);
-			//$scope.addControlData($scope.events.play, data.data);
 			var timerPlayer = data.data.player;
 			var id = "#playtimer-"+$scope.shifter(timerPlayer);
 			var timeOut = data.data.timeOut;
 			$scope.timerSeconds = parseInt(timeOut/1000, 10);
+			//$scope.addControlData($scope.events.timer, {id:id, timeOut:timeOut, player:timerPlayer, seconds:$scope.timerSeconds, position:$scope.position, index:$scope.shifter(timerPlayer)});
 			$(id).circleProgress({
 				value: 1.0,
 				size:80,
@@ -297,7 +304,7 @@ function trump($scope) {
 				animation: { duration: timeOut}
 			}).on('circle-animation-progress', function(event, progress) {
 				var curTimer = 0;
-				if (timerPlayer != $scope.token) {
+				if (timerPlayer && timerPlayer != $scope.token) {
 					$(this).circleProgress({value:1.0, animation:false, fill : {gradient: [$scope.tableColors[$scope.shifter(timerPlayer)], "#efefef"]}});
 					$scope.timerSeconds= '';
 				}
@@ -308,6 +315,8 @@ function trump($scope) {
 				}
 				//$(this).find('strong').html(parseInt(100 * progress) + '<i>%</i>');
 			}).on('circle-animation-end', function(event) {
+				$(this).off('circle-animation-progress');
+				$scope.timerSeconds= '';
 				//$(this).circleProgress({value:1.0, animation:false, fill: {gradient: [$scope.tableColors[$scope.shifter(timerPlayer)], "#efefef"]}});
 				//var canvas = $(this).find('canvas')[0];
 				//var context = canvas.getContext('2d');
@@ -323,7 +332,7 @@ function trump($scope) {
 			} else {
 				$scope.bidFunction(data);
 			}
-			$scope.$digest();
+			$scope.$apply();
 		});
 		$scope.currentPrevGameSlide = -1;
 		$scope.carouselFunc = function() {
@@ -407,12 +416,14 @@ function trump($scope) {
 		$scope.bidObj.minimum = data.data.bidObj.minimum;
 		if (data.data.bidObj.bid && $scope.token === $scope.position) {
 			$scope.action = "Bid";
+			$scope.info = "Bid";
 			$scope.tableData.bidData[$scope.shifter($scope.token)] = ' ';
 			for (j = 0; j < $scope.cards.length; j++) {
 				$scope.cards[j].valid = true;
 			}
 		} else {
 			$scope.action = "Wait";
+			$scope.info = "Wait";
 			for (j = 0; j < $scope.cards.length; j++) {
 				$scope.cards[j].valid = true;
 			}
@@ -447,7 +458,7 @@ function trump($scope) {
 						$scope.cards[j].valid = false;
 					}
 				}
-			}else {
+			} else {
 				var value = data.data.bidObj.points;
 				if (data.data.pass === true) {
 					value = '-';
@@ -483,7 +494,7 @@ function trump($scope) {
 	};
 
 	$scope.addControlData = function (event, data) {
-		$("#control-data").append(event+" : "+JSON.stringify(data));
+		$("#control-data").append(event+" : "+JSON.stringify(data)+'<br/>');
 	};
 
 	$scope.replaceComputer = function(index) {
@@ -543,7 +554,7 @@ function trump($scope) {
 				return ($scope.trump.revealed === true);
 			},
 			suit: function () {
-				if ($scope.trump.card) {
+				if ($scope.trump.card && $scope.trump.card.name != $scope.cardBack.name) {
 					return $scope.suitImg[$scope.trump.card.suit.name];
 				} else {
 					return $scope.suitImg['-'];
@@ -613,7 +624,7 @@ function hearts ($scope) {
 				$scope.cards[$scope.passCards[0]].valid = false;
 				$scope.cards[$scope.passCards[1]].valid = false;
 				$scope.cards[$scope.passCards[2]].valid = false;
-				passSent = true;
+				$scope.passSent = true;
 			} else {
 				$scope.info = "Select 3 cards to pass";
 			}
@@ -623,7 +634,7 @@ function hearts ($scope) {
 	trump.call(this, $scope);
 
 	var passArr = ["L", "A", "R", "-"];
-	var passSent = false;
+	$scope.passSent = false;
 
 	$scope.gameOver = function(data){
 		//$scope.addMessage(data.message, data.sender, data.date, data.data);
@@ -666,16 +677,18 @@ function hearts ($scope) {
 	};
 
 	$scope.bidFunction = function (data) {
+		var i, temp;
 		if (data.data.game !== undefined) {
 			$scope.addControlData("Pass", data.data.game);
 			$scope.bgIcon = passArr[data.data.game];
 		}
 		if (data.data.passOver && data.data.passOver === true) {
 			$scope.passOver = true;
-			passSent = false;
-			if (data.data.cards) {
-				for (var i = 0; i < $scope.passCards.length; i++) {
-					$scope.cards[$scope.passCards[i]] = data.data.cards[i];
+			$scope.passSent = false;
+			if (data.data.cards && data.data.cardIndexArr) {
+				var cardIndexArr = data.data.cardIndexArr;
+				for (i = 0; i < cardIndexArr.length; i++) {
+					$scope.cards[cardIndexArr[i]] = data.data.cards[i];
 				}
 			}
 			$scope.passCards.splice(0, 3);
@@ -687,10 +700,9 @@ function hearts ($scope) {
 			$scope.action = "Wait";
 		}
 		$scope.setDefaultBg(1);
-		$scope.$apply();
 	};
 	$scope.cardClick = function (card, index) {
-		if ($scope.passOver === false && passSent === false) {
+		if ($scope.passOver === false && $scope.passSent === false) {
 			var cardFound = $.inArray(index, $scope.passCards);
 			if (cardFound == -1) {
 				if ($scope.passCards.length == 3) {

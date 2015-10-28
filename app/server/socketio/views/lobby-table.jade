@@ -7,11 +7,11 @@
 			th Room
 			th Status
 			th Human Players
-			th
 		- each stuff in list
 			tr
 				//td= stuff.game+' ('+stuff.totalPoints+')'
-				td= stuff.room
+				td
+					a(href='/razeplay/'+stuff.game+'/?session='+stuff.session)= stuff.room
 				td
 					- if (stuff.inProgress)
 						span.icon.glyphicon.glyphicon-ok.color-metroGreen
@@ -22,9 +22,6 @@
 						span.color-metroGreen= stuff.active+'/'+stuff.total
 					- else
 						span.color-metroRed= stuff.active+'/'+stuff.total
-				td
-					a.btn.btn-success.btn-sm(href='/razeplay/'+stuff.game+'/?session='+stuff.session)
-						span Join
 - else
 	h3.text-center No Tables at this time
 	hr

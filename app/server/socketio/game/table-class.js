@@ -23,6 +23,9 @@ function player(name, position, human, bio, difficulty) {
 }
 
 player.prototype.getCardSet = function (set) {
+	if (set === 0) {
+		return this.hand;
+	}
 	var first_set = parseInt(this.hand.length / 2 , 10);
 	var second_set = this.hand.length - first_set;
 	var start = (set == 1) ? 0 : first_set;

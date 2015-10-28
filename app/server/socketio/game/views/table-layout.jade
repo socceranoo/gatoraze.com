@@ -7,11 +7,9 @@
 						img.user-img(src='{{tableData.playerDetails[$index].thumbnail}}')
 					span.player-name(ng-bind='tableData.players[$index]', ng-hide='$index == 0 && $scope.position >= 0')
 					ul.list-inline.text-center(style="width:80px;font-size:18px;margin:15px 0px 0 0")
-						li
-							span.fa(class="{{tableData.playerDetails[$index].difficulty_class}}")
-						li
-							span.fa.fa-desktop(ng-if='tableData.playerDetails[$index].human === false')
-							span.fa.fa-user(ng-if='tableData.playerDetails[$index].human')
+						li.fa(class="{{tableData.playerDetails[$index].difficulty_class}}")
+						li.fa.fa-desktop(ng-if='tableData.playerDetails[$index].human === false')
+						li.fa.fa-user(ng-if='tableData.playerDetails[$index].human')
 					table.table.table-bordered.user-details.well.color-black(style="background:{{tableColors[$index]}}", ng-show='hoverEdit >= 0')
 						tr(ng-show='key != "thumbnail" && key != "human" && key != "difficulty_class" && key != "gender" && key != "name"', ng-repeat='(key, value) in tableData.playerDetails[$index]')
 							td.text-center(ng-bind='key')
@@ -19,7 +17,7 @@
 				.card(ng-class="{'empty-card':card.name == cardBack.name || (card.name == blank.name && tableData.bidData[$index] == '' && $index != shifter(token)), 'round-starter': $index == shifter(starter)}", style='background:{{tableColors[$index]}};background-position:{{card.bgPos[0]}}px {{card.bgPos[1]}}px')
 					.center-position.background-oacity.pointer(ng-if='position < 0', ng-click='replaceComputer($index)')
 						span.fa-3x.glyphicon.glyphicon-plus-sign
-					span.bid-data(ng-if="shifter(token) == $index && timerSeconds <= minTimerDisplay && tableData.bidData[$index] == ''", ng-bind='timerSeconds', g-hide='$index == 0 && bidObj.bid && action == "Bid"')
+					span.bid-data(ng-if="shifter(token) == $index && timerSeconds > 0 && timerSeconds <= minTimerDisplay && tableData.bidData[$index] == ''", ng-bind='timerSeconds')
 					- if (site == 'trump' || site == 'spades')
 						include trump/bid-area
 			.trump-position(ng-show='centerObj.suitObj.show()' style='background-position:{{centerObj.suitObj.suit().bgPos[0]}}px {{centerObj.suitObj.suit().bgPos[1]}}px')

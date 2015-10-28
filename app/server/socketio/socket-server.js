@@ -172,6 +172,7 @@ module.exports = function(IO) {
 	exportObj.userJoin = function (socket, data) {
 		var socketRoomObj = socketRoomsHash[data.site][data.room];
 		if (!socketRoomObj) {
+			console.log("SockRoom obj is null");
 			console.log(data);
 			return;
 		}
@@ -184,7 +185,7 @@ module.exports = function(IO) {
 				roomBroadcastExceptSender(socket.data.user, socket, events.message, message, null);
 			});
 			socket.on(events.play, function (data) {
-				console.log(JSON.stringify(data));
+				//console.log(JSON.stringify(data));
 				var socketRoomObj = socketRoomsHash[data.userInfo.site][data.userInfo.room];
 				socketRoomObj.userPlay(socket, data, null);
 			});

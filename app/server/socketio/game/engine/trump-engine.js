@@ -109,6 +109,9 @@ function Engine(game, num) {
 	};
 
 	this.bestBid = function (playerObj, bidObj, trump) {
+		if (bidObj.minimum === true) {
+			return {pass:false, points: bidObj.points};
+		}
 		return {pass:true, points: bidObj.points};
 		/*
 		if (trump === null) {
@@ -160,6 +163,7 @@ function Engine(game, num) {
 			}
 		}
 		assert.equal(sane, true, "Game Sanity Failed");
+		console.log("Game is Sane");
 		return sane;
 	};
 
@@ -375,7 +379,12 @@ function spade_engine(num) {
 	this.getTotalPoints = function () {
 		return 13;
 	};
-
+	this.bestBid = function (playerObj, bidObj, trump) {
+		if (bidObj.points == "00") {
+			return {pass:true, points:0};
+		}
+		return {pass:false, points:0};
+	};
 }
 spade_engine.prototype = new Engine();
 spade_engine.prototype.constructor = spade_engine;
