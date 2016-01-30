@@ -6,6 +6,8 @@ exports.createNewGame = function (game, num) {
 		return new trump_engine(num);
 	} else if (game == "hearts") {
 		return new hearts_engine(num);
+	} else if (game == "ass") {
+		return new ass_engine(num);
 	} else {
 		return new spade_engine(num);
 	}
@@ -428,3 +430,8 @@ function hearts_engine(num) {
 }
 hearts_engine.prototype = new Engine();
 hearts_engine.prototype.constructor = hearts_engine;
+
+function ass_engine(num) {
+}
+ass_engine.prototype = new Engine();
+ass_engine.prototype.constructor = ass_engine;

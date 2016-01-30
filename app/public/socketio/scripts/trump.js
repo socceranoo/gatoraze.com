@@ -298,8 +298,8 @@ function trump($scope) {
 			//$scope.addControlData($scope.events.timer, {id:id, timeOut:timeOut, player:timerPlayer, seconds:$scope.timerSeconds, position:$scope.position, index:$scope.shifter(timerPlayer)});
 			$(id).circleProgress({
 				value: 1.0,
-				size:80,
-				thickness:5,
+				size:userImgWidth,
+				thickness:thickness,
 				fill : {gradient: [$scope.tableColors[$scope.shifter(timerPlayer)], "#efefef"]},
 				animation: { duration: timeOut}
 			}).on('circle-animation-progress', function(event, progress) {
@@ -760,6 +760,11 @@ function hearts ($scope) {
 	};
 }
 hearts.prototype = Object.create(trump.prototype);
+
+function ass($scope) {
+	trump.call(this, $scope);
+}
+ass.prototype = Object.create(trump.prototype);
 
 function test ($scope) {
 	$scope.testclick = function () {

@@ -68,6 +68,12 @@ module.exports = function(app, module_obj, io) {
 		process_request(req, res, site, players, 'game');
 	});
 
+	app.get('/razeplay/ass', function(req, res){
+		var site = "ass";
+		var players = 4;
+		process_request(req, res, site, players, 'game');
+	});
+
 	app.post('/razeplay/*lobby', function(req, res){
 		res.clearCookie('razeplay_user');
 		req.session.destroy( function(e) {

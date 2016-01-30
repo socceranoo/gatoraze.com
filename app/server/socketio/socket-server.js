@@ -11,6 +11,7 @@ module.exports = function(IO) {
 		trump: {name:"Trump", image:"trump.png", background:"metroJade", info:{game:[4, 6, 8], icon:'user'}, sessionCount: 0, tableObj:game_table},
 		spades: {name:"Spades", image:"spades.png", background:"metroOrange", info:{game:[4], icon:'user'}, sessionCount: 0, tableObj:game_table},
 		hearts:{name:"Hearts", image:"QH.png", background:"metroYellow", info:{game:[4], icon:'heart'}, sessionCount:0, tableObj:game_table},
+		ass:{name:"Ass", image:"spades.png", background:"metroNavy", info:{game:[4], icon:'user'}, sessionCount:0, tableObj:game_table},
 		tube:{name:"Connectube", image:"tube.png", background:"peterRiver", info:{game:[""], icon:'facetime-video'}, sessionCount:0, tableObj:require('./tube/tube-server.js')}
 	};
 	for (var key in servers) {

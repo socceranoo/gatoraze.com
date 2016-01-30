@@ -6,7 +6,7 @@ var tableClass = require('./table-class');
 var SLEEP_SECONDS = 0.3 * 200000;
 var PLAYER_TIMEOUT = 4000;
 var COMPUTER_TIMEOUT = 4000;
-var gameEngine = require('./engine/trump-engine');
+var gameEngine = require('./engine/basic-engine');
 var assert = require('assert');
 
 exports.createGame = function(data) {
@@ -14,6 +14,8 @@ exports.createGame = function(data) {
 		return new trump_table(data.total, data.room, data.site);
 	} else if (data.site == "spades") {
 		return new spades_table(data.total, data.room, data.site);
+	} else if (data.site == "ass") {
+		return new ass_table(data.total, data.room, data.site);
 	} else {
 		return new hearts_table(data.total, data.room, data.site);
 	}
@@ -695,3 +697,19 @@ function hearts_table (num, room, game) {
 
 hearts_table.prototype = new trump_table();
 hearts_table.prototype.constructor = hearts_table;
+
+function ass_table (num, room, game) {
+	trump_table.call(this, num, room, game);
+	this.constantTrump = this.fullCardDeck[0]; //ACE OF Spades
+
+	this.startPrePlay = function (sendData) {
+		this.setNewGame();
+		this.sendPlayerCards(sendData);
+		this.passData = [];
+		this.startPlay(sendData);
+	};
+}
+
+ass_table.prototype = new trump_table();
+ass_table.prototype.constructor = ass_table;
+

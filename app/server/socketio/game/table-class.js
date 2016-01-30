@@ -8,6 +8,15 @@ var REPLACE_COMPUTER_SPECIFIC = 0, REPLACE_COMPUTER_ANY = 1, CHANGE_DIFFICULTY =
 var uinames = require("./uinames.json");
 var cardClass = require("./card-class");
 
+function hand_info(hand, gameObj) {
+	this.hand = hand;
+	this.count = {
+	this.initHandInfo = function () {
+
+	};
+
+}
+
 function player(name, position, human, bio, difficulty) {
 	this.name = name;
 	this.hand = [];
