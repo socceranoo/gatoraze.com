@@ -21,12 +21,12 @@ module.exports = function (server, app, port) {
 	});
 
 	var address = "localhost";
-	app.get('*', function(req, res) { res.render('account/views/404', { title: 'Page Not Found'}); });
 	console.log("arguments" + process.argv);
 	if (process.argv.length > 2) {
 		address = process.argv[2];
 	}
 	var startFunc = function () {
+		app.get('*', function(req, res) { res.render('account/views/404', { title: 'Page Not Found'}); });
 		server.listen(port, address, function(){
 			console.log("Express server listening on address " + address + " and port " + app.get('port'));
 		});

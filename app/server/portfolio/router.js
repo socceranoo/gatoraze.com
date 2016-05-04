@@ -1,4 +1,4 @@
-module.exports = function (app, module_obj) {
+module.exports = function (app, module_obj, secret_var) {
 	var CT = module_obj.CT;
 	var AM = module_obj.AM;
 	var EM = module_obj.EM;
@@ -6,6 +6,47 @@ module.exports = function (app, module_obj) {
 	function render (req, res, current){
 		res.render('portfolio/views/home', {current:current, title: 'portfolio', works:PF.works, projects:PF.projects, superSet:PF.superSet, pages:PF.pages, total: PF.pages.length, interests:PF.interests});
 	}
+	app.get('/passcode', function(req, res){
+		res.render('account/views/passcode', { title: 'Enter passcode'});
+	});
+
+	app.post('/passcode', function(req, res){
+		var secret = req.param('entry_key');
+		if (secret == secret_var.secret) {
+			res.cookie('entry_key', secret);
+			res.redirect('/portfolio');
+		} else {
+			res.redirect('/passcode');
+		}
+	});
+
+	app.get('/clearpasscode', function(req, res){
+		res.clearCookie('entry_key');
+		req.session.destroy( function(e) {
+			res.redirect('/passcode');
+		});
+	});
+
+	app.all('/portfolio', function(req, res, next){
+		if (!check_for_entry_key(req)) {
+			res.clearCookie('entry_key');
+			res.redirect('/passcode');
+			return;
+		} else {
+			next();
+		}
+	});
+
+	var check_for_entry_key = function (req) {
+		if (req.cookies.entry_key === undefined){
+			return false;
+		}
+		if (req.cookies.entry_key == secret_var.secret) {
+			req.session.entry_key = req.cookies.entry_key;
+			return true;
+		}
+		return false;
+	};
 	app.get('/portfolio', function(req, res) {
 		render(req, res, 0);
 	});

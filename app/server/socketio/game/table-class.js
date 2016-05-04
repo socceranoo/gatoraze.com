@@ -10,11 +10,10 @@ var cardClass = require("./card-class");
 
 function hand_info(hand, gameObj) {
 	this.hand = hand;
-	this.count = {
+	this.count = 0;
 	this.initHandInfo = function () {
 
 	};
-
 }
 
 function player(name, position, human, bio, difficulty) {
