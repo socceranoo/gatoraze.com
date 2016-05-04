@@ -16,8 +16,5 @@ var startFunc = require('./start-server')(server, app, port);
 var secret_var = require("./secret.json");
 console.log("secret is " + secret_var.secret);
 require('./app/server/portfolio/router')(app, module_obj, secret_var);
-//require('./app/server/sports/router')(app, module_obj);
-//require('./app/server/coolgitstats/router')(app, module_obj);
-//require('./app/server/socketio/router')(app, module_obj, io);
 
 startFunc();
